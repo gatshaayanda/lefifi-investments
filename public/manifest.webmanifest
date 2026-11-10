@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "Iteration 13 | Service Studio",
-  "short_name": "Iteration 13",
-  "description": "A mobile-first service-order demo with customer requests, local admin tools, installation guidance and offline-aware behavior.",
+  "name": "Lefifi Investments | Events & Production",
+  "short_name": "Lefifi",
+  "description": "Event planning, equipment hire and technical production by Lefifi Investments in Gaborone, Botswana.",
   "categories": [
     "business",
     "productivity"
@@ -10,23 +10,11 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f6f5f0",
-  "theme_color": "#155eef",
+  "background_color": "#09131e",
+  "theme_color": "#09131e",
   "icons": [
     {
-      "src": "/iteration13-icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/iteration13-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/iteration13-icon.svg",
+      "src": "/lefifi-mark.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
