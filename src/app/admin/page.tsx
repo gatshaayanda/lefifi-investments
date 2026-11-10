@@ -31,8 +31,9 @@ function Workspace(){
  const [loading,setLoading]=useState(true);
  useEffect(()=>{
   const stopA=onSnapshot(query(collection(staffDb,"eventEnquiries"),orderBy("createdAt","desc")),snap=>{setEvents(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
-  const stopB=onSnapshot(query(collection(db,"rentalRequests"),orderBy("createdAt","desc")),snap=>{setRentals(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
-  return ()=>{stopA();stopB();};
+  const stopB=onSnapshot(query(collection(staffDb,"rentalRequests"),orderBy("createdAt","desc")),snap=>{setRentals(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
+  const stopC=onSnapshot(collection(staffDb,"equipment"),snap=>setEquipment(snap.docs.map(d=>({id:d.id,...d.data()} as EquipmentRecord))),err=>setError(err.message));
+  return ()=>{stopA();stopB();stopC();};
  },[]);
  const records=useMemo(()=>[...events.map(r=>({...r,kind:"Event enquiry",collection:"eventEnquiries"})),...rentals.map(r=>({...r,kind:"Equipment hire",collection:"rentalRequests"}))].sort((a,b)=>(b.createdAt?.toDate?.().getTime()??0)-(a.createdAt?.toDate?.().getTime()??0)),[events,rentals]);
  const filtered=records.filter(r=>filter==="all"||r.status===filter);
