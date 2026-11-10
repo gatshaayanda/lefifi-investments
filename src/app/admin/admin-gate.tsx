@@ -1,6 +1,4 @@
 "use client";
-
-import Link from "next/link";
 import { onAuthStateChanged, signInAnonymously, signOut, type User } from "firebase/auth";
 import { doc, onSnapshot, Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -15,7 +13,7 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
   const [error,setError]=useState("");
   useEffect(()=>{
     let stopRole=()=>{};
-    let expiryTimer:ReturnType<typeof window.setTimeout>|undefined;
+    let expiryTimer:number|undefined;
     const stopAuth=onAuthStateChanged(staffAuth,next=>{
       stopRole();stopRole=()=>{};if(expiryTimer)window.clearTimeout(expiryTimer);setUser(next);setAuthorized(false);
       if(!next){setChecking(false);return;}
