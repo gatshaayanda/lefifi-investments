@@ -2682,3 +2682,17 @@ h1 em,
 .lf-asset-empty{color:#aab5bd;font-size:.75rem}
 @media(max-width:800px){.lf-asset-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.lf-asset-form{grid-template-columns:1fr}.lf-asset-list article{grid-template-columns:1fr 1fr}.lf-asset-actions{grid-column:1/-1}}
+
+
+/* Quote handling stays distinct from booking confirmation and payment. */
+.lf-quote-editor{display:grid;grid-template-columns:minmax(140px,.55fr) minmax(150px,1fr) minmax(200px,1.5fr) auto;gap:8px;align-items:center;padding:12px 0;border-bottom:1px solid var(--lf-line)}
+.lf-quote-editor>div{display:grid;gap:4px}.lf-quote-editor strong{font-size:.72rem;color:#e7ebee}.lf-quote-editor b{font:500 1.05rem Georgia,serif;color:var(--lf-gold)}
+.lf-quote-editor input{width:100%;min-width:0;min-height:38px;padding:8px;border:1px solid #596a76;background:#f8f7f3;color:#15212a;font-size:.72rem}
+.lf-quote-editor button{min-height:38px;padding:8px 12px;border:0;background:var(--lf-gold);color:#101820;font-size:.68rem;font-weight:900;cursor:pointer}
+.lf-customer-quote{display:grid;gap:7px;padding:13px;margin-top:12px;background:#f3eee4;border-left:3px solid #a98752;color:#17212a}
+.lf-customer-quote span{font-size:.62rem;letter-spacing:.12em;font-weight:900;color:#927342}
+.lf-customer-quote strong{font:500 1.65rem Georgia,serif}
+.lf-customer-quote p{margin:0;color:#56616a;font-size:.78rem;line-height:1.5}
+.lf-customer-quote small{color:#65717a;font-size:.67rem;line-height:1.45}
+@media(max-width:800px){.lf-quote-editor{grid-template-columns:1fr 1fr}.lf-quote-editor>div{grid-column:1/-1}.lf-quote-editor button{grid-column:1/-1}}
+@media(max-width:560px){.lf-quote-editor{grid-template-columns:1fr}}
