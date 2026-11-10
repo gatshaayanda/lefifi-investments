@@ -4,7 +4,7 @@ A customer-facing service experience and private operations workspace for Lefifi
 
 ## Customer journey
 1. Browse event planning, furniture/styling, LED screens, sound, lighting, stage production and mobile toilet/equipment hire.
-2. Choose Event enquiry or Equipment hire and submit the relevant brief.
+2. Choose Event enquiry or Equipment hire and submit the relevant brief. Rental requests can specify delivery/collection and whether servicing/cleaning should be discussed.
 3. The app creates a Firebase guest session, stores the customer profile and saves the request in Firestore.
 4. Customers can return to My requests in the same browser session to review the latest status.
 5. A submitted request is not a confirmed booking. Lefifi must review scope, availability, pricing and delivery arrangements before confirming.
