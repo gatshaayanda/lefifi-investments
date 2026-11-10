@@ -35,6 +35,7 @@ function Workspace(){
  const [saving,setSaving]=useState("");
  const [notice,setNotice]=useState("");
  const [loading,setLoading]=useState(true);
+ const starterSeedAttempted=useRef(false);
  useEffect(()=>{
   const stopA=onSnapshot(query(collection(staffDb,"eventEnquiries"),orderBy("createdAt","desc")),snap=>{setEvents(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
   const stopB=onSnapshot(query(collection(staffDb,"rentalRequests"),orderBy("createdAt","desc")),snap=>{setRentals(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
