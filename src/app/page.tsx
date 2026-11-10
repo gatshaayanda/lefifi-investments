@@ -17,13 +17,13 @@ const offerings = [
   { title: "Stage design & production", detail: "Stage concepts, staging and production coordination.", mark: "05" },
   { title: "Mobile toilet hire", detail: "Mobile toilet rental enquiries for event and site requirements.", mark: "06" },
 ];
-const guideServices = offerings.map((item, index) => ({ id: String(index), name: item.title, price: 0, description: item.detail, media: "/lefifi-mark.svg", mediaType: "image" as const, active: true }));
 
 function clean(value: FormDataEntryValue | null) { return String(value ?? "").trim(); }
 
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
   const [catalog, setCatalog] = useState<PublicService[]>(offerings.map((item,index)=>({id:String(index),name:item.title,detail:item.detail,price:0,active:true,mark:item.mark})));
+  const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi-mark.svg", mediaType:"image" as const, active:item.active }));
   const [online, setOnline] = useState(true);
   useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); if(live.length) setCatalog(live); }); return ()=>stop(); }, []);
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
@@ -168,7 +168,7 @@ export default function HomePage() {
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-main"><a className="lf-brand" href="#"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></a><p>Events, equipment and production.<br/>Gaborone, Botswana.</p><a href="tel:+26773706331">+267 73 706 331</a></div><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><Link href="/account">Customer requests</Link></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-main"><a className="lf-brand" href="#"><span className="lf-brand-mark"><img src="/lefifi-mark.svg" alt="" /></span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></a><p>Events, equipment and production.<br/>Gaborone, Botswana.</p><a href="tel:+26773706331">+267 73 706 331</a></div><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><Link href="/account">Customer requests</Link></div></footer>
     <ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
