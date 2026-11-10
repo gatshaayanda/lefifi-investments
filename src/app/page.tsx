@@ -5,24 +5,16 @@ import { useEffect, useState } from "react";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
 import ServiceGuide from "@/app/ServiceGuide";
+import { STARTER_SERVICES } from "@/lib/services/catalog";
 import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
 
 type RequestKind = "event" | "rental";
 type PublicService = { id:string; name:string; detail:string; price:number; active:boolean; mark?:string };
-const offerings = [
-  { title: "Event planning & management", detail: "Planning, coordination and on-the-day delivery for corporate and private events.", mark: "01" },
-  { title: "Furniture & event styling", detail: "Classy furniture setups, tables, seating and considered event environments.", mark: "02" },
-  { title: "LED screens & visuals", detail: "Indoor and outdoor LED screen requirements for presentations and live events.", mark: "03" },
-  { title: "Sound & lighting", detail: "Event sound, lighting and technical production requirements.", mark: "04" },
-  { title: "Stage design & production", detail: "Stage concepts, staging and production coordination.", mark: "05" },
-  { title: "Mobile toilet hire", detail: "Mobile toilet rental enquiries for event and site requirements.", mark: "06" },
-];
-
 function clean(value: FormDataEntryValue | null) { return String(value ?? "").trim(); }
 
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
-  const [catalog, setCatalog] = useState<PublicService[]>(offerings.map((item,index)=>({id:String(index),name:item.title,detail:item.detail,price:0,active:true,mark:item.mark})));
+  const [catalog, setCatalog] = useState<PublicService[]>(STARTER_SERVICES.map(item=>({...item})));
   const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi-mark.svg", mediaType:"image" as const, active:item.active }));
   const [online, setOnline] = useState(true);
   useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); if(live.length) setCatalog(live); }); return ()=>stop(); }, []);
@@ -130,8 +122,8 @@ export default function HomePage() {
     </div></section>
 
     <section className="lf-section" id="services"><div className="lf-container">
-      <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step.</p></div>
-      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-no">{item.mark||String(index+1).padStart(2,"0")}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`P${Number(item.price).toLocaleString("en-BW")}`:"Price confirmed after brief"}</span><span className="lf-service-arrow">↗</span></button>)}</div>
+      <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step. Listed amounts are editable base prices; final scope is confirmed with the team.</p></div>
+      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-no">{item.mark||String(index+1).padStart(2,"0")}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`Base price · P${Number(item.price).toLocaleString("en-BW")}`:"Price to be confirmed"}</span><span className="lf-service-arrow">↗</span></button>)}</div>
     </div></section>
 
     <section className="lf-feature" id="about"><div className="lf-feature-image" /><div className="lf-feature-copy"><p className="lf-eyebrow">FROM FIRST IDEA TO FINAL DETAIL</p><h2>Good events are<br/><em>well put together.</em></h2><p>Lefifi Investments supports event requirements across planning, furniture and styling, technical production and equipment hire. Share the occasion, the location and what you have in mind — the team can help shape the scope with you.</p><a href="#request" className="lf-text-link">Talk to the team <span>↗</span></a></div></section>
