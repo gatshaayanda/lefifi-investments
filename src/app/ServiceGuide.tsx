@@ -17,8 +17,8 @@ type Props = {
   onOpenStorefront: () => void;
 };
 
-const HISTORY_KEY = "iteration13:guide-history:v1";
-const TEASER_KEY = "iteration13:guide-teaser:v1";
+const HISTORY_KEY = "lefifi:guide-history:v1";
+const TEASER_KEY = "lefifi:guide-teaser:v1";
 
 function createMessage(from: Message["from"], text: string): Message {
   return { id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, from, text };
@@ -87,18 +87,18 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
   }
   function chooseService(service: GuideService) {
     setLastChoice(service.id);
-    say(`${service.name} starts at P${service.price.toLocaleString("en-BW")}. ${service.description} Choose “Request this service” to continue in the existing form; your requested date is a preference, not a confirmed delivery promise.`);
+    say(`${service.name}. ${service.description} Select “Request this service” to add it to your enquiry. The Lefifi team will confirm availability and pricing before a booking is agreed.`);
   }
   function runAction(action: string) {
     setTeaser(false);
     switch (action) {
-      case "help": say("I can guide you to a service or a real page in this demo. Choose a service below, view your requests, or browse without chat. I’m a scripted guide, not a live person or AI assistant."); break;
-      case "browse": say("No problem. You can keep browsing; the service menu and order form remain available without chat."); setOpen(false); break;
-      case "account": say(`Opening My account. This demo currently has ${requestCount} request(s) in this browser. Use the same browser profile to see local demo records.`); onOpenAccount(); break;
-      case "storefront": say("Taking you back to the customer storefront."); onOpenStorefront(); break;
-      case "admin-services": say("Opening the service menu tools. You can add, edit, hide or remove demo services here."); onOpenAdmin("services"); break;
-      case "admin-announcement": say("Opening the announcement editor. Publish or clear a storefront note; it stays on this device."); onOpenAdmin("announcement"); break;
-      case "admin-requests": say(requestCount ? `Opening ${requestCount} local request(s). Status changes are visible to the customer view on this same device.` : "There are no requests yet. Switch to the storefront and submit a sample request first."); onOpenAdmin("requests"); break;
+      case "help": say("I can help you find the right Lefifi service, open your request history or take you to the enquiry form. I’m an automated guide, not a live person."); break;
+      case "browse": say("No problem. Browse the services or send an enquiry whenever you are ready."); setOpen(false); break;
+      case "account": say(`Opening your Lefifi request history.`); onOpenAccount(); break;
+      case "storefront": say("Taking you back to the Lefifi customer website."); onOpenStorefront(); break;
+      case "admin-services": say("Staff tools are available from the private Lefifi Operations workspace."); onOpenAdmin("services"); break;
+      case "admin-announcement": say("Staff can manage customer updates from the private Lefifi Operations workspace."); onOpenAdmin("announcement"); break;
+      case "admin-requests": say(requestCount ? `Opening the incoming request queue.` : "There are no requests yet. A customer enquiry will appear here after it is submitted."); onOpenAdmin("requests"); break;
       default: {
         const service = activeServices.find(item => item.id === action);
         if (service) {
@@ -110,8 +110,8 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
   }
   function continueWithService() {
     const service = activeServices.find(item => item.id === lastChoice);
-    if (!service) { say("Choose a visible service first, then I can take you to its request form."); return; }
-    say(`Taking you to the ${service.name} request form. Your service selection will be carried across.`);
+    if (!service) { say("Choose a service first, then I can take you to the Lefifi enquiry form."); return; }
+    say(`Taking you to the ${service.name} enquiry. Your selection will be carried across.`);
     setOpen(false);
     onChooseService(service);
   }
@@ -149,15 +149,15 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
   ];
 
   return <div className="sd-guide-root">
-    {!open && teaser && <aside className="sd-guide-teaser" aria-label="Optional service guide invitation">
+    {!open && teaser && <aside className="sd-guide-teaser" aria-label="Optional Lefifi guide invitation">
       <span className="sd-guide-teaser-spark"><Sparkles size={15}/></span>
-      <div><strong>{view === "admin" ? "Need a hand with the demo?" : "Not sure which service fits?"}</strong><p>{view === "admin" ? "Jump straight to requests, services or your storefront." : "I can help you choose, or take you to your requests."}</p><div className="sd-guide-teaser-actions"><button type="button" onClick={() => { setTeaser(false); setOpen(true); if (!messages.length) say("Hi! I’m the Service Studio guide. I use clear options and real demo actions—no pretend human replies."); }}> {view === "admin" ? "Open admin guide" : "Help me choose"} <ArrowRight size={14}/></button><button type="button" className="sd-guide-dismiss" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}>Not now</button></div></div>
+      <div><strong>{view === "admin" ? "Need a hand with the demo?" : "Not sure which service fits?"}</strong><p>{view === "admin" ? "Jump straight to requests, services or your storefront." : "I can help you choose, or take you to your requests."}</p><div className="sd-guide-teaser-actions"><button type="button" onClick={() => { setTeaser(false); setOpen(true); if (!messages.length) say("Hi! I’m the Lefifi guide. I use clear options and real demo actions—no pretend human replies."); }}> {view === "admin" ? "Open admin guide" : "Help me choose"} <ArrowRight size={14}/></button><button type="button" className="sd-guide-dismiss" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}>Not now</button></div></div>
       <button type="button" className="sd-guide-teaser-close" aria-label="Dismiss guide invitation" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}><X size={15}/></button>
     </aside>}
     {open && <div className="sd-guide-backdrop" onClick={() => setOpen(false)} aria-hidden="true"/>}
     {open && <section ref={panelRef} className="sd-guide-panel" role="dialog" aria-modal="true" aria-labelledby="sd-guide-title">
       <header className="sd-guide-head"><div className="sd-guide-avatar"><Sparkles size={18}/></div><div><span className="sd-guide-eyebrow">ITERATION 13 · SERVICE GUIDE</span><h2 id="sd-guide-title">{view === "admin" ? "Studio sidekick" : "Find your next step"}</h2><p><span/> Guided demo · {view === "admin" ? "Admin tools" : "Customer journey"}</p></div><button type="button" aria-label="Close guide" onClick={() => { setOpen(false); launcherRef.current?.focus(); }}><ChevronDown size={19}/></button></header>
-      <div className="sd-guide-intro"><strong>{view === "admin" ? "What are you working on?" : "What would you like to do?"}</strong><p>{view === "admin" ? "I’ll take you to the right local demo tool." : "Choose a service or jump to your requests. You can always continue without me."}</p></div>
+      <div className="sd-guide-intro"><strong>{view === "admin" ? "What are you working on?" : "What would you like to do?"}</strong><p>{view === "admin" ? "I’ll take you to the right Lefifi request tool." : "Choose a service or jump to your requests. You can always continue without me."}</p></div>
       <div className="sd-guide-actions">{(view === "admin" ? adminActions : customerActions).map(item => <button key={item.key} type="button" onClick={() => item.key === "services" ? say("Choose a service below to see its starting price and fit. I’ll take you to the existing form when you’re ready.") : runAction(item.key)}><span>{item.icon}</span>{item.label}<ArrowRight size={15}/></button>)}</div>
       {view !== "admin" && <div className="sd-guide-services"><span className="sd-guide-section-label">SERVICE SHORTCUTS</span>{activeServices.map(service => <button key={service.id} type="button" onClick={() => chooseService(service)} aria-pressed={lastChoice === service.id}><span className="sd-guide-service-thumb" aria-hidden="true"><img src={service.media} alt="" loading="lazy" onError={event => { event.currentTarget.style.visibility = "hidden"; }}/></span><span className="sd-guide-service-copy"><strong>{service.name}</strong><small>{service.description}</small></span><b>P{service.price.toLocaleString("en-BW")}</b></button>)}</div>}
       {lastChoice && view !== "admin" && <button type="button" className="sd-guide-continue" onClick={continueWithService}>Request this service <ArrowRight size={16}/></button>}
