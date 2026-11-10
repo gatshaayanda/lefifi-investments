@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
 import ServiceGuide from "@/app/ServiceGuide";
@@ -22,6 +22,8 @@ function clean(value: FormDataEntryValue | null) { return String(value ?? "").tr
 
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
+  const [online, setOnline] = useState(true);
+  useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState<{ id: string; kind: RequestKind } | null>(null);
@@ -31,6 +33,7 @@ export default function HomePage() {
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
+    if (!navigator.onLine) { setError("You are offline. This request has not been sent. Reconnect and submit it again."); return; }
     if (!hasFirebaseWebConfig) {
       setError("Online requests are not configured on this deployment yet. Please contact Lefifi directly on +267 73 706 331.");
       return;
@@ -139,9 +142,9 @@ export default function HomePage() {
             <label className="lf-full">Additional details <textarea name="notes" rows={3} placeholder="Quantities, access, setup requirements or timing"/></label>
           </>}
           </div>
-          <button className="lf-submit" type="submit" disabled={busy || !hasFirebaseWebConfig}>{busy ? "Sending your request…" : "Send request"} <span>↗</span></button>
+          <button className="lf-submit" type="submit" disabled={busy || !hasFirebaseWebConfig || !online}>{busy ? "Sending your request…" : online ? "Send request" : "Reconnect to send"} <span>↗</span></button>
           <p className="lf-form-note">Your details are used to respond to this enquiry. Availability, final pricing and booking confirmation are handled by the Lefifi team.</p>
-          {message && <p className="lf-inline-message" role="status">{message}</p>}{error && <p className="lf-error" role="alert">{error}</p>}
+          {!online && <p className="lf-error" role="status">Offline · This form will not send or queue a request until you reconnect.</p>}{message && <p className="lf-inline-message" role="status">{message}</p>}{error && <p className="lf-error" role="alert">{error}</p>}
           {!hasFirebaseWebConfig && <p className="lf-error" role="status">Online request saving is not configured on this deployment. Please call +267 73 706 331.</p>}
         </form>}
       </div>
