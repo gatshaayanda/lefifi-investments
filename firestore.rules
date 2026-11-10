@@ -32,7 +32,7 @@ service cloud.firestore {
         && (!request.resource.data.keys().hasAny(['guestCount']) || request.resource.data.guestCount is number);
     }
     function validRentalRequest() {
-      return request.resource.data.keys().hasOnly(['customerId','customerName','email','phone','items','eventDate','returnDate','deliveryLocation','deliveryRequired','notes','status','createdAt','updatedAt'])
+      return request.resource.data.keys().hasOnly(['customerId','customerName','email','phone','items','eventDate','returnDate','deliveryLocation','deliveryRequired','servicingRequirement','notes','status','createdAt','updatedAt'])
         && request.resource.data.keys().hasAll(['customerId','customerName','phone','items','eventDate','returnDate','deliveryLocation','deliveryRequired','notes','status','createdAt','updatedAt'])
         && request.resource.data.customerId == request.auth.uid
         && request.resource.data.customerName is string && request.resource.data.customerName.size() > 0
@@ -41,6 +41,7 @@ service cloud.firestore {
         && request.resource.data.eventDate is string && request.resource.data.returnDate is string
         && request.resource.data.deliveryLocation is string && request.resource.data.deliveryRequired is bool
         && request.resource.data.notes is string && request.resource.data.status == 'new'
+        && (!request.resource.data.keys().hasAny(['servicingRequirement']) || request.resource.data.servicingRequirement in ['yes','no','discuss'])
         && request.resource.data.createdAt is timestamp && request.resource.data.updatedAt is timestamp
         && (!request.resource.data.keys().hasAny(['email']) || request.resource.data.email is string);
     }
