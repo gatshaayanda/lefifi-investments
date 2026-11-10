@@ -75,6 +75,7 @@ export default function HomePage() {
           eventDate, returnDate,
           deliveryLocation: clean(form.get("deliveryLocation")),
           deliveryRequired: form.get("deliveryRequired") === "yes",
+          servicingRequirement: clean(form.get("servicingRequirement")),
           notes: clean(form.get("notes")), status: "new", createdAt: now, updatedAt: now,
         });
         recordId = record.id;
@@ -142,6 +143,7 @@ export default function HomePage() {
             <label className="lf-full">Equipment or services needed *<textarea name="items" required rows={3} placeholder="List each item or service on a new line"/></label>
             <label className="lf-full">Delivery / event location *<input name="deliveryLocation" required placeholder="Venue, site or area"/></label>
             <label className="lf-full">Do you need delivery and collection?<select name="deliveryRequired" defaultValue="yes"><option value="yes">Yes, please include it in the quote</option><option value="no">No, I will arrange collection</option></select></label>
+            <label className="lf-full">Servicing / cleaning during hire<select name="servicingRequirement" defaultValue="discuss"><option value="discuss">Discuss with Lefifi</option><option value="yes">Yes, please include it in the request</option><option value="no">Not required</option></select></label>
             <label className="lf-full">Additional details <textarea name="notes" rows={3} placeholder="Quantities, access, setup requirements or timing"/></label>
           </>}
           </div>
