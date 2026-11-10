@@ -16,7 +16,7 @@ const offerings = [
   { title: "Stage design & production", detail: "Stage concepts, staging and production coordination.", mark: "05" },
   { title: "Mobile toilet hire", detail: "Mobile toilet rental enquiries for event and site requirements.", mark: "06" },
 ];
-const guideServices = offerings.map((item, index) => ({ id: String(index), name: item.title, price: 0, description: item.detail, media: "", mediaType: "image" as const, active: true }));
+const guideServices = offerings.map((item, index) => ({ id: String(index), name: item.title, price: 0, description: item.detail, media: "/lefifi-mark.svg", mediaType: "image" as const, active: true }));
 
 function clean(value: FormDataEntryValue | null) { return String(value ?? "").trim(); }
 
