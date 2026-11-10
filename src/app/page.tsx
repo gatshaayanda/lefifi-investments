@@ -27,7 +27,6 @@ export default function HomePage() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState<{ id: string; kind: RequestKind } | null>(null);
-  const [selectedService, setSelectedService] = useState("");
   const [eventBrief, setEventBrief] = useState("");
   const [rentalItems, setRentalItems] = useState("");
   const [error, setError] = useState("");
