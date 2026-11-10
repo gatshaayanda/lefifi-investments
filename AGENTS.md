@@ -57,6 +57,8 @@
 - No local build, emulator, browser, physical-device or production deployment is claimed unless its output is actually inspected.
 
 ## Current checkpoint
-- Baseline: 8cab59b.
-- Implementation is being developed directly on main and pushed as changes are made. See latest GitHub commit and CI status for verification.
-- Product-owner QA remains required for live Firebase credentials, staff access, customer/admin end-to-end behavior, official logo assets and physical-device PWA behavior.
+- Foundation baseline: 8cab59b.
+- Customer, account, staff operations, quote recording, equipment register, Firestore contracts and Lefifi PWA identity are committed directly to main. The latest application-code checkpoint before this documentation update is f502be8cc69496cac042467696510be3ef6b19b4.
+- Automated build/lint and browser/device visual QA have not been verified in this session. Vercel's status for the branch reports a build-rate-limit failure; no deployment is claimed.
+- End-to-end QA is blocked until the Lefifi Firebase web config, same-project Firebase Admin service account, operations access word and updated Firestore rules are configured/published.
+- Product-owner QA remains required for customer submissions, private account history, staff access/expiry, quote visibility, equipment CRUD, PWA install behavior, real mobile layouts and the official logo asset.
