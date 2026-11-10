@@ -5,14 +5,16 @@ import {auth,db} from "@/lib/firebase/client";
 import {generateReactHelpers} from "@uploadthing/react";
 import type {OurFileRouter} from "@/app/api/uploadthing/core";
 
-const {useUploadThing}=generateReactHelpers<OurFileRouter>();
 import {subscribeToAdminConversations,subscribeToConversation,updateConversationRead,recordConversationMessage,type Conversation,type ConversationMessage} from "@/lib/firebase/data";
+
+const {useUploadThing}=generateReactHelpers<OurFileRouter>();
 
 const MAX_FILE_SIZE=4*1024*1024;
 const allowed=(file:File)=>file.type.startsWith("image/")||file.type==="application/pdf";
 const timeText=(value:string)=>{const d=new Date(value);return Number.isFinite(d.getTime())?d.toLocaleString([], {dateStyle:"medium",timeStyle:"short"}):""};
 
 export default function AdminConversations(){
+ const {startUpload}=useUploadThing("fileUploader");
  const[user,setUser]=useState(auth.currentUser),[items,setItems]=useState<Conversation[]>([]),[selected,setSelected]=useState<string>(),[conversation,setConversation]=useState<Conversation|null>(null),[messages,setMessages]=useState<ConversationMessage[]>([]),[text,setText]=useState(""),[file,setFile]=useState<File|null>(null),[busy,setBusy]=useState(false),[notice,setNotice]=useState("");
  useEffect(()=>auth.onAuthStateChanged(next=>setUser(next)),[]);
  useEffect(()=>subscribeToAdminConversations(setItems,error=>setNotice(error.message)),[]);
