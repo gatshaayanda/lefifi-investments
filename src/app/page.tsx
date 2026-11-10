@@ -28,6 +28,8 @@ export default function HomePage() {
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState<{ id: string; kind: RequestKind } | null>(null);
   const [selectedService, setSelectedService] = useState("");
+  const [eventBrief, setEventBrief] = useState("");
+  const [rentalItems, setRentalItems] = useState("");
   const [error, setError] = useState("");
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -83,6 +85,7 @@ export default function HomePage() {
       setSaved({ id: recordId, kind });
       setMessage(kind === "event" ? "Your event enquiry has been received." : "Your equipment request has been received.");
       formElement.reset();
+      setSelectedService(""); setEventBrief(""); setRentalItems("");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not save this request. Please try again.");
       setMessage("");
@@ -90,8 +93,11 @@ export default function HomePage() {
   }
 
   function chooseOffering(service: { name: string }) {
+    const rental = service.name.toLowerCase().includes("hire");
     setSelectedService(service.name);
-    setKind(service.name.toLowerCase().includes("hire") ? "rental" : "event");
+    setKind(rental ? "rental" : "event");
+    if (rental) setRentalItems(service.name); else setEventBrief("I’m interested in: " + service.name + ". ");
+    setError(""); setMessage(""); setSaved(null);
     document.getElementById("request")?.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -114,7 +120,12 @@ export default function HomePage() {
       </div>
     </section>
 
-    <section className="lf-trust-strip"><div className="lf-container"><span>EVENTS</span><i/><span>FURNITURE</span><i/><span>TECHNICAL PRODUCTION</span><i/><span>EQUIPMENT HIRE</span></div></section>
+    <section className="lf-shortcuts" aria-label="Quick destinations"><div className="lf-container lf-shortcut-grid">
+      <button type="button" onClick={()=>chooseOffering({name:"Event planning & management"})}><span className="lf-shortcut-mark">01</span><strong>Plan an event</strong><small>Brief the team</small><b aria-hidden="true">↗</b></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Sound & lighting"})}><span className="lf-shortcut-mark">02</span><strong>Production</strong><small>Sound, light & stage</small><b aria-hidden="true">↗</b></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Mobile toilet hire"})}><span className="lf-shortcut-mark">03</span><strong>Hire equipment</strong><small>Share dates & location</small><b aria-hidden="true">↗</b></button>
+      <Link href="/account"><span className="lf-shortcut-mark">04</span><strong>My requests</strong><small>Check your updates</small><b aria-hidden="true">↗</b></Link>
+    </div></section>
 
     <section className="lf-section" id="services"><div className="lf-container">
       <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step.</p></div>
@@ -126,7 +137,7 @@ export default function HomePage() {
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
       <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Send an event brief or an equipment hire request. The team will review it and confirm availability, scope and pricing with you. Submitting a request does not confirm a booking.</p><div className="lf-contact-card"><span>Prefer to speak directly?</span><a href="tel:+26773706331">+267 73 706 331</a><small>Gaborone, Botswana · P.O. Box 201958, Bontleng</small></div></div>
       <div className="lf-form-panel">
-        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");}}>Event enquiry</button><button type="button" className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");}}>Equipment hire</button></div>
+        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setSelectedService("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setSelectedService("");setEventBrief("");}}>Equipment hire</button></div>
         {saved ? <div className="lf-success" role="status"><span className="lf-success-icon">✓</span><p className="lf-eyebrow">REQUEST RECEIVED</p><h3>Thank you. We have it.</h3><p>{message} The team still needs to review the details and confirm the next step. This is not yet a confirmed booking.</p><div className="lf-reference">REFERENCE <strong>{saved.id.slice(0,8).toUpperCase()}</strong></div><Link href="/account" className="lf-primary">Track your request <span>↗</span></Link><button className="lf-reset" type="button" onClick={()=>{setSaved(null);setMessage("");}}>Send another enquiry</button></div> :
         <form className="lf-form" onSubmit={submit}>
           <div className="lf-form-heading"><span>{kind === "event" ? "01 / EVENT BRIEF" : "02 / EQUIPMENT REQUEST"}</span><small>Fields marked * are required</small></div>
@@ -136,11 +147,11 @@ export default function HomePage() {
             <label>Event date *<input name="eventDate" type="date" required min={new Date().toISOString().slice(0,10)}/></label>
             <label>Expected guests <span>(optional)</span><input name="guestCount" type="number" min="1" placeholder="e.g. 150"/></label>
             <label>Event location *<input name="location" required placeholder="Venue or area"/></label>
-            <label className="lf-full">What are you planning? *<textarea name="brief" required rows={4} placeholder="Share the event, services needed, preferred setup and anything else we should know." defaultValue={selectedService ? "I’m interested in: "+selectedService+". " : ""}/></label>
+            <label className="lf-full">What are you planning? *<textarea name="brief" required rows={4} placeholder="Share the event, services needed, preferred setup and anything else we should know." value={eventBrief} onChange={e=>setEventBrief(e.target.value)}/></label>
           </> : <>
             <label>Required from *<input name="eventDate" type="date" required min={new Date().toISOString().slice(0,10)}/></label>
             <label>Return / end date<input name="returnDate" type="date" min={new Date().toISOString().slice(0,10)}/></label>
-            <label className="lf-full">Equipment or services needed *<textarea name="items" required rows={3} placeholder="List each item or service on a new line"/></label>
+            <label className="lf-full">Equipment or services needed *<textarea name="items" required rows={3} placeholder="List each item or service on a new line" value={rentalItems} onChange={e=>setRentalItems(e.target.value)}/></label>
             <label className="lf-full">Delivery / event location *<input name="deliveryLocation" required placeholder="Venue, site or area"/></label>
             <label className="lf-full">Do you need delivery and collection?<select name="deliveryRequired" defaultValue="yes"><option value="yes">Yes, please include it in the quote</option><option value="no">No, I will arrange collection</option></select></label>
             <label className="lf-full">Servicing / cleaning during hire<select name="servicingRequirement" defaultValue="discuss"><option value="discuss">Discuss with Lefifi</option><option value="yes">Yes, please include it in the request</option><option value="no">Not required</option></select></label>
