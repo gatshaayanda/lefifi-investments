@@ -14,9 +14,9 @@
   "theme_color": "#102638",
   "icons": [
     {
-      "src": "/lefifi-logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/lefifi.jpg",
+      "sizes": "280x114",
+      "type": "image/jpeg",
       "purpose": "any"
     }
   ]
