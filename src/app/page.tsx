@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowUpRight, AudioLines, CalendarDays, ClipboardList, Monitor, Package, PanelsTopLeft, Sofa } from "lucide-react";
 import { useEffect, useState } from "react";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
@@ -10,6 +11,7 @@ import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
 
 type RequestKind = "event" | "rental";
 type PublicService = { id:string; name:string; detail:string; price:number; active:boolean; mark?:string };
+const serviceIcons = [CalendarDays, Sofa, Monitor, AudioLines, PanelsTopLeft, Package];
 function clean(value: FormDataEntryValue | null) { return String(value ?? "").trim(); }
 
 export default function HomePage() {
@@ -17,7 +19,7 @@ export default function HomePage() {
   const [catalog, setCatalog] = useState<PublicService[]>(STARTER_SERVICES.map(item=>({...item})));
   const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi-mark.svg", mediaType:"image" as const, active:item.active }));
   const [online, setOnline] = useState(true);
-  useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); if(live.length) setCatalog(live); }); return ()=>stop(); }, []);
+  useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); setCatalog(snap.empty ? STARTER_SERVICES.map(item=>({...item})) : live); }); return ()=>stop(); }, []);
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -115,15 +117,15 @@ export default function HomePage() {
     </section>
 
     <section className="lf-shortcuts" aria-label="Quick destinations"><div className="lf-container lf-shortcut-grid">
-      <button type="button" onClick={()=>chooseOffering({name:"Event planning & management"})}><span className="lf-shortcut-mark">01</span><strong>Plan an event</strong><small>Brief the team</small><b aria-hidden="true">↗</b></button>
-      <button type="button" onClick={()=>chooseOffering({name:"Sound & lighting"})}><span className="lf-shortcut-mark">02</span><strong>Production</strong><small>Sound, light & stage</small><b aria-hidden="true">↗</b></button>
-      <button type="button" onClick={()=>chooseOffering({name:"Mobile toilet hire"})}><span className="lf-shortcut-mark">03</span><strong>Hire equipment</strong><small>Share dates & location</small><b aria-hidden="true">↗</b></button>
-      <Link href="/account"><span className="lf-shortcut-mark">04</span><strong>My requests</strong><small>Check your updates</small><b aria-hidden="true">↗</b></Link>
+      <button type="button" onClick={()=>chooseOffering({name:"Event planning & management"})}><span className="lf-shortcut-icon" aria-hidden="true"><CalendarDays size={19} strokeWidth={1.6}/></span><strong>Plan an event</strong><small>Brief the team</small><b aria-hidden="true"><ArrowUpRight size={16}/></b></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Sound & lighting"})}><span className="lf-shortcut-icon" aria-hidden="true"><AudioLines size={19} strokeWidth={1.6}/></span><strong>Production</strong><small>Sound, light & stage</small><b aria-hidden="true">↗</b></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Mobile toilet hire"})}><span className="lf-shortcut-icon" aria-hidden="true"><Package size={19} strokeWidth={1.6}/></span><strong>Hire equipment</strong><small>Share dates & location</small><b aria-hidden="true">↗</b></button>
+      <Link href="/account"><span className="lf-shortcut-icon" aria-hidden="true"><ClipboardList size={19} strokeWidth={1.6}/></span><strong>My requests</strong><small>Check your updates</small><b aria-hidden="true">↗</b></Link>
     </div></section>
 
     <section className="lf-section" id="services"><div className="lf-container">
       <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step. Listed amounts are editable base prices; final scope is confirmed with the team.</p></div>
-      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-no">{item.mark||String(index+1).padStart(2,"0")}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`Base price · P${Number(item.price).toLocaleString("en-BW")}`:"Price to be confirmed"}</span><span className="lf-service-arrow">↗</span></button>)}</div>
+      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`Base price · P${Number(item.price).toLocaleString("en-BW")}`:"Price to be confirmed"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
     </div></section>
 
     <section className="lf-feature" id="about"><div className="lf-feature-image" /><div className="lf-feature-copy"><p className="lf-eyebrow">FROM FIRST IDEA TO FINAL DETAIL</p><h2>Good events are<br/><em>well put together.</em></h2><p>Lefifi Investments supports event requirements across planning, furniture and styling, technical production and equipment hire. Share the occasion, the location and what you have in mind — the team can help shape the scope with you.</p><a href="#request" className="lf-text-link">Talk to the team <span>↗</span></a></div></section>

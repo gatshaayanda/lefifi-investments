@@ -2836,3 +2836,10 @@ h1 em,
 .lefifi .lf-service-form input,.lefifi .lf-service-form select{min-width:0}
 @media(max-width:760px){.lefifi .lf-nav nav{display:none}.lefifi .lf-nav{min-height:62px}.lefifi .lf-hero{min-height:450px;padding:54px 0 20px}.lefifi .lf-hero-foot{margin-top:42px;gap:12px}.lefifi .lf-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lefifi .lf-shortcut-grid>*{border-bottom:1px solid #d4cbb9}.lefifi .lf-shortcut-grid>*:nth-child(odd){border-left:1px solid #d4cbb9}.lefifi .lf-section{padding:44px 0}.lefifi .lf-section-heading{grid-template-columns:1fr;gap:8px}.lefifi .lf-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lefifi .lf-service{min-height:166px;padding:14px}.lefifi .lf-request-section{padding:44px 0}.lefifi .lf-request-layout{grid-template-columns:1fr;gap:24px}.lefifi .lf-form{padding:15px}.lefifi .lf-service-form{grid-template-columns:1fr 1fr}}
 @media(max-width:420px){.lefifi .lf-container{width:calc(100% - 24px)}.lefifi .lf-nav-account{padding:9px 10px;font-size:10px}.lefifi .lf-brand-mark{width:36px;height:36px}.lefifi .lf-brand strong{font-size:13px}.lefifi .lf-hero h1{font-size:45px}.lefifi .lf-service-grid{grid-template-columns:1fr 1fr}.lefifi .lf-service-title{font-size:13px}.lefifi .lf-service-detail{font-size:10px}}
+
+/* Lefifi icon language: small, consistent line icons rather than text-symbol substitutes. */
+.lf-shortcut-icon{position:absolute;top:12px;left:14px;display:inline-flex;align-items:center;justify-content:center;color:var(--lf-gold);width:20px;height:20px}
+.lf-shortcut-grid b{display:inline-flex;align-items:center;justify-content:center}
+.lf-service-icon{position:absolute;left:20px;top:18px;display:inline-flex;color:#a98752}
+.lf-service-arrow{display:inline-flex;align-items:center;justify-content:center}
+.lf-brand-mark img{display:block;width:28px;height:28px;object-fit:contain}
