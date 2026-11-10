@@ -17,7 +17,7 @@ function clean(value: FormDataEntryValue | null) { return String(value ?? "").tr
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
   const [catalog, setCatalog] = useState<PublicService[]>(STARTER_SERVICES.map(item=>({...item})));
-  const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi-logo.svg", mediaType:"image" as const, active:item.active }));
+  const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi.jpg", mediaType:"image" as const, active:item.active }));
   const [online, setOnline] = useState(true);
   useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); setCatalog(snap.empty ? STARTER_SERVICES.map(item=>({...item})) : live); }); return ()=>stop(); }, []);
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
@@ -100,7 +100,7 @@ export default function HomePage() {
   return <main className="lefifi">
     <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></div>
     <header className="lf-header"><div className="lf-container lf-nav">
-      <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi-logo.svg" alt="Lefifi Investments" /></span></Link>
+      <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></Link>
       <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#about">About</a><a href="#request">Enquire</a></nav>
       <Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link>
     </div></header>
@@ -162,7 +162,7 @@ export default function HomePage() {
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-main"><a className="lf-brand" href="#"><span className="lf-brand-mark"><img src="/lefifi-logo.svg" alt="Lefifi Investments" /></span></a><p>Events, equipment and production.<br/>Gaborone, Botswana.</p><a href="tel:+26773706331">+267 73 706 331</a></div><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><Link href="/account">Customer requests</Link></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-main"><a className="lf-brand" href="#"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></a><p>Events, equipment and production.<br/>Gaborone, Botswana.</p><a href="tel:+26773706331">+267 73 706 331</a></div><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><Link href="/account">Customer requests</Link></div></footer>
     <ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
