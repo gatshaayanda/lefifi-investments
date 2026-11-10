@@ -13,7 +13,7 @@ A customer-facing service experience and private operations workspace for Lefifi
 - Open /admin directly; it is not exposed in public navigation.
 - Enter the one-word Lefifi Operations access word.
 - Review incoming event enquiries and equipment hire requests in the live Firestore queue.
-- Filter by status and update a request as it moves through review, quote, confirmation, work and completion.
+- Filter by status, record a Pula quote with scope/inclusions, then move a request through review, quote, confirmation, work and completion. Customers see the recorded quote in My requests; it is not a payment receipt or booking confirmation.
 - Customer-facing account status updates are driven by the same Firestore record.
 - Staff sessions expire after 12 hours and are isolated from the customer guest session.
 
