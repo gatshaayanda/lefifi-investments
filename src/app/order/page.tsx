@@ -1,3 +1,3 @@
-import {redirect} from "next/navigation";
-export const metadata={title:"Request a product",description:"Send The Plug a sneaker or apparel sourcing request."};
-export default function OrderPage(){redirect("/request")}
+import { redirect } from "next/navigation";
+export const metadata = { title: "Equipment hire enquiry", description: "Send Lefifi an equipment hire enquiry." };
+export default function OrderPage(){redirect("/#request");}
