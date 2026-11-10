@@ -35,7 +35,8 @@ export default function HomePage() {
       setError("Online requests are not configured on this deployment yet. Please contact Lefifi directly on +267 73 706 331.");
       return;
     }
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const customerName = clean(form.get("customerName"));
     const phone = clean(form.get("phone"));
     const email = clean(form.get("email"));
@@ -72,7 +73,7 @@ export default function HomePage() {
       }
       setSaved({ id: record.id, kind });
       setMessage(kind === "event" ? "Your event enquiry has been received." : "Your equipment request has been received.");
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not save this request. Please try again.");
       setMessage("");
