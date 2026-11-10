@@ -1,103 +1,64 @@
-# Iteration 13 — Business OS / Store + Briefcase
+# Lefifi Investments — Events, Rentals & Production
 
-**Start every new implementation or QA chat at [START-HERE.md](./START-HERE.md).** The [Iteration 13 Portfolio Handoff](./docs/ITERATION13-PORTFOLIO-HANDOFF.md) explains how this repository is used as the shared reference for new and existing portfolio projects. The complete [documentation map](./docs/README.md) shows the shortest task-specific reading path. The mandatory [Change Safety & Regression Prevention Standard](./docs/CHANGE-SAFETY-STANDARD.md) applies to every change and requires the fix and adjacent working behavior to be verified. [AGENTS.md](./AGENTS.md) contains repository rules; [FOUNDATION-BLUEPRINT.md](./FOUNDATION-BLUEPRINT.md) documents architecture; [CLONING.md](./CLONING.md) governs source selection and adaptation; [docs/ADMIN-HUB-APP-FACTORY-SOP.md](./docs/ADMIN-HUB-APP-FACTORY-SOP.md) and [docs/CLONE-RESET-CHECKLIST.md](./docs/CLONE-RESET-CHECKLIST.md) govern new-project execution. [docs/VISUAL-DIRECTION-STANDARD.md](./docs/VISUAL-DIRECTION-STANDARD.md) defines the visual craftsmanship and mobile-first experience standard. Iteration 13 is the engineering standards/reference repository, not the default clone source. The product owner chooses each new project's source; if none is named, use `gatshaayanda/africhiko`. Existing projects are improved in place.
+A customer-facing service experience and private operations workspace for Lefifi Investments in Gaborone, Botswana.
 
-The Sparkle Legacy chat-widget reference and evidence-led proposal live in [CHAT-WIDGET-RESEARCH.md](./CHAT-WIDGET-RESEARCH.md). These files explain what to preserve, where to edit, what is demo-only, and what needs deliberate project-specific replacement.
+## Customer journey
+1. Browse event planning, furniture/styling, LED screens, sound, lighting, stage production and mobile toilet/equipment hire.
+2. Choose Event enquiry or Equipment hire and submit the relevant brief.
+3. The app creates a Firebase guest session, stores the customer profile and saves the request in Firestore.
+4. Customers can return to My requests in the same browser session to review the latest status.
+5. A submitted request is not a confirmed booking. Lefifi must review scope, availability, pricing and delivery arrangements before confirming.
 
-The approved foundation baseline and recovery policy are documented in [GOLDEN-BASELINE.md](./GOLDEN-BASELINE.md). A reusable, mobile-first PWA foundation candidate. The homepage demonstrates a compact business-branded Store connected to an owner Briefcase/Business OS. The public navigation uses Store, Account and Login; the owner logo remains a discreet workspace entry. Owners can edit services, announcements and the Store accent theme in the local demo. The interface uses the BoardSignal-derived 25 GB monthly capacity reference and high-volume customer-day scenario supplied by the product owner; it is not live server metering or a universal capacity guarantee. Firebase configuration, rules and data were intentionally left unchanged.
-## Customer demo
+## Staff operations
+- Open /admin directly; it is not exposed in public navigation.
+- Enter the one-word Lefifi Operations access word.
+- Review incoming event enquiries and equipment hire requests in the live Firestore queue.
+- Filter by status and update a request as it moves through review, quote, confirmation, work and completion.
+- Customer-facing account status updates are driven by the same Firestore record.
+- Staff sessions expire after 12 hours and are isolated from the customer guest session.
 
-1. Open the homepage and browse the four example services:
-   - Website — P100
-   - App — P200
-   - Monthly support — P50
-   - Phaser games — P500
-2. Select **Request this service**, enter a name and email, choose a requested timeline date (today or later), and optionally describe the project.
-3. Submit the request. It should take you to **My account**, where the request, requested date, starting price and status are shown.
-4. Return to Services to submit another request or filter account requests by the same email. Each request has a branded request/payment record that can be printed or saved as PDF, even before a payment is recorded. Use the receipt's **Print / Save PDF** action to open the browser's native print dialog, then choose **Save as PDF**; the prototype does not generate or download a server-side PDF.
+## Firebase setup
+Firebase project: learn-fx-trading-bw-academy.
 
-The date is a requested timeline, not a confirmed delivery promise. No payment is taken.
+Enable Authentication → Sign-in method → Anonymous. Customer and staff experiences both use anonymous Firebase Auth; staff access is granted only after the server validates the access word and verifies the ID token.
 
-## Local admin demo
+Set these environment variables in the deployment environment:
 
-Use the one-word **Login** entry or the discreet 13Studio footer logo to open the local Briefcase demo. From the owner workspace you can:
+| Variable | Purpose |
+|---|---|
+| NEXT_PUBLIC_FIREBASE_API_KEY | Firebase web API key |
+| NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN | Firebase auth domain |
+| NEXT_PUBLIC_FIREBASE_PROJECT_ID | Must be learn-fx-trading-bw-academy |
+| NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID | Firebase messaging sender ID |
+| NEXT_PUBLIC_FIREBASE_APP_ID | Firebase web app ID |
+| NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID | Optional Analytics ID |
+| LEFIFI_OPERATIONS_WORD | Server-only one-word staff secret |
+| FIREBASE_ADMIN_KEY | Server-only service-account JSON from this same Firebase project |
+| NEXT_PUBLIC_BASE_URL | Canonical public site URL |
 
-- Add, edit, hide/show and delete services.
-- Change prices, descriptions, image/video URLs and media type.
-- Publish or clear a storefront announcement.
-- Review each customer and their requests, then move work through New request, Reviewing, Accepted, In progress, Completed or Declined.
-- Record full or partial simulated payments against a request. Download or print a branded receipt / request record from both the customer account and owner job record, including unpaid, partially paid and fully paid states. The receipt uses the current business name and selected Store colour; no money moves.
-- Review the customer directory, payments received, completed value, projected accepted/in-progress value, requested value and completed-unpaid balance.
-- Choose whether a clean lap in the embedded Big Brothers Racing 3D warm-up awards P10 or P20 off. The customer enters an email, earns a one-use code on a clean lap, and can redeem it against a Store request. Owners can also assign a promotion directly to a customer email.
-- Switch between Today, Customers & jobs, Money, Store design, My Notes and Insights tabs instead of scrolling through one long owner page.
-- Configure the business details and tax references shown on prototype receipts for the business's own record-keeping setup.
-- Review a local event trail tied to demo visits, requests, completed jobs and payments. Vercel Analytics and Speed Insights are included at application level; Firebase Analytics and private Vercel dashboard data are not connected.
-- See summary counts for requests, statuses, services, customer emails and demo visits.
-- Change the Store's accent colour using vivid presets or a custom colour picker; the chosen colour is used as an accent on neutral, readable surfaces across the Store, Briefcase and receipts.
-- Keep private My Notes in this browser.
-- Review the BoardSignal 25 GB capacity reference and illustrative busy-day scenario.
-- Reset the local sample data for another walkthrough.
+The operations API does not create a Firebase custom token. It verifies the staff session's Firebase ID token, validates LEFIFI_OPERATIONS_WORD, then creates/refreshes admins/{uid} with a 12-hour expiry. The service account project_id must match NEXT_PUBLIC_FIREBASE_PROJECT_ID. Never paste service-account JSON into client code or commit it.
 
-This is a prototype control surface, not a secure admin boundary. Do not enter real customer data.
+Publish firestore.rules and firestore.indexes.json to the Lefifi Firebase project. The GitHub rules workflow uses the FIREBASE_SERVICE_ACCOUNT_JSON repository secret and deploys only Firestore rules/indexes to the project ID above. No Firebase Storage rules are configured or deployed.
 
-## Persistence and offline QA
+## Uploads
+UploadThing is the approved media pipeline. The inherited UploadThing route is retained. Do not configure Firebase Storage or Storage rules. Upload controls should only be enabled once the Lefifi UploadThing token is configured.
 
-- Orders, service edits, announcements and statuses are stored in this browser's `localStorage`; customer and admin views share the same local data on the same browser profile.
-- Data is not shared with other devices, sent to a business, or synchronized to Firebase.
-- Visit the homepage while online first so the service worker can cache the app shell. Then switch the device/browser offline and reload the homepage. Confirm the app shell opens, submit a sample request, and use the bottom **Admin demo** entry to change its status. Return to **My account** and confirm the status is reflected.
-- External preview images/videos may need a connection; if an asset is unavailable, the service card should fall back to its local visual placeholder. Offline success means local demo state persists on this device, not that external media is downloaded.
-- If local storage is blocked or full, the app should show a notice; do not interpret a local save notice as server synchronization.
+## PWA and offline boundaries
+The existing PWA installation behavior is protected: native prompt capture and user gesture, dismissible install card, embedded-browser handling, iOS Safari guidance, service-worker updates and offline shell remain intact. Branding and cache identity have been adapted to Lefifi.
 
-## Installation — protected behavior
+The public shell and approved media may be cached. New event/rental requests are not queued offline; the form reports that the request was not sent and must be submitted again after reconnecting. Account history can show data already cached on the device, but current status requires connectivity.
 
-The existing installation mechanics are intentionally preserved:
+## Verification commands
+- npm ci
+- npm run verify:identity
+- npm run verify:offline
+- npm run lint
+- npm run build
 
-- The browser's retained `beforeinstallprompt` event is invoked from the user's explicit branded install action when available.
-- When a native prompt is unavailable, platform-specific guidance is shown instead of a dead button or fake native prompt.
-- Embedded browsers receive a blocking open-in-browser handoff.
-- `/iphone-install` explains Safari Share → Add to Home Screen and includes the walkthrough link.
-- Service-worker caches use an Iteration 13 namespace and provide an update/refresh action.
-
-The duplicate header install CTA has been removed; the persistent branded install action remains the single install entry point. Do not alter install mechanics when changing icon artwork.
-
-## Interaction feedback
-
-Action buttons provide visible press/focus feedback. Successful local changes and validation/storage failures use a dismissible, screen-reader-announced toast. A success message is shown only after the browser accepts the localStorage write; it does not imply server synchronization.
-
-## Development and verification
-
-```sh
-npm install
-npx tsc --noEmit
-npm run verify:identity
-npm run lint
-npm run build
-```
-
-The GitHub Actions workflow in `.github/workflows/verify.yml` runs `npm ci`, identity verification, lint and build checks on pushes to `main` and pull requests. A green CI run is evidence of code checks; it does not by itself prove a Vercel deployment or device/offline behavior succeeded.
-
-After changing icons, inspect both `public/manifest.webmanifest` and `src/app/manifest.ts`, verify all referenced assets and the manifest actually served by the built app, and test Chrome/Android plus physical iPhone Safari. Firebase configuration and rules are outside this prototype's scope.
-
-
-## Guided customer and admin flow
-
-The floating **Need a hand?** guide is optional and scripted. Customers can choose a service, continue into the existing request form or open My account. In Admin demo, it links directly to service management, announcements, incoming requests and the storefront. It does not send chat messages to a server or use an AI model. Its small invitation can be dismissed for the current tab session.
-
-Before cloning/adapting the guide, read [CHAT-WIDGET-RESEARCH.md](./CHAT-WIDGET-RESEARCH.md) and [FOUNDATION-BLUEPRINT.md](./FOUNDATION-BLUEPRINT.md). Keep the main customer journey obvious when the guide is closed.
-
-
-## Customer account workspace
-
-**My account** now demonstrates more than an empty request list:
-- Filter and review request history, requested timeline, discounted or regular price and current status.
-- Submit repeat requests for the same customer, browse new services, and view assigned or earned racing discount codes.
-- Open a conversation attached to a specific request, send a message and share an image, video or PDF attachment while online.
-- See admin/studio replies in the same thread in the Admin demo on this same browser.
-- Use a project-preparation checklist and save a project note for later in this browser. Account sections use consistent Service Studio styling; optional extras are chosen for the actual product context rather than copied from another client.
-- Continue reading saved local state and sending text messages offline after the app shell has been cached. File uploads require internet and are not queued.
-
-**Important limitation:** this remains a local prototype. Requests, messages, replies, statuses, project checklist progress and notes use this browser's storage. They are not sent to a real admin, emailed, or synchronized to another device. UploadThing files are uploaded remotely while online (images up to 4 MB, PDFs up to 4 MB, videos up to 16 MB), but their message metadata is saved in this browser's local thread. Do not use real customer data.
-
-### Reusing the account in another project
-
-Read the customer account adaptation contract in `AGENTS.md` and the account section in `CLONING.md`. Keep the useful capabilities, but replace the theme/game, wording, account extras, status language, file policy and actions with those that fit the actual project. Inspect its authentication, persistence, admin workflow and security rules. A production account requires verified per-customer data access and staff authorization; the demo's localStorage thread is not a real support inbox.
+## Known QA/configuration items
+- Confirm Firebase web config and same-project service-account JSON are set in the deployment environment.
+- Configure the server-only LEFIFI_OPERATIONS_WORD.
+- Upload the official lefifi.jpg logo and replace the interim monogram/PWA mark with approved brand assets.
+- Confirm the mobile toilet hire workflow: delivery, collection, servicing/cleaning and maintenance responsibilities.
+- Confirm inventory quantities, asset ownership vs supplier-sourced items, and quote/deposit rules before enabling inventory availability or payment recording.
+- Test customer and staff flows on real mobile devices; a GitHub push is not a deployment or device QA.
