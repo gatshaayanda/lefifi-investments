@@ -3,7 +3,7 @@
 import { onAuthStateChanged, signInAnonymously, signOut, type User } from "firebase/auth";
 import { doc, onSnapshot, Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
+import { staffAuth, staffDb, hasFirebaseWebConfig } from "@/lib/firebase/client";
 
 export default function AdminGate({children}:{children:React.ReactNode}) {
   const [user,setUser]=useState<User|null>(null);
@@ -14,16 +14,16 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
   const [error,setError]=useState("");
   useEffect(()=>{
     let stopRole=()=>{};
-    const stopAuth=onAuthStateChanged(auth,next=>{
+    const stopAuth=onAuthStateChanged(staffAuth,next=>{
       stopRole();stopRole=()=>{};setUser(next);setAuthorized(false);
       if(!next){setChecking(false);return;}
       setChecking(true);
-      stopRole=onSnapshot(doc(db,"admins",next.uid),snap=>{
+      stopRole=onSnapshot(doc(staffDb,"admins",next.uid),snap=>{
         const data=snap.data();
         const expiry=data?.expiresAt instanceof Timestamp ? data.expiresAt.toMillis() : 0;
         const allowed=snap.exists()&&["owner","staff"].includes(String(data?.role||""))&&expiry>Date.now();
         setAuthorized(allowed);setChecking(false);
-        if(snap.exists()&&!allowed)void signOut(auth);
+        if(snap.exists()&&!allowed)void signOut(staffAuth);
       },()=>{setError("We could not verify staff access. Check the connection and try again.");setChecking(false);});
     });
     return ()=>{stopRole();stopAuth();};
@@ -33,7 +33,7 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
     if(!hasFirebaseWebConfig){setError("Lefifi Firebase web configuration is missing.");return;}
     setBusy(true);setError("");
     try {
-      const active=user ?? (await signInAnonymously(auth)).user;
+      const active=user ?? (await signInAnonymously(staffAuth)).user;
       const idToken=await active.getIdToken(true);
       const response=await fetch("/api/operations-login",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+idToken},body:JSON.stringify({word})});
       const payload=await response.json() as {error?:string};
