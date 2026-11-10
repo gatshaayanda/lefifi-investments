@@ -19,7 +19,7 @@ check(sw.includes("const MEDIA_LIMIT = 40"), "media cache must remain bounded");
 check(page.includes('addDoc(collection(db, "eventEnquiries")') && page.includes('addDoc(collection(db, "rentalRequests")'), "customer forms must create real Firestore enquiries and rental requests");
 check(page.includes("serverTimestamp()") && page.includes("signInAnonymously(auth)"), "customer request creation must use authenticated sessions and server timestamps");
 check(page.includes("This form will not send or queue a request"), "offline customer submissions must be clearly identified as unsent");
-check(account.includes('where("customerId","==",next.uid)') && account.includes('collection(db,"eventEnquiries")') && account.includes('collection(db,"rentalRequests")'), "customer account must query only the signed-in customer's records");
+check(/where\(\s*"customerId"\s*,\s*"=="\s*,\s*next\.uid\s*\)/.test(account) && account.includes('collection(db, "eventEnquiries")') && account.includes('collection(db, "rentalRequests")'), "customer account must query only the signed-in customer's records");
 check(admin.includes("onSnapshot") && admin.includes("updateDoc") && admin.includes("staffDb"), "staff workspace must subscribe to and update Firestore records");
 check(offlinePage.includes("will not send or queue a request"), "offline guide must explain that new requests are not queued");
 check(sw.includes('key.startsWith("iteration13-shell-")') && sw.includes('key.startsWith("theplug-shell-")'), "service worker must retire inherited app-shell caches");
