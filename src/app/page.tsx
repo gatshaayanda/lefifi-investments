@@ -67,9 +67,12 @@ export default function HomePage() {
       } else {
         const items = clean(form.get("items")).split(/\n|,/).map(item => item.trim()).filter(Boolean);
         if (!items.length) throw new Error("Tell us which equipment or services you need.");
+        const eventDate = clean(form.get("eventDate"));
+        const returnDate = clean(form.get("returnDate"));
+        if (returnDate && returnDate < eventDate) throw new Error("The return date must be on or after the required-from date.");
         const record = await addDoc(collection(db, "rentalRequests"), {
           customerId: user.uid, customerName, email, phone, items,
-          eventDate: clean(form.get("eventDate")), returnDate: clean(form.get("returnDate")),
+          eventDate, returnDate,
           deliveryLocation: clean(form.get("deliveryLocation")),
           deliveryRequired: form.get("deliveryRequired") === "yes",
           notes: clean(form.get("notes")), status: "new", createdAt: now, updatedAt: now,
