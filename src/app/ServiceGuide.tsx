@@ -133,12 +133,12 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
     if (match) { chooseService(match); return; }
     if (/website|web page|site/.test(normalized)) { const service = activeServices.find(item => /website/i.test(item.name)); if (service) { chooseService(service); return; } }
     if (/app|mobile/.test(normalized)) { const service = activeServices.find(item => /^app$/i.test(item.name)); if (service) { chooseService(service); return; } }
-    say("I can help with the options this demo actually supports. Pick one of the quick actions below, or choose a service from the menu. I won’t pretend to know something this guide hasn’t been configured to answer.");
+    say("I can help with Lefifi’s event and equipment services. Choose a service below or open your request history. For anything outside these options, contact the team directly.");
   }
 
   const customerActions = [
     { key: "services", label: "Help me choose", icon: "✳" },
-    { key: "account", label: `My requests (${requestCount})`, icon: "↗" },
+    { key: "account", label: `My requests`, icon: "↗" },
     { key: "browse", label: "Just browsing", icon: "↓" },
   ];
   const adminActions = [
@@ -151,12 +151,12 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
   return <div className="sd-guide-root">
     {!open && teaser && <aside className="sd-guide-teaser" aria-label="Optional Lefifi guide invitation">
       <span className="sd-guide-teaser-spark"><Sparkles size={15}/></span>
-      <div><strong>{view === "admin" ? "Need a hand with the demo?" : "Not sure which service fits?"}</strong><p>{view === "admin" ? "Jump straight to requests, services or your storefront." : "I can help you choose, or take you to your requests."}</p><div className="sd-guide-teaser-actions"><button type="button" onClick={() => { setTeaser(false); setOpen(true); if (!messages.length) say("Hi! I’m the Lefifi guide. I use clear options and real demo actions—no pretend human replies."); }}> {view === "admin" ? "Open admin guide" : "Help me choose"} <ArrowRight size={14}/></button><button type="button" className="sd-guide-dismiss" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}>Not now</button></div></div>
+      <div><strong>{view === "admin" ? "Need a hand with your workspace?" : "Not sure which service fits?"}</strong><p>{view === "admin" ? "Jump straight to requests, services or your storefront." : "I can help you choose, or take you to your requests."}</p><div className="sd-guide-teaser-actions"><button type="button" onClick={() => { setTeaser(false); setOpen(true); if (!messages.length) say("Hello. I’m the Lefifi guide. I can point you to the right service and help you start an enquiry."); }}> {view === "admin" ? "Open admin guide" : "Help me choose"} <ArrowRight size={14}/></button><button type="button" className="sd-guide-dismiss" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}>Not now</button></div></div>
       <button type="button" className="sd-guide-teaser-close" aria-label="Dismiss guide invitation" onClick={() => { setTeaser(false); try { window.sessionStorage.setItem(TEASER_KEY, "dismissed"); } catch { /* optional */ } }}><X size={15}/></button>
     </aside>}
     {open && <div className="sd-guide-backdrop" onClick={() => setOpen(false)} aria-hidden="true"/>}
     {open && <section ref={panelRef} className="sd-guide-panel" role="dialog" aria-modal="true" aria-labelledby="sd-guide-title">
-      <header className="sd-guide-head"><div className="sd-guide-avatar"><Sparkles size={18}/></div><div><span className="sd-guide-eyebrow">ITERATION 13 · SERVICE GUIDE</span><h2 id="sd-guide-title">{view === "admin" ? "Studio sidekick" : "Find your next step"}</h2><p><span/> Guided demo · {view === "admin" ? "Admin tools" : "Customer journey"}</p></div><button type="button" aria-label="Close guide" onClick={() => { setOpen(false); launcherRef.current?.focus(); }}><ChevronDown size={19}/></button></header>
+      <header className="sd-guide-head"><div className="sd-guide-avatar"><Sparkles size={18}/></div><div><span className="sd-guide-eyebrow">LEFIFI · SERVICE GUIDE</span><h2 id="sd-guide-title">{view === "admin" ? "Studio sidekick" : "Find your next step"}</h2><p><span/> Guided support · {view === "admin" ? "Admin tools" : "Customer journey"}</p></div><button type="button" aria-label="Close guide" onClick={() => { setOpen(false); launcherRef.current?.focus(); }}><ChevronDown size={19}/></button></header>
       <div className="sd-guide-intro"><strong>{view === "admin" ? "What are you working on?" : "What would you like to do?"}</strong><p>{view === "admin" ? "I’ll take you to the right Lefifi request tool." : "Choose a service or jump to your requests. You can always continue without me."}</p></div>
       <div className="sd-guide-actions">{(view === "admin" ? adminActions : customerActions).map(item => <button key={item.key} type="button" onClick={() => item.key === "services" ? say("Choose a service below to see its starting price and fit. I’ll take you to the existing form when you’re ready.") : runAction(item.key)}><span>{item.icon}</span>{item.label}<ArrowRight size={15}/></button>)}</div>
       {view !== "admin" && <div className="sd-guide-services"><span className="sd-guide-section-label">SERVICE SHORTCUTS</span>{activeServices.map(service => <button key={service.id} type="button" onClick={() => chooseService(service)} aria-pressed={lastChoice === service.id}><span className="sd-guide-service-thumb" aria-hidden="true"><img src={service.media} alt="" loading="lazy" onError={event => { event.currentTarget.style.visibility = "hidden"; }}/></span><span className="sd-guide-service-copy"><strong>{service.name}</strong><small>{service.description}</small></span><b>P{service.price.toLocaleString("en-BW")}</b></button>)}</div>}
@@ -164,7 +164,7 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
       <div className="sd-guide-thread" aria-live="polite" aria-relevant="additions text">{messages.slice(-4).map(message => <p key={message.id} className={`sd-guide-message is-${message.from}`}>{message.text}</p>)}</div>
       <form className="sd-guide-composer" onSubmit={sendText}><input ref={inputRef} value={input} onChange={event => setInput(event.target.value)} aria-label="Ask the service guide" aria-describedby="sd-guide-type-hint" placeholder="Tap here to type a question…" maxLength={300}/><button type="submit" disabled={!input.trim()} aria-label="Send message"><Send size={17}/></button></form>
       <p id="sd-guide-type-hint" className="sd-guide-type-hint">Tap the message box above to type. Your keyboard opens only when you choose to type.</p>
-      <p className="sd-guide-footnote"><Check size={12}/> Scripted guidance · Local demo only · No data sent</p>
+      <p className="sd-guide-footnote"><Check size={12}/> Automated guidance · Enquiry details are only sent when you submit the form</p>
     </section>}
     <button ref={launcherRef} type="button" className={`sd-guide-launcher${open ? " is-open" : ""}`} aria-expanded={open} aria-haspopup="dialog" aria-label={open ? "Close service guide" : "Open service guide"} onClick={() => { setTeaser(false); setOpen(value => !value); if (!messages.length) say("Hi! I’m the Service Studio guide. I can point you to the right action, but I’m not a live person or an AI assistant."); }}>
       {open ? <X size={21}/> : <MessageCircle size={22}/>}<span>{open ? "Close" : "Need a hand?"}</span>{!open && requestCount > 0 && view === "admin" && <b>{requestCount}</b>}
