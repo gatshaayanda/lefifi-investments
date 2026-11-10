@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="92" fill="#09131e"/>
+  <rect x="34" y="34" width="444" height="444" rx="70" fill="none" stroke="#c6a46a" stroke-width="5"/>
+  <path d="M165 115h68v213h144v69H165z" fill="#f3f1eb"/>
+  <path d="M165 115h68v213h144v69H165z" fill="none" stroke="#c6a46a" stroke-width="4"/>
+  <path d="M286 115h62l-52 112h-62z" fill="#c6a46a"/>
+  <text x="256" y="437" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" letter-spacing="8" fill="#c6a46a">LEFIFI</text>
+</svg>
