@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { addDoc, collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
 import ServiceGuide from "@/app/ServiceGuide";
 import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
 
 type RequestKind = "event" | "rental";
+type PublicService = { id:string; name:string; detail:string; price:number; active:boolean; mark?:string };
 const offerings = [
   { title: "Event planning & management", detail: "Planning, coordination and on-the-day delivery for corporate and private events.", mark: "01" },
   { title: "Furniture & event styling", detail: "Classy furniture setups, tables, seating and considered event environments.", mark: "02" },
@@ -22,7 +23,9 @@ function clean(value: FormDataEntryValue | null) { return String(value ?? "").tr
 
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
+  const [catalog, setCatalog] = useState<PublicService[]>(offerings.map((item,index)=>({id:String(index),name:item.title,detail:item.detail,price:0,active:true,mark:item.mark})));
   const [online, setOnline] = useState(true);
+  useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); if(live.length) setCatalog(live); }); return ()=>stop(); }, []);
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -103,7 +106,7 @@ export default function HomePage() {
   return <main className="lefifi">
     <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></div>
     <header className="lf-header"><div className="lf-container lf-nav">
-      <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></Link>
+      <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi-mark.svg" alt="" /></span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></Link>
       <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#about">About</a><a href="#request">Enquire</a></nav>
       <Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link>
     </div></header>
@@ -128,7 +131,7 @@ export default function HomePage() {
 
     <section className="lf-section" id="services"><div className="lf-container">
       <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step.</p></div>
-      <div className="lf-service-grid">{offerings.map(item=><button className="lf-service" type="button" key={item.mark} onClick={()=>chooseOffering({name:item.title})}><span className="lf-service-no">{item.mark}</span><span className="lf-service-title">{item.title}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-arrow">↗</span></button>)}</div>
+      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-no">{item.mark||String(index+1).padStart(2,"0")}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`P${Number(item.price).toLocaleString("en-BW")}`:"Price confirmed after brief"}</span><span className="lf-service-arrow">↗</span></button>)}</div>
     </div></section>
 
     <section className="lf-feature" id="about"><div className="lf-feature-image" /><div className="lf-feature-copy"><p className="lf-eyebrow">FROM FIRST IDEA TO FINAL DETAIL</p><h2>Good events are<br/><em>well put together.</em></h2><p>Lefifi Investments supports event requirements across planning, furniture and styling, technical production and equipment hire. Share the occasion, the location and what you have in mind — the team can help shape the scope with you.</p><a href="#request" className="lf-text-link">Talk to the team <span>↗</span></a></div></section>
