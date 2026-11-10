@@ -10,8 +10,8 @@
 - Uploads: UploadThing only. Firebase Storage is not configured or deployed.
 
 ## Architecture and journeys
-- src/app/page.tsx: public services, event enquiry and equipment hire request forms. Requests are written to Firestore.
-- src/app/account/page.tsx: reads only the signed-in guest/customer's own event and rental records.
+- src/app/page.tsx: mobile-first public discovery, compact service shortcuts, service selection that prefills the correct event/rental form field, and real Firestore event enquiry/equipment hire submissions. Offline submissions are not queued.
+- src/app/account/page.tsx: live, customer-UID-scoped event/rental history with All/Events/Hire filters, status explanations, last-update timestamps, request detail disclosure and staff-recorded quote visibility. Guest history remains tied to the same browser session.
 - src/app/admin/page.tsx: private operations workspace with live event/rental request queues and staff-controlled status updates.
 - src/app/admin/admin-gate.tsx: one-word staff access gate.
 - src/app/api/operations-login/route.ts: verifies the access word server-side, verifies an anonymous Firebase ID token, and grants a time-limited admin role document. It does not issue custom tokens.
@@ -53,12 +53,13 @@
 - npm run verify:offline
 - npm run lint
 - npm run build
-- Test customer event enquiry and rental request, customer-only account history, staff correct/incorrect access word, 12-hour expiry, status update reflected in customer account, denied cross-customer reads, offline unsent form state, PWA native prompt and iOS/embedded-browser behavior.
+- Test customer event enquiry and rental request, selected-service prefills, customer-only live account history and filters, status/quote reflection, staff correct/incorrect access word, 12-hour expiry, denied cross-customer reads, offline unsent form state, PWA native prompt and iOS/embedded-browser behavior.
 - No local build, emulator, browser, physical-device or production deployment is claimed unless its output is actually inspected.
 
 ## Current checkpoint
 - Foundation baseline: 8cab59b.
-- Customer, account, staff operations, quote recording, equipment register, Firestore contracts and Lefifi PWA identity are committed directly to main. The latest application-code checkpoint before this documentation update is f502be8cc69496cac042467696510be3ef6b19b4.
-- Automated build/lint and browser/device visual QA have not been verified in this session. Vercel's status for the branch reports a build-rate-limit failure; no deployment is claimed.
-- End-to-end QA is blocked until the Lefifi Firebase web config, same-project Firebase Admin service account, operations access word and updated Firestore rules are configured/published.
+- Customer discovery, event/rental enquiry flows, customer request account, staff operations, quote recording, equipment register, Firestore contracts and Lefifi PWA identity are committed directly to main.
+- Latest customer-side implementation checkpoint: e2d4465cfa9ea14e34f0d51eb9d018ff9be3e62c. GitHub application verification and Iteration 13 verification passed on this commit, including TypeScript, lint, identity/PWA isolation, offline invariants and production build.
+- Browser/device visual QA and production deployment are not claimed. Vercel's prior branch status reported a build-rate-limit failure; check the current deployment separately.
+- End-to-end Firebase QA still depends on the Lefifi Firebase web config, same-project Firebase Admin service account, operations access word and published Firestore rules.
 - Product-owner QA remains required for customer submissions, private account history, staff access/expiry, quote visibility, equipment CRUD, PWA install behavior, real mobile layouts and the official logo asset.
