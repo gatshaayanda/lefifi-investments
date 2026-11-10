@@ -3,7 +3,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 const f = createUploadthing();
 
 // Lefifi media uploads remain on UploadThing; Firebase Storage is not used.
-// Keep the client-side validation in request-form.tsx in sync with these limits.
+// Images, video and PDFs use UploadThing; Firebase Storage is not configured.
 export const ourFileRouter = {
   fileUploader: f({
     image: { maxFileSize: "4MB", maxFileCount: 1 },
