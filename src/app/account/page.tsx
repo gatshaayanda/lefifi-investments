@@ -75,12 +75,12 @@ export default function AccountPage() {
       let rentalsReady = false;
       const finishLoading = () => setLoading(!(eventsReady && rentalsReady));
       stopEvents = onSnapshot(
-        query(collection(db, "eventEnquiries"), where("customerId", "==", next.uid), orderBy("createdAt", "desc")),
+        query(collection(db,"eventEnquiries"), where("customerId","==",next.uid), orderBy("createdAt","desc")),
         snapshot => { setEvents(snapshot.docs.map(item => ({ id: item.id, ...item.data(), kind: "event" } as RecordItem))); eventsReady = true; finishLoading(); },
         () => { setError("We could not load your event enquiries. Check your connection and try again."); eventsReady = true; finishLoading(); }
       );
       stopRentals = onSnapshot(
-        query(collection(db, "rentalRequests"), where("customerId", "==", next.uid), orderBy("createdAt", "desc")),
+        query(collection(db,"rentalRequests"), where("customerId","==",next.uid), orderBy("createdAt","desc")),
         snapshot => { setRentals(snapshot.docs.map(item => ({ id: item.id, ...item.data(), kind: "rental" } as RecordItem))); rentalsReady = true; finishLoading(); },
         () => { setError("We could not load your equipment requests. Check your connection and try again."); rentalsReady = true; finishLoading(); }
       );
