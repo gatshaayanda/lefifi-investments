@@ -48,30 +48,32 @@ export default function HomePage() {
       await setDoc(doc(db, "customers", user.uid), {
         uid: user.uid, name: customerName, email, phone, createdAt: now, updatedAt: now,
       }, { merge: true });
-      let record;
+      let recordId = "";
       if (kind === "event") {
         const eventType = clean(form.get("eventType"));
         const eventDate = clean(form.get("eventDate"));
         const location = clean(form.get("location"));
         const brief = clean(form.get("brief"));
         const guestCountRaw = clean(form.get("guestCount"));
-        record = await addDoc(collection(db, "eventEnquiries"), {
+        const record = await addDoc(collection(db, "eventEnquiries"), {
           customerId: user.uid, customerName, email, phone, eventType, eventDate, location, brief,
           ...(guestCountRaw ? { guestCount: Number(guestCountRaw) } : {}),
           status: "new", createdAt: now, updatedAt: now,
         });
+        recordId = record.id;
       } else {
         const items = clean(form.get("items")).split(/\n|,/).map(item => item.trim()).filter(Boolean);
         if (!items.length) throw new Error("Tell us which equipment or services you need.");
-        record = await addDoc(collection(db, "rentalRequests"), {
+        const record = await addDoc(collection(db, "rentalRequests"), {
           customerId: user.uid, customerName, email, phone, items,
           eventDate: clean(form.get("eventDate")), returnDate: clean(form.get("returnDate")),
           deliveryLocation: clean(form.get("deliveryLocation")),
           deliveryRequired: form.get("deliveryRequired") === "yes",
           notes: clean(form.get("notes")), status: "new", createdAt: now, updatedAt: now,
         });
+        recordId = record.id;
       }
-      setSaved({ id: record.id, kind });
+      setSaved({ id: recordId, kind });
       setMessage(kind === "event" ? "Your event enquiry has been received." : "Your equipment request has been received.");
       formElement.reset();
     } catch (cause) {
