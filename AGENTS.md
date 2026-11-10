@@ -12,7 +12,7 @@
 ## Architecture and journeys
 - src/app/page.tsx: mobile-first public discovery, compact service shortcuts, a live Firestore service catalogue with six editable single-price starter entries, service selection that prefills the correct event/rental form field, and real Firestore event enquiry/equipment hire submissions. Offline submissions are not queued.
 - src/app/account/page.tsx: live, customer-UID-scoped event/rental history with All/Events/Hire filters, status explanations, last-update timestamps, request detail disclosure and staff-recorded quote visibility. Guest history remains tied to the same browser session.
-- src/app/admin/page.tsx: private operations workspace with live event/rental request queues, staff-controlled status updates, equipment CRUD and a single-price service catalogue CRUD. When the services collection is empty, the authorized staff workspace seeds six editable base-price entries.
+- src/app/admin/page.tsx: private operations workspace with live event/rental request queues, staff-controlled status updates, equipment CRUD and a single-price service catalogue CRUD. When the services collection is empty, staff can explicitly load six editable base-price entries; deletion does not silently recreate them.
 - src/app/admin/admin-gate.tsx: one-word staff access gate.
 - src/app/api/operations-login/route.ts: verifies the access word server-side, verifies an anonymous Firebase ID token, and grants a time-limited admin role document. It does not issue custom tokens.
 - src/lib/firebase/client.ts: separate Firebase Auth/Firestore app instances for customer and staff sessions, so staff sign-in does not overwrite a customer's guest session.
@@ -59,7 +59,7 @@
 ## Current checkpoint
 - Foundation baseline: 8cab59b.
 - Customer discovery, event/rental enquiry flows, customer request account, staff operations, quote recording, equipment register, Firestore contracts, live service catalogue and single-price CRUD are committed to main.
-- The service catalogue now seeds six editable single-price starter entries from the authorized staff workspace when the services collection is empty. Starter values are indicative baselines, not verified final quotes; staff can edit or remove them.
+- The service catalogue offers six editable single-price starter entries through an explicit staff action when the services collection is empty. Starter values are indicative baselines, not verified final quotes; staff can edit or remove them. Starter values are indicative baselines, not verified final quotes; staff can edit or remove them.
 - Official source logo `lefifi.jpg` is not currently present in the repository or attached project files. `public/lefifi-mark.svg` is a temporary substitute only; replace it with the actual supplied brand asset once provided.
 - Latest pre-change main commit: 9c8d03fd123342f0e9010deee2a4de4cae0a5cf6. GitHub application verification, Iteration 13 verification and prototype quality passed on that commit.
 - Vercel reported a build-rate-limit failure on that commit; no live deployment is verified. Firestore rules deployment also failed because the GitHub Actions secret `FIREBASE_SERVICE_ACCOUNT_JSON` was empty; no rules deployment is claimed.
