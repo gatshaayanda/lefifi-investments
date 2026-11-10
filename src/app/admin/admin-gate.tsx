@@ -15,8 +15,9 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
   const [error,setError]=useState("");
   useEffect(()=>{
     let stopRole=()=>{};
+    let expiryTimer:ReturnType<typeof window.setTimeout>|undefined;
     const stopAuth=onAuthStateChanged(staffAuth,next=>{
-      stopRole();stopRole=()=>{};setUser(next);setAuthorized(false);
+      stopRole();stopRole=()=>{};if(expiryTimer)window.clearTimeout(expiryTimer);setUser(next);setAuthorized(false);
       if(!next){setChecking(false);return;}
       setChecking(true);
       stopRole=onSnapshot(doc(staffDb,"admins",next.uid),snap=>{
@@ -24,10 +25,11 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
         const expiry=data?.expiresAt instanceof Timestamp ? data.expiresAt.toMillis() : 0;
         const allowed=snap.exists()&&["owner","staff"].includes(String(data?.role||""))&&expiry>Date.now();
         setAuthorized(allowed);setChecking(false);
+        if(allowed&&expiry>Date.now())expiryTimer=window.setTimeout(()=>void signOut(staffAuth),expiry-Date.now());
         if(snap.exists()&&!allowed)void signOut(staffAuth);
       },()=>{setError("We could not verify staff access. Check the connection and try again.");setChecking(false);});
     });
-    return ()=>{stopRole();stopAuth();};
+    return ()=>{stopRole();stopAuth();if(expiryTimer)window.clearTimeout(expiryTimer);};
   },[]);
   async function enter(event:React.FormEvent<HTMLFormElement>) {
     event.preventDefault();if(busy)return;
