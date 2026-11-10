@@ -4,7 +4,8 @@ import AdminGate from "@/app/admin/admin-gate";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { collection, onSnapshot, orderBy, query, serverTimestamp, updateDoc, doc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase/client";
+import { signOut } from "firebase/auth";
+import { staffAuth, staffDb } from "@/lib/firebase/client";
 
 type OpsRecord = { id:string; customerName:string; email?:string; phone:string; status:string; createdAt?:{toDate?:()=>Date}; updatedAt?:unknown; eventType?:string; eventDate?:string; guestCount?:number; location?:string; brief?:string; items?:string[]; returnDate?:string; deliveryLocation?:string; deliveryRequired?:boolean; notes?:string };
 const statuses=["new","reviewing","quoted","confirmed","in_progress","completed","declined"];
@@ -19,7 +20,7 @@ function Workspace(){
  const [notice,setNotice]=useState("");
  const [loading,setLoading]=useState(true);
  useEffect(()=>{
-  const stopA=onSnapshot(query(collection(db,"eventEnquiries"),orderBy("createdAt","desc")),snap=>{setEvents(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
+  const stopA=onSnapshot(query(collection(staffDb,"eventEnquiries"),orderBy("createdAt","desc")),snap=>{setEvents(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
   const stopB=onSnapshot(query(collection(db,"rentalRequests"),orderBy("createdAt","desc")),snap=>{setRentals(snap.docs.map(d=>({id:d.id,...d.data()} as OpsRecord)));setLoading(false);},err=>{setError(err.message);setLoading(false);});
   return ()=>{stopA();stopB();};
  },[]);
@@ -28,11 +29,11 @@ function Workspace(){
  const needsAction=records.filter(r=>["new","reviewing","quoted"].includes(r.status)).length;
  async function changeStatus(collectionName:string,id:string,status:string){
   const key=collectionName+":"+id;setSaving(key);setNotice("");setError("");
-  try{await updateDoc(doc(db,collectionName,id),{status,updatedAt:serverTimestamp()});setNotice("Request status saved. The customer will see the updated status in their account.");}
+  try{await updateDoc(doc(staffDb,collectionName,id),{status,updatedAt:serverTimestamp()});setNotice("Request status saved. The customer will see the updated status in their account.");}
   catch(cause){setError(cause instanceof Error?cause.message:"Could not update this request.");}
   finally{setSaving("");}
  }
- return <main className="lf-admin lf-workspace"><header className="lf-admin-top"><Link className="lf-brand" href="/"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>OPERATIONS</small></span></Link><div><span>Staff workspace · live Firestore records</span><button onClick={()=>void auth.signOut()}>Sign out</button></div></header>
+ return <main className="lf-admin lf-workspace"><header className="lf-admin-top"><Link className="lf-brand" href="/"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>OPERATIONS</small></span></Link><div><span>Staff workspace · live Firestore records</span><button onClick={()=>void signOut(staffAuth)}>Sign out</button></div></header>
  <div className="lf-admin-content"><div className="lf-admin-title"><div><p className="lf-eyebrow">OPERATIONS OVERVIEW</p><h1>The work,<br/><em>in motion.</em></h1><p>Review new enquiries, check rental requirements and keep customer-facing statuses accurate.</p></div><a href="tel:+26773706331">Lefifi contact · +267 73 706 331</a></div>
  <div className="lf-metrics"><article><span>All requests</span><strong>{records.length}</strong><small>Saved in Firestore</small></article><article><span>Needs attention</span><strong>{needsAction}</strong><small>New, reviewing or quoted</small></article><article><span>Event enquiries</span><strong>{events.length}</strong><small>Planning and production</small></article><article><span>Equipment hire</span><strong>{rentals.length}</strong><small>Rental requests</small></article></div>
  <div className="lf-ops-toolbar"><div><h2>Incoming work</h2><p>Live records update when a customer submits or staff changes a status.</p></div><label>Filter <select value={filter} onChange={e=>setFilter(e.target.value)}><option value="all">All statuses</option>{statuses.map(s=><option key={s} value={s}>{s.replaceAll("_"," ")}</option>)}</select></label></div>
