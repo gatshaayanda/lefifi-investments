@@ -45,7 +45,7 @@ service cloud.firestore {
         && (!request.resource.data.keys().hasAny(['email']) || request.resource.data.email is string);
     }
     match /admins/{uid} {
-      allow get: if owns(uid) && isAdmin();
+      allow get: if owns(uid);
       allow list, create, update, delete: if false;
     }
     match /customers/{uid} {
