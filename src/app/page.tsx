@@ -84,7 +84,7 @@ export default function HomePage() {
       setSaved({ id: recordId, kind });
       setMessage(kind === "event" ? "Your event enquiry has been received." : "Your equipment request has been received.");
       formElement.reset();
-      setSelectedService(""); setEventBrief(""); setRentalItems("");
+       setEventBrief(""); setRentalItems("");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not save this request. Please try again.");
       setMessage("");
@@ -93,7 +93,7 @@ export default function HomePage() {
 
   function chooseOffering(service: { name: string }) {
     const rental = service.name.toLowerCase().includes("hire");
-    setSelectedService(service.name);
+    
     setKind(rental ? "rental" : "event");
     if (rental) setRentalItems(service.name); else setEventBrief("I’m interested in: " + service.name + ". ");
     setError(""); setMessage(""); setSaved(null);
@@ -136,7 +136,7 @@ export default function HomePage() {
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
       <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Send an event brief or an equipment hire request. The team will review it and confirm availability, scope and pricing with you. Submitting a request does not confirm a booking.</p><div className="lf-contact-card"><span>Prefer to speak directly?</span><a href="tel:+26773706331">+267 73 706 331</a><small>Gaborone, Botswana · P.O. Box 201958, Bontleng</small></div></div>
       <div className="lf-form-panel">
-        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setSelectedService("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setSelectedService("");setEventBrief("");}}>Equipment hire</button></div>
+        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setEventBrief("");}}>Equipment hire</button></div>
         {saved ? <div className="lf-success" role="status"><span className="lf-success-icon">✓</span><p className="lf-eyebrow">REQUEST RECEIVED</p><h3>Thank you. We have it.</h3><p>{message} The team still needs to review the details and confirm the next step. This is not yet a confirmed booking.</p><div className="lf-reference">REFERENCE <strong>{saved.id.slice(0,8).toUpperCase()}</strong></div><Link href="/account" className="lf-primary">Track your request <span>↗</span></Link><button className="lf-reset" type="button" onClick={()=>{setSaved(null);setMessage("");}}>Send another enquiry</button></div> :
         <form className="lf-form" onSubmit={submit}>
           <div className="lf-form-heading"><span>{kind === "event" ? "01 / EVENT BRIEF" : "02 / EQUIPMENT REQUEST"}</span><small>Fields marked * are required</small></div>
