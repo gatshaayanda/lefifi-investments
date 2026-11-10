@@ -2758,3 +2758,81 @@ h1 em,
 @media(max-width:800px){.lf-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lf-account-heading{align-items:flex-start;flex-direction:column}.lf-account-heading>.lf-primary{min-height:42px}}
 @media(max-width:560px){.lf-shortcut-grid>a,.lf-shortcut-grid>button{min-height:91px;padding:11px}.lf-shortcut-mark{top:9px;left:11px}.lf-shortcut-grid b{top:8px;right:10px}.lf-account-wrap{padding:34px 0 55px}.lf-account-summary{gap:6px}.lf-account-summary>div{padding:10px}.lf-account-summary strong{font-size:1.4rem}.lf-account-summary span{font-size:.59rem}.lf-account-toolbar{align-items:flex-start;flex-direction:column}.lf-account-filters{width:100%}.lf-account-filters button{flex:1}.lf-account-record{padding:13px}.lf-account-record-head{align-items:flex-start;flex-direction:column}.lf-account-facts{grid-template-columns:1fr 1fr;gap:9px}.lf-account-record-actions{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.lf-shortcut-grid>a,.lf-shortcut-grid>button{transition:none}.lf-shortcut-grid>a:hover,.lf-shortcut-grid>button:hover{transform:none}}
+
+
+/* Lefifi customer visual pass — compact, editorial, mobile-first. */
+.lefifi{--lf-ink:#09131e;--lf-gold:#c6a46a;--lf-paper:#f3f1eb;--lf-muted:#6d737a;background:var(--lf-paper);color:var(--lf-ink);font-family:Inter,Arial,sans-serif}
+.lefifi .lf-container{width:min(1160px,calc(100% - 36px))}
+.lefifi .lf-topline{background:var(--lf-ink);color:var(--lf-paper);font-size:10px;letter-spacing:.13em;padding:7px 0}
+.lefifi .lf-header{background:rgba(243,241,235,.96);border-bottom:1px solid rgba(9,19,30,.12);backdrop-filter:blur(14px)}
+.lefifi .lf-nav{min-height:68px;gap:16px}
+.lefifi .lf-brand{display:inline-flex;align-items:center;gap:10px;color:var(--lf-ink)}
+.lefifi .lf-brand-mark{width:42px;height:42px;border:0;border-radius:0;background:transparent;box-shadow:none;display:block;overflow:hidden}
+.lefifi .lf-brand-mark:after{display:none}
+.lefifi .lf-brand-mark img{display:block;width:100%;height:100%;object-fit:contain}
+.lefifi .lf-brand strong{font-size:15px;letter-spacing:.18em;font-weight:800}
+.lefifi .lf-brand small{display:block;font-size:9px;letter-spacing:.24em;color:#68717b;margin-top:2px}
+.lefifi .lf-nav nav{display:flex;gap:22px;color:#394451;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.lefifi .lf-nav-account{border:1px solid var(--lf-gold);padding:10px 13px;color:var(--lf-ink);font-size:11px;font-weight:700}
+.lefifi .lf-hero{min-height:510px;background:var(--lf-ink);color:var(--lf-paper);padding:66px 0 26px;position:relative;isolation:isolate}
+.lefifi .lf-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(9,19,30,.96) 0%,rgba(9,19,30,.83) 48%,rgba(9,19,30,.35) 100%),linear-gradient(0deg,rgba(9,19,30,.62),transparent 45%)}
+.lefifi .lf-hero-image{opacity:.45;filter:saturate(.58)}
+.lefifi .lf-eyebrow{font-size:10px;letter-spacing:.19em;font-weight:700;color:var(--lf-gold)}
+.lefifi .lf-hero h1{font-family:Georgia,serif;font-size:clamp(46px,7vw,82px);line-height:.98;letter-spacing:-.045em;font-weight:500;margin:22px 0 16px;max-width:700px}
+.lefifi .lf-hero h1 em,.lefifi .lf-section h2 em,.lefifi .lf-feature h2 em,.lefifi .lf-request-intro h2 em{color:var(--lf-gold);font-style:italic}
+.lefifi .lf-hero-copy{max-width:480px;color:#d4d8db;font-size:14px;line-height:1.65}
+.lefifi .lf-primary,.lefifi .lf-submit{background:var(--lf-gold);color:var(--lf-ink);border:1px solid var(--lf-gold);border-radius:2px;min-height:44px;padding:12px 18px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:800}
+.lefifi .lf-secondary{border:1px solid rgba(243,241,235,.5);border-radius:2px;padding:12px 18px;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+.lefifi .lf-hero-foot{border-top:1px solid rgba(243,241,235,.22);margin-top:56px;padding-top:13px;font-size:9px;letter-spacing:.16em;color:#c8cbd0}
+.lefifi .lf-shortcuts{background:#e8e4da;border-bottom:1px solid #d4cbb9}
+.lefifi .lf-shortcut-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+.lefifi .lf-shortcut-grid>*{min-height:82px;padding:14px 16px;border-right:1px solid #d4cbb9;color:var(--lf-ink);position:relative}
+.lefifi .lf-shortcut-grid>*:first-child{border-left:1px solid #d4cbb9}
+.lefifi .lf-shortcut-mark{color:#9b7945;font-size:10px;letter-spacing:.12em}
+.lefifi .lf-shortcut-grid strong{display:block;font-size:13px;margin:6px 0 2px}
+.lefifi .lf-shortcut-grid small{font-size:10px;color:#66707a}
+.lefifi .lf-shortcut-grid b{position:absolute;right:14px;top:14px;color:#9b7945}
+.lefifi .lf-section{padding:64px 0;background:var(--lf-paper)}
+.lefifi .lf-section-heading{display:grid;grid-template-columns:1.1fr .7fr;align-items:end;gap:40px;margin-bottom:26px}
+.lefifi .lf-section h2,.lefifi .lf-feature h2,.lefifi .lf-request-intro h2{font:500 clamp(30px,4vw,46px)/1.06 Georgia,serif;letter-spacing:-.025em;margin:10px 0}
+.lefifi .lf-section-heading>p{font-size:13px;line-height:1.65;color:#59616b;max-width:390px;margin:0 0 5px}
+.lefifi .lf-service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid #d4cbb9;border-left:1px solid #d4cbb9}
+.lefifi .lf-service{min-height:154px;padding:18px 20px;text-align:left;position:relative;background:transparent;border:0;border-right:1px solid #d4cbb9;border-bottom:1px solid #d4cbb9;color:var(--lf-ink);display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.lefifi .lf-service:hover{background:#e9e3d7}
+.lefifi .lf-service-no{font-size:10px;color:#9b7945;letter-spacing:.12em}
+.lefifi .lf-service-title{font-size:15px;font-weight:750;max-width:90%}
+.lefifi .lf-service-detail{font-size:11px;line-height:1.5;color:#68717b;max-width:92%}
+.lefifi .lf-service-price{font-size:11px;font-weight:800;color:#8b6937;letter-spacing:.04em;margin-top:auto;padding-top:4px}
+.lefifi .lf-service-arrow{position:absolute;right:18px;top:17px;color:#9b7945}
+.lefifi .lf-feature{background:var(--lf-ink);color:var(--lf-paper);min-height:360px}
+.lefifi .lf-feature-copy{padding:58px clamp(24px,7vw,100px);max-width:680px}
+.lefifi .lf-feature-copy>p:not(.lf-eyebrow){font-size:13px;line-height:1.7;color:#c5cbd0;max-width:490px}
+.lefifi .lf-text-link{display:inline-flex;margin-top:14px;color:var(--lf-gold);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.lefifi .lf-request-section{background:#e9e5dc;padding:64px 0}
+.lefifi .lf-request-layout{display:grid;grid-template-columns:.75fr 1.25fr;gap:42px;align-items:start}
+.lefifi .lf-request-intro>p:not(.lf-eyebrow){font-size:13px;line-height:1.65;color:#59616b;max-width:360px}
+.lefifi .lf-contact-card{border-top:1px solid #cfc5b4;margin-top:26px;padding-top:16px;display:grid;gap:7px}
+.lefifi .lf-contact-card span,.lefifi .lf-contact-card small{font-size:10px;color:#68717b}
+.lefifi .lf-contact-card a{font-size:19px;font-weight:750;color:var(--lf-ink)}
+.lefifi .lf-form-panel{background:#f8f7f3;border:1px solid #d7d0c3;box-shadow:0 12px 35px rgba(9,19,30,.07)}
+.lefifi .lf-form-tabs{padding:0 20px;border-bottom:1px solid #ded8ce;display:flex;gap:20px}
+.lefifi .lf-form-tabs button{padding:15px 0;border:0;border-bottom:2px solid transparent;background:none;color:#6b737b;font-size:11px;font-weight:750}
+.lefifi .lf-form-tabs button.active{color:var(--lf-ink);border-color:var(--lf-gold)}
+.lefifi .lf-form{padding:20px}
+.lefifi .lf-form-heading{display:flex;justify-content:space-between;gap:12px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid #e1dbd1;color:#8b6937;font-size:10px;letter-spacing:.1em}
+.lefifi .lf-form-heading small{color:#7a8188;letter-spacing:0}
+.lefifi .lf-form-grid{gap:12px}
+.lefifi .lf-form label{font-size:10px;font-weight:700;color:#414a53;gap:6px}
+.lefifi .lf-form input,.lefifi .lf-form select,.lefifi .lf-form textarea{min-height:42px;padding:10px 11px;border:1px solid #d6d2ca;border-radius:2px;background:white;color:var(--lf-ink);font-size:12px}
+.lefifi .lf-form textarea{min-height:88px}
+.lefifi .lf-submit{width:100%;margin-top:14px}
+.lefifi .lf-form-note{font-size:10px;line-height:1.5;color:#77808a}
+.lefifi .lf-footer{background:var(--lf-ink);color:var(--lf-paper)}
+.lefifi .lf-footer-main{padding:26px 0;gap:24px}
+.lefifi .lf-footer-main>p{font-size:11px;line-height:1.6;color:#b7bdc4}
+.lefifi .lf-footer-bottom{padding:12px 0;border-top:1px solid rgba(243,241,235,.16);font-size:10px;color:#b7bdc4}
+.lefifi .lf-service-manager{margin-bottom:26px}
+.lefifi .lf-service-form{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lefifi .lf-service-form input,.lefifi .lf-service-form select{min-width:0}
+@media(max-width:760px){.lefifi .lf-nav nav{display:none}.lefifi .lf-nav{min-height:62px}.lefifi .lf-hero{min-height:450px;padding:54px 0 20px}.lefifi .lf-hero-foot{margin-top:42px;gap:12px}.lefifi .lf-shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lefifi .lf-shortcut-grid>*{border-bottom:1px solid #d4cbb9}.lefifi .lf-shortcut-grid>*:nth-child(odd){border-left:1px solid #d4cbb9}.lefifi .lf-section{padding:44px 0}.lefifi .lf-section-heading{grid-template-columns:1fr;gap:8px}.lefifi .lf-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lefifi .lf-service{min-height:166px;padding:14px}.lefifi .lf-request-section{padding:44px 0}.lefifi .lf-request-layout{grid-template-columns:1fr;gap:24px}.lefifi .lf-form{padding:15px}.lefifi .lf-service-form{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.lefifi .lf-container{width:calc(100% - 24px)}.lefifi .lf-nav-account{padding:9px 10px;font-size:10px}.lefifi .lf-brand-mark{width:36px;height:36px}.lefifi .lf-brand strong{font-size:13px}.lefifi .lf-hero h1{font-size:45px}.lefifi .lf-service-grid{grid-template-columns:1fr 1fr}.lefifi .lf-service-title{font-size:13px}.lefifi .lf-service-detail{font-size:10px}}
