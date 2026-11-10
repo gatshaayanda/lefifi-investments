@@ -1,67 +1,50 @@
 "use client";
-import {onAuthStateChanged,signInWithCustomToken,signOut,type User} from "firebase/auth";
-import {doc,onSnapshot} from "firebase/firestore";
-import {useEffect,useState} from "react";
-import {auth,db} from "@/lib/firebase/client";
 
-function hasAdminRole(data:Record<string,unknown>|undefined){
- return ["owner","staff"].includes(String(data?.role??"").toLowerCase());
+import { onAuthStateChanged, signInAnonymously, signOut, type User } from "firebase/auth";
+import { doc, onSnapshot, Timestamp } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
+
+export default function AdminGate({children}:{children:React.ReactNode}) {
+  const [user,setUser]=useState<User|null>(null);
+  const [checking,setChecking]=useState(true);
+  const [authorized,setAuthorized]=useState(false);
+  const [word,setWord]=useState("");
+  const [busy,setBusy]=useState(false);
+  const [error,setError]=useState("");
+  useEffect(()=>{
+    let stopRole=()=>{};
+    const stopAuth=onAuthStateChanged(auth,next=>{
+      stopRole();stopRole=()=>{};setUser(next);setAuthorized(false);
+      if(!next){setChecking(false);return;}
+      setChecking(true);
+      stopRole=onSnapshot(doc(db,"admins",next.uid),snap=>{
+        const data=snap.data();
+        const expiry=data?.expiresAt instanceof Timestamp ? data.expiresAt.toMillis() : 0;
+        const allowed=snap.exists()&&["owner","staff"].includes(String(data?.role||""))&&expiry>Date.now();
+        setAuthorized(allowed);setChecking(false);
+        if(snap.exists()&&!allowed)void signOut(auth);
+      },()=>{setError("We could not verify staff access. Check the connection and try again.");setChecking(false);});
+    });
+    return ()=>{stopRole();stopAuth();};
+  },[]);
+  async function enter(event:React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();if(busy)return;
+    if(!hasFirebaseWebConfig){setError("Lefifi Firebase web configuration is missing.");return;}
+    setBusy(true);setError("");
+    try {
+      const active=user ?? (await signInAnonymously(auth)).user;
+      const idToken=await active.getIdToken(true);
+      const response=await fetch("/api/operations-login",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+idToken},body:JSON.stringify({word})});
+      const payload=await response.json() as {error?:string};
+      if(!response.ok)throw new Error(payload.error||"Access denied. Check the access word.");
+      setWord("");
+    } catch(cause) { setError(cause instanceof Error?cause.message:"We could not verify access. Try again."); }
+    finally { setBusy(false); }
+  }
+  if(checking)return <main className="lf-admin"><div className="lf-admin-shell"><p className="lf-eyebrow">LEFIFI OPERATIONS</p><h1>Checking staff access…</h1></div></main>;
+  if(user&&authorized)return <>{children}</>;
+  return <main className="lf-admin"><div className="lf-admin-shell"><Link href="/" className="lf-admin-back">← Customer website</Link><p className="lf-eyebrow">PRIVATE STAFF WORKSPACE</p><h1>Operations<br/><em>sign in.</em></h1><p className="lf-admin-intro">Enter the Lefifi operations access word to open the staff workspace.</p><form className="lf-admin-login" onSubmit={enter}><label htmlFor="operations-word">Access word</label><input id="operations-word" type="password" value={word} onChange={event=>setWord(event.target.value)} autoComplete="current-password" required autoFocus/><button type="submit" disabled={busy||!hasFirebaseWebConfig}>{busy?"Verifying access…":"Enter operations ↗"}</button>{error&&<p className="lf-error" role="alert">{error}</p>}</form>{!hasFirebaseWebConfig&&<p className="lf-error">Firebase web configuration is not available in this deployment.</p>}<p className="lf-admin-footnote">Staff access is checked by the server. The customer website does not expose this workspace in its main navigation.</p></div></main>;
 }
 
-function friendlyAuthError(err:unknown){
- const code=typeof err==="object"&&err!==null&&"code" in err?String((err as {code?:unknown}).code):"";
- if(["auth/invalid-credential","auth/wrong-password","auth/user-not-found","auth/invalid-login-credentials"].includes(code)){
-  return "Sign-in failed. Check your email and password and try again.";
- }
- if(code==="auth/too-many-requests") return "Too many sign-in attempts. Wait a moment and try again.";
- if(code==="auth/network-request-failed") return "We could not reach Firebase. Check your internet connection and try again.";
- return err instanceof Error?err.message:"We could not sign you in. Check your details.";
-}
-
-export default function AdminGate({children}:{children:React.ReactNode}){
- const[user,setUser]=useState<User|null>(null),[checking,setChecking]=useState(true),[authorized,setAuthorized]=useState(false),[offline,setOffline]=useState(false),[accessWord,setAccessWord]=useState(""),[error,setError]=useState(""),[busy,setBusy]=useState(false);
-
- useEffect(()=>{
-  let stopAdmin:undefined|(()=>void);
-  const stopAuth=onAuthStateChanged(auth,next=>{
-   if(stopAdmin){stopAdmin();stopAdmin=undefined}
-   setUser(next);
-   setChecking(true);
-   setOffline(false);
-   if(!next){setAuthorized(false);setChecking(false);return}
-   stopAdmin=onSnapshot(doc(db,"admins",next.uid),snapshot=>{
-    const allowed=snapshot.exists()&&hasAdminRole(snapshot.data());
-    setAuthorized(allowed);
-    setOffline(false);
-    setChecking(false);
-    if(!allowed)void signOut(auth);
-   },()=>{
-    setOffline(true);
-    setChecking(false);
-   });
-  });
-  return ()=>{if(stopAdmin)stopAdmin();stopAuth()};
- },[]);
-
- async function signIn(e:React.FormEvent){
-  e.preventDefault();setBusy(true);setError("");
-  try{
-   const response=await fetch("/api/operations-login",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({word:accessWord})});
-   const payload=await response.json() as {token?:string;error?:string};
-   if(!response.ok||!payload.token)throw new Error(payload.error??"Access denied. Check the access word and try again.");
-   const credential=await signInWithCustomToken(auth,payload.token);
-   const adminSnapshot=await new Promise<{exists:boolean;data:()=>Record<string,unknown>}|null>(resolve=>{
-    const stop=onSnapshot(doc(db,"admins",credential.user.uid),snapshot=>{stop();resolve({exists:snapshot.exists(),data:()=>snapshot.data()??{}})},()=>{stop();resolve(null)});
-   });
-   if(!adminSnapshot||!adminSnapshot.exists||!hasAdminRole(adminSnapshot.data())){
-    setError("This account is not enabled for Iteration 13 Operations.");
-    await signOut(auth);
-   }else{setAuthorized(true);setOffline(false);setAccessWord("")}
-  }catch(err){setError(friendlyAuthError(err))}
-  finally{setBusy(false)}
- }
-
- if(checking)return <main className="adminPage"><div className="adminShell"><div className="emptyState"><div>🔐</div><h1>Opening Iteration 13 Admin</h1><p>Checking access…</p></div></div></main>;
- if(user&&authorized)return <div className="adminAuthorized">{offline&&<div className="adminAccountBar"><span>Iteration 13 Admin · Offline mode · cached admin access</span><span>Changes will sync when connection returns.</span></div>}<div className="adminAccountBar"><span>Iteration 13 Admin · {user.email??"authorized staff"}</span><button className="button buttonLight" type="button" onClick={()=>void signOut(auth)}>Sign out</button></div>{children}</div>;
- return <main className="adminPage"><div className="adminShell"><section className="adminPanel" style={{maxWidth:520,margin:"80px auto"}}><span className="kicker">Iteration 13 · Operations</span><h1>Operations sign in</h1><p>Enter your Operations access word to manage sourcing requests, catalogue and customer conversations.</p><form className="adminForm" onSubmit={signIn}><label>Access word<input type="password" value={accessWord} onChange={e=>setAccessWord(e.target.value)} autoComplete="current-password" required autoFocus/></label><button className="button buttonPrimary" type="submit" disabled={busy}>{busy?"Checking access…":"Enter Operations"}</button></form>{error&&<p role="alert" className="notice">{error}</p>}</section></div></main>
-}
+import Link from "next/link";
