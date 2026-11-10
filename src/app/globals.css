@@ -2899,3 +2899,41 @@ a{ text-underline-offset:3px }
 .lefifi .lf-footer-main>p,.lefifi .lf-footer-bottom{color:#d2dce2}
 .lefifi .lf-brand-mark img{width:100%;height:100%;object-fit:contain}
 @media(max-width:560px){.lefifi .lf-brand-mark{width:142px;height:59px}.lefifi .lf-nav{gap:8px}.lefifi .lf-nav-account{white-space:nowrap}}
+
+/* Staff workspace: clear information hierarchy, readable copy and branded form controls. */
+.lf-admin{--lf-ink:#102638;--lf-gold:#43a9d0;--lf-paper:#f7f8f7;--lf-muted:#536575;background:#f2f5f6;color:#172b3b}
+.lf-admin .lf-admin-top{background:#102638;color:#fff;border-bottom:3px solid #43a9d0}
+.lf-admin .lf-brand{gap:0}
+.lf-admin .lf-brand-mark{width:178px;height:73px;background:#fff;border-radius:3px;padding:3px;display:block}
+.lf-admin .lf-brand-mark img{width:100%;height:100%;object-fit:contain}
+.lf-admin .lf-admin-top>div>span{color:#d5e1e8}
+.lf-admin .lf-admin-top button{background:#43a9d0;color:#092234;border:1px solid #43a9d0;font-weight:800}
+.lf-admin .lf-admin-content{color:#172b3b}
+.lf-admin .lf-admin-title h1{color:#102638}
+.lf-admin .lf-admin-title>div>p:not(.lf-eyebrow){color:#435361;line-height:1.6}
+.lf-admin .lf-admin-title>a{color:#176b8d;font-weight:800}
+.lf-admin .lf-eyebrow{color:#176b8d}
+.lf-admin .lf-metrics article{background:#fff;border:1px solid #cbd5dc;border-top:3px solid #43a9d0}
+.lf-admin .lf-metrics article span,.lf-admin .lf-metrics article small{color:#536575}
+.lf-admin .lf-metrics article strong{color:#102638}
+.lf-admin .lf-inventory,.lf-admin .lf-ops-record{background:#fff;border:1px solid #cbd5dc;box-shadow:0 3px 12px rgba(16,38,56,.045)}
+.lf-admin h2,.lf-admin h3{color:#102638}
+.lf-admin p{color:#435361}
+.lf-admin :where(label){color:#263b4b;font-weight:750}
+.lf-admin :where(input,select,textarea){background:#fff!important;color:#172b3b!important;border:1px solid #aebdc7!important;min-height:40px}
+.lf-admin :where(input,select,textarea)::placeholder{color:#667786!important}
+.lf-admin :where(button){color:#102638}
+.lf-admin .lf-asset-list,.lf-admin .lf-ops-list{gap:12px}
+.lf-admin .lf-ops-record{padding:18px}
+.lf-admin .lf-ops-facts{color:#263b4b}
+.lf-admin .lf-ops-facts strong{color:#172b3b}
+.lf-admin .lf-ops-brief{background:#f2f6f8;border-left:3px solid #43a9d0;color:#263b4b}
+.lf-admin .lf-quote-editor{background:#f7f9fa;padding:14px;border:1px solid #d7e0e5}
+.lf-admin .lf-quote-editor strong{color:#263b4b}
+.lf-admin .lf-quote-editor input{background:#fff;color:#172b3b}
+.lf-admin .lf-quote-editor button,.lf-admin .lf-asset-form-actions button{background:#43a9d0;color:#092234;font-weight:850}
+.lf-admin .lf-ops-actions button{border:1px solid #aebdc7;background:#f7f9fa;color:#263b4b}
+.lf-admin .lf-ops-actions button:hover{border-color:#43a9d0;background:#e8f5fa}
+.lf-admin .lf-error{color:#8d2d24}
+.lf-admin .lf-success-inline{color:#23633b}
+@media(max-width:600px){.lf-admin .lf-brand-mark{width:142px;height:58px}.lf-admin .lf-admin-top{gap:10px}.lf-admin .lf-ops-record{padding:13px}}
