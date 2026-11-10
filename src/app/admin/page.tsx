@@ -8,7 +8,7 @@ import { signOut } from "firebase/auth";
 import { staffAuth, staffDb } from "@/lib/firebase/client";
 
 type EquipmentRecord = { id:string; name:string; category:string; source:"owned"|"supplier"; quantity:number; status:string; supplier?:string; notes?:string; quoteAmount?:number; quoteDetails?:string };
-type OpsRecord = { id:string; customerName:string; email?:string; phone:string; status:string; createdAt?:{toDate?:()=>Date}; updatedAt?:unknown; eventType?:string; eventDate?:string; guestCount?:number; location?:string; brief?:string; items?:string[]; returnDate?:string; deliveryLocation?:string; deliveryRequired?:boolean; notes?:string };
+type OpsRecord = { id:string; customerName:string; email?:string; phone:string; status:string; createdAt?:{toDate?:()=>Date}; updatedAt?:unknown; eventType?:string; eventDate?:string; guestCount?:number; location?:string; brief?:string; items?:string[]; returnDate?:string; deliveryLocation?:string; deliveryRequired?:boolean; notes?:string; quoteAmount?:number; quoteDetails?:string };
 const statuses=["new","reviewing","quoted","confirmed","in_progress","completed","declined"];
 const time=(value:OpsRecord["createdAt"])=>value?.toDate?value.toDate().toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"Just received";
 
