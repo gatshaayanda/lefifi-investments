@@ -65,6 +65,10 @@ service cloud.firestore {
       allow read: if isAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
       allow update, delete: if isAdmin();
     }
+    match /services/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
     match /equipment/{id} {
       allow read, write: if isAdmin();
     }
