@@ -2843,3 +2843,59 @@ h1 em,
 .lf-service-icon{position:absolute;left:20px;top:18px;display:inline-flex;color:#a98752}
 .lf-service-arrow{display:inline-flex;align-items:center;justify-content:center}
 .lf-brand-mark img{display:block;width:28px;height:28px;object-fit:contain}
+
+
+/* Lefifi brand system — readable contrast and consistent controls across customer and staff routes. */
+:root{
+  --lf-brand-blue:#43a9d0;
+  --lf-brand-green:#91c84a;
+  --lf-brand-orange:#f07836;
+  --lf-brand-purple:#77358e;
+  --lf-brand-navy:#102638;
+  --lf-brand-ink:#172b3b;
+  --lf-brand-paper:#f7f8f7;
+  --lf-brand-line:#cbd5dc;
+  --lf-brand-muted:#536575;
+}
+body{background:var(--lf-brand-paper);color:var(--lf-brand-ink)}
+::selection{background:rgba(67,169,208,.28);color:#102638}
+a{ text-underline-offset:3px }
+:where(input,select,textarea){color:#172b3b}
+:where(input,select,textarea)::placeholder{color:#667786;opacity:1}
+:where(input,select,textarea):focus-visible{outline:3px solid rgba(67,169,208,.42);outline-offset:1px;border-color:#237fa7!important}
+:where(button,a,[role=button]):focus-visible{outline:3px solid #43a9d0;outline-offset:3px}
+:where(label){color:#263b4b}
+:where(small,.muted,.text-muted){color:#536575}
+:where(table){border-collapse:collapse}
+:where(th){color:#263b4b;font-weight:800}
+:where(td){color:#263b4b}
+:where(button:disabled){opacity:.62;cursor:not-allowed}
+.lefifi{--lf-ink:#102638;--lf-gold:#43a9d0;--lf-paper:#f7f8f7;--lf-muted:#536575}
+.lefifi .lf-topline{background:#102638;color:#fff}
+.lefifi .lf-header{background:rgba(247,248,247,.97)}
+.lefifi .lf-brand{gap:0}
+.lefifi .lf-brand-mark{width:184px;height:76px;flex:0 0 auto;background:#fff;border-radius:3px;padding:3px}
+.lefifi .lf-brand-mark img{width:100%;height:100%;object-fit:contain}
+.lefifi .lf-hero{background:#102638}
+.lefifi .lf-hero:before{background:linear-gradient(90deg,rgba(8,24,37,.97) 0%,rgba(8,24,37,.88) 55%,rgba(8,24,37,.48) 100%),linear-gradient(0deg,rgba(8,24,37,.7),transparent 55%)}
+.lefifi .lf-eyebrow{color:#9bd9ee}
+.lefifi .lf-hero h1 em,.lefifi .lf-section h2 em,.lefifi .lf-feature h2 em,.lefifi .lf-request-intro h2 em{color:#72c9e8}
+.lefifi .lf-primary,.lefifi .lf-submit{background:#43a9d0;color:#092234;border-color:#43a9d0}
+.lefifi .lf-primary:hover,.lefifi .lf-submit:hover{background:#75c7e3;border-color:#75c7e3}
+.lefifi .lf-shortcut-grid>*:hover{background:#fff}
+.lefifi .lf-shortcut-icon,.lefifi .lf-shortcut-grid b{color:#237fa7}
+.lefifi .lf-service-icon,.lefifi .lf-service-arrow{color:#237fa7}
+.lefifi .lf-service-price{color:#176b8d}
+.lefifi .lf-form-tabs button.active{border-color:#43a9d0;color:#102638}
+.lefifi .lf-form label{font-size:12px;color:#263b4b}
+.lefifi .lf-form-heading{color:#176b8d}
+.lefifi .lf-form-heading small,.lefifi .lf-form-note{color:#536575}
+.lefifi .lf-form input,.lefifi .lf-form select,.lefifi .lf-form textarea{color:#172b3b;border-color:#b9c6ce;background:#fff;font-size:14px}
+.lefifi .lf-form input::placeholder,.lefifi .lf-form textarea::placeholder{color:#667786}
+.lefifi .lf-form-note{font-size:12px}
+.lefifi .lf-section-heading>p,.lefifi .lf-request-intro>p:not(.lf-eyebrow){color:#435361;font-size:14px}
+.lefifi .lf-service-detail{color:#4f5f6b;font-size:12px}
+.lefifi .lf-shortcut-grid small{color:#435361;font-size:11px}
+.lefifi .lf-footer-main>p,.lefifi .lf-footer-bottom{color:#d2dce2}
+.lefifi .lf-brand-mark img{width:100%;height:100%;object-fit:contain}
+@media(max-width:560px){.lefifi .lf-brand-mark{width:142px;height:59px}.lefifi .lf-nav{gap:8px}.lefifi .lf-nav-account{white-space:nowrap}}
