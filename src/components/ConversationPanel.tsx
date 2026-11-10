@@ -5,8 +5,9 @@ import {auth,db} from "@/lib/firebase/client";
 import {generateReactHelpers} from "@uploadthing/react";
 import type {OurFileRouter} from "@/app/api/uploadthing/core";
 
-const {useUploadThing}=generateReactHelpers<OurFileRouter>();
 import {createCustomerConversation,subscribeToConversation,updateConversationRead,recordConversationMessage,type Conversation,type ConversationMessage} from "@/lib/firebase/data";
+
+const {useUploadThing}=generateReactHelpers<OurFileRouter>();
 
 const MAX_FILE_SIZE=4*1024*1024;
 const allowed=(file:File)=>file.type.startsWith("image/")||file.type==="application/pdf";
@@ -14,6 +15,7 @@ const allowed=(file:File)=>file.type.startsWith("image/")||file.type==="applicat
 function timeText(value:string){const date=new Date(value);return Number.isFinite(date.getTime())?date.toLocaleString([], {dateStyle:"medium",timeStyle:"short"}):""}
 
 export default function ConversationPanel({conversationId,conversationTitle,onBack}:{conversationId?:string;conversationTitle?:string;onBack?:()=>void}){
+ const {startUpload}=useUploadThing("fileUploader");
  const[user,setUser]=useState(auth.currentUser),[activeConversationId,setActiveConversationId]=useState(conversationId),[conversation,setConversation]=useState<Conversation|null>(null),[messages,setMessages]=useState<ConversationMessage[]>([]),[text,setText]=useState(""),[file,setFile]=useState<File|null>(null),[busy,setBusy]=useState(false),[notice,setNotice]=useState(""),bottomRef=useRef<HTMLDivElement>(null);
  useEffect(()=>{const stop=auth.onAuthStateChanged(()=>setUser(auth.currentUser));return stop},[]);
  useEffect(()=>{setActiveConversationId(conversationId)},[conversationId]);
