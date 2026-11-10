@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { onAuthStateChanged, signInAnonymously, signOut, type User } from "firebase/auth";
 import { doc, onSnapshot, Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
