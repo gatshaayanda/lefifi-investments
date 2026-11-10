@@ -30,7 +30,7 @@
 ## Data contracts
 - customers/{uid}: uid, name, email, phone, createdAt, updatedAt (timestamps).
 - eventEnquiries/{id}: customerId, customerName, optional email, phone, eventType, eventDate, location, brief, optional guestCount, status, createdAt, updatedAt; staff may add quoteAmount, quoteDetails and quoteUpdatedAt.
-- rentalRequests/{id}: customerId, customerName, optional email, phone, items[], eventDate, returnDate, deliveryLocation, deliveryRequired, notes, status, createdAt, updatedAt; staff may add quoteAmount, quoteDetails and quoteUpdatedAt.
+- rentalRequests/{id}: customerId, customerName, optional email, phone, items[], eventDate, returnDate, deliveryLocation, deliveryRequired, optional servicingRequirement (yes/no/discuss), notes, status, createdAt, updatedAt; staff may add quoteAmount, quoteDetails and quoteUpdatedAt.
 - Customer writes are limited by firestore.rules; staff status changes are authorized by admins/{uid} role and expiry.
 - Availability, quotes, payments, asset ownership, supplier sourcing, delivery/collection, servicing and maintenance must not be represented as confirmed until the team records verified information. Distinguish Lefifi-owned assets from supplier-sourced assets.
 
