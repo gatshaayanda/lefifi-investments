@@ -98,7 +98,7 @@ export default function HomePage() {
   return <main className="lefifi">
     <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></div>
     <header className="lf-header"><div className="lf-container lf-nav">
-      <a className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></a>
+      <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark">L</span><span><strong>LEFIFI</strong><small>INVESTMENTS</small></span></Link>
       <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#about">About</a><a href="#request">Enquire</a></nav>
       <Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link>
     </div></header>
