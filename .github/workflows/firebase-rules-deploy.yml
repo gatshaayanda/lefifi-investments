@@ -33,14 +33,14 @@ jobs:
         run: npm install --global firebase-tools
       - name: Write Firebase service account
         env:
-          FIREBASE_SERVICE_ACCOUNT_JSON: \${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
         run: |
           test -n "$FIREBASE_SERVICE_ACCOUNT_JSON"
           umask 077
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT_JSON" > "$RUNNER_TEMP/firebase-service-account.json"
       - name: Deploy Firestore rules and indexes to Lefifi project
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: \${{ runner.temp }}/firebase-service-account.json
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
         run: firebase deploy --only firestore:rules,firestore:indexes --project "learn-fx-trading-bw-academy" --non-interactive
       - name: Remove Firebase service account
         if: always()
