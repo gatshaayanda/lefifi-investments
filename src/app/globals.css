@@ -2660,3 +2660,25 @@ h1 em,
 .lf-success-inline{padding:12px;background:#183426;border:1px solid #426c50;color:#c2e0c9;font-size:.76rem}
 @media(max-width:800px){.lf-hero{min-height:560px}.lf-hero-image{background-position:58% center}.lf-section-heading{display:block}.lf-section-heading>p{margin-top:14px}.lf-feature{grid-template-columns:1fr}.lf-feature-image{min-height:260px}.lf-feature-copy{padding:42px 24px}.lf-request-layout{grid-template-columns:1fr;gap:28px}.lf-request-intro{position:static}.lf-metrics{grid-template-columns:repeat(2,1fr)}.lf-admin-title{align-items:start;flex-direction:column}}
 @media(max-width:560px){.lf-container{width:calc(100% - 28px)}.lf-nav{height:64px}.lf-nav nav{display:none}.lf-brand-mark{width:37px;height:37px}.lf-nav-account{font-size:.65rem;padding:9px}.lf-hero{min-height:560px}.lf-hero-content{padding:64px 0 40px}.lf-hero h1{font-size:clamp(3rem,14vw,4.2rem)}.lf-hero-copy{font-size:.9rem}.lf-hero-foot{margin-top:48px;display:grid;gap:7px}.lf-trust-strip .lf-container{justify-content:center;flex-wrap:wrap;padding:13px 0;font-size:.54rem}.lf-trust-strip i{display:none}.lf-section{padding:56px 0}.lf-section-heading h2{font-size:2.7rem}.lf-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lf-service{min-height:180px;padding:15px}.lf-service-title{font-size:1.05rem;margin-top:19px}.lf-service-detail{font-size:.68rem}.lf-request-section{padding:55px 0}.lf-form-panel{padding:17px 14px}.lf-form-grid{grid-template-columns:1fr}.lf-full{grid-column:auto}.lf-form-heading{display:grid;gap:5px}.lf-footer-main{align-items:flex-start;flex-wrap:wrap}.lf-footer-main p{order:3;flex-basis:100%}.lf-admin-shell{padding:23px}.lf-admin-shell h1{font-size:3rem}.lf-admin-top{align-items:flex-start;flex-direction:column;padding-inline:15px}.lf-admin-top>div{width:100%;justify-content:space-between}.lf-admin-content{width:calc(100% - 28px);margin-top:26px}.lf-metrics{gap:7px}.lf-metrics article{padding:12px}.lf-ops-toolbar{align-items:start;flex-direction:column}.lf-ops-toolbar label{width:100%;justify-content:space-between}.lf-ops-toolbar select{flex:1}.lf-ops-record{padding:13px}.lf-ops-record-head{flex-direction:column}.lf-ops-facts{gap:13px}.lf-ops-actions{align-items:flex-start;flex-direction:column}.lf-ops-actions label{width:100%;justify-content:space-between}.lf-ops-actions select{flex:1}.lf-footer-bottom{gap:10px;flex-wrap:wrap}}
+
+
+/* Lefifi equipment register — dense, responsive staff CRUD. */
+.lf-inventory{margin:0 0 34px;padding:18px;border:1px solid var(--lf-line);background:#0e1e2b}
+.lf-asset-count{color:var(--lf-gold);font-size:.7rem}
+.lf-asset-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px;background:#142838;border:1px solid #304452}
+.lf-asset-form label{display:grid;gap:5px;color:#c5cdd3;font-size:.68rem}
+.lf-asset-form input,.lf-asset-form select,.lf-asset-form textarea{width:100%;min-height:39px;padding:8px;background:#f8f7f3;color:#1b2832;border:1px solid #9ca7ad}
+.lf-asset-notes{grid-column:1/-1}
+.lf-asset-form-actions{display:flex;gap:8px;align-items:end}
+.lf-asset-form-actions button,.lf-asset-actions button{min-height:38px;padding:8px 12px;border:1px solid #a98752;background:#b8955d;color:#101820;font-size:.7rem;font-weight:850;cursor:pointer}
+.lf-asset-form-actions button+button,.lf-asset-actions button+button{background:transparent;color:#e2e7ea;border-color:#61717c}
+.lf-asset-list{display:grid;gap:8px;margin-top:12px}
+.lf-asset-list article{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:center;padding:12px;background:#132636;border:1px solid #304452}
+.lf-asset-list article>div{display:grid;gap:4px}
+.lf-asset-list strong{font-size:.8rem}
+.lf-asset-list span,.lf-asset-list small,.lf-asset-list p{color:#aab5bd;font-size:.67rem;margin:0}
+.lf-asset-list b{color:var(--lf-gold);font-size:.68rem}
+.lf-asset-actions{display:flex;gap:6px}
+.lf-asset-empty{color:#aab5bd;font-size:.75rem}
+@media(max-width:800px){.lf-asset-form{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.lf-asset-form{grid-template-columns:1fr}.lf-asset-list article{grid-template-columns:1fr 1fr}.lf-asset-actions{grid-column:1/-1}}
