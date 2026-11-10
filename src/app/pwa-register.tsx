@@ -13,7 +13,7 @@ type InstallPromptEvent = Event & {
 };
 type InstallState = "hidden" | "native" | "embedded";
 
-const INSTALL_DISMISSED_KEY = "iteration13:install:dismissed-at";
+const INSTALL_DISMISSED_KEY = "lefifi:install:dismissed-at";
 const INSTALL_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
 
 function environment() {
@@ -317,7 +317,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       <div className="pwaInstallInfo" style={{...installShellStyle, position: "relative", left: "auto", right: "auto", bottom: "auto", width: "100%", maxWidth: 520, margin: 0}}>
         <div>
           <strong id="plug-embedded-title"><span aria-hidden="true">🌐 </span>OPEN ITERATION 13 IN YOUR BROWSER</strong>
-          <span id="plug-embedded-message">{embeddedAndroid ? <>Open Iteration 13 in Chrome to continue. Chrome will offer its own installation action when the app is eligible.</> : <>Iteration 13 opened inside another app. Open this page in your browser to continue.</>}</span>
+          <span id="plug-embedded-message">{embeddedAndroid ? <>Open Lefifi in Chrome to continue. Chrome will offer its own installation action when the app is eligible.</> : <>Lefifi opened inside another app. Open this page in your browser to continue.</>}</span>
         </div>
         <div className="pwaInstallActions" style={{display:"flex",justifyContent:"flex-end"}}>
           <button ref={embeddedActionRef} type="button" style={{background:"#0866FF",color:"#fff"}} onClick={openBrowser}>{embeddedAndroid ? "OPEN IN CHROME" : "OPEN IN BROWSER"}</button>
@@ -328,9 +328,9 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
 
   return <>
     {offline && <div className="offlineBanner" role="status" aria-live="polite"><span aria-hidden="true">⚡</span> Offline · The service demo saves orders and admin edits locally on this device. Firebase-backed routes need a connection.</div>}
-    {!offline && reconnecting && <div className="offlineBanner reconnectingBanner" role="status" aria-live="polite"><span aria-hidden="true">↻</span> Reconnected · Iteration 13 can reach the network again. Local demo data remains on this device.</div>}
+    {!offline && reconnecting && <div className="offlineBanner reconnectingBanner" role="status" aria-live="polite"><span aria-hidden="true">↻</span> Reconnected · Iteration 13 can reach the network again. Your saved request records remain in your account.</div>}
     {!environment().standalone && installState !== "embedded" && (canInstall || canShowManualInstall) && !installCardDismissed && !(installState === "native" && installHelpOpen) && (
-      <aside className="i13-install-card" aria-label="Install Iteration 13">
+      <aside className="i13-install-card" aria-label="Install Lefifi">
         <div className="i13-install-brand">
           <span className="i13-install-mark" aria-hidden="true">13</span>
           <span><strong>ITERATION 13</strong><small>SERVICE STUDIO</small></span>
@@ -345,10 +345,10 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
             setInstallHelpOpen(true);
             setInstallState("native");
           }
-        }}>{canInstall ? "Install Iteration 13" : "Add to Home Screen"} <span aria-hidden="true">↗</span></button>
+        }}>{canInstall ? "Install Lefifi" : "Add to Home Screen"} <span aria-hidden="true">↗</span></button>
       </aside>
     )}
     {installCard}
-    {updateReady && <div className="pwaUpdate" role="status" aria-live="polite"><div><strong>Iteration 13 update is ready</strong><span>Refresh when you are ready.</span></div><button type="button" className="button buttonPrimary" onClick={applyUpdate}>Refresh</button></div>}
+    {updateReady && <div className="pwaUpdate" role="status" aria-live="polite"><div><strong>Lefifi update is ready</strong><span>Refresh when you are ready.</span></div><button type="button" className="button buttonPrimary" onClick={applyUpdate}>Refresh</button></div>}
   </>;
 }
