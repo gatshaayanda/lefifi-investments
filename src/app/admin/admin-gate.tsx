@@ -38,14 +38,14 @@ export default function AdminGate({children}:{children:React.ReactNode}) {
       const idToken=await active.getIdToken(true);
       const response=await fetch("/api/operations-login",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+idToken},body:JSON.stringify({word})});
       const payload=await response.json() as {error?:string};
-      if(!response.ok)throw new Error(payload.error||"Access denied. Check the access word.");
+      if(!response.ok)throw new Error(payload.error||"Access denied. Check the password.");
       setWord("");
     } catch(cause) { setError(cause instanceof Error?cause.message:"We could not verify access. Try again."); }
     finally { setBusy(false); }
   }
   if(checking)return <main className="lf-admin"><div className="lf-admin-shell"><p className="lf-eyebrow">LEFIFI OPERATIONS</p><h1>Checking staff access…</h1></div></main>;
   if(user&&authorized)return <>{children}</>;
-  return <main className="lf-admin"><div className="lf-admin-shell"><Link href="/" className="lf-admin-back">← Customer website</Link><p className="lf-eyebrow">PRIVATE STAFF WORKSPACE</p><h1>Operations<br/><em>sign in.</em></h1><p className="lf-admin-intro">Enter the Lefifi operations access word to open the staff workspace.</p><form className="lf-admin-login" onSubmit={enter}><label htmlFor="operations-word">Access word</label><input id="operations-word" type="password" value={word} onChange={event=>setWord(event.target.value)} autoComplete="current-password" required autoFocus/><button type="submit" disabled={busy||!hasFirebaseWebConfig}>{busy?"Verifying access…":"Enter operations ↗"}</button>{error&&<p className="lf-error" role="alert">{error}</p>}</form>{!hasFirebaseWebConfig&&<p className="lf-error">Firebase web configuration is not available in this deployment.</p>}<p className="lf-admin-footnote">Staff access is checked by the server. The customer website does not expose this workspace in its main navigation.</p></div></main>;
+  return <main className="lf-admin"><div className="lf-admin-shell"><Link href="/" className="lf-admin-back">← Customer website</Link><p className="lf-eyebrow">PRIVATE STAFF WORKSPACE</p><h1>Staff<br/><em>access.</em></h1><p className="lf-admin-intro">Enter the one-word staff password to open the private workspace.</p><form className="lf-admin-login" onSubmit={enter}><label htmlFor="admin-password">Password</label><input id="operations-word" type="password" value={word} onChange={event=>setWord(event.target.value)} autoComplete="current-password" required autoFocus/><button type="submit" disabled={busy||!hasFirebaseWebConfig}>{busy?"Verifying access…":"Enter operations ↗"}</button>{error&&<p className="lf-error" role="alert">{error}</p>}</form>{!hasFirebaseWebConfig&&<p className="lf-error">Firebase web configuration is not available in this deployment.</p>}<p className="lf-admin-footnote">Access is verified securely. Customer requests and updates stay inside the Lefifi app.</p></div></main>;
 }
 
 import Link from "next/link";
