@@ -118,7 +118,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       event.preventDefault();
       const prompt = event as InstallPromptEvent;
       installPromptRef.current = prompt;
-      setInstallCardDismissed(false);
+      setInstallCardDismissed(dismissedRecently());
       setCanInstall(true);
       // Retain the one-shot native event for the user's explicit Install click.
       // Do not interrupt page load with a second, custom install screen.
@@ -334,7 +334,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
         <div className="i13-install-brand">
           <span className="i13-install-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
         </div>
-        <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => setInstallCardDismissed(true)}>×</button>
+        <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => { rememberDismissal(); setInstallCardDismissed(true); }}>×</button>
         <button className="i13-install-action" type="button" onClick={() => {
           if (installPromptRef.current) {
             void install();
