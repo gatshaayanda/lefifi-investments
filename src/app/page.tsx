@@ -23,7 +23,6 @@ export default function HomePage() {
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const [saved, setSaved] = useState<{ id: string; kind: RequestKind } | null>(null);
   const [eventBrief, setEventBrief] = useState("");
   const [rentalItems, setRentalItems] = useState("");
   const [error, setError] = useState("");
@@ -56,8 +55,10 @@ export default function HomePage() {
         const location = clean(form.get("location"));
         const brief = clean(form.get("brief"));
         const guestCountRaw = clean(form.get("guestCount"));
+        const priceReferences = catalog.filter(item => item.active !== false && item.price > 0 && brief.toLowerCase().includes(item.name.toLowerCase())).map(item => ({ name: item.name, price: Number(item.price) }));
         const record = await addDoc(collection(db, "eventEnquiries"), {
           customerId: user.uid, customerName, email, phone, eventType, eventDate, location, brief,
+          ...(priceReferences.length ? { priceReferences } : {}),
           ...(guestCountRaw ? { guestCount: Number(guestCountRaw) } : {}),
           status: "new", createdAt: now, updatedAt: now,
         });
@@ -68,8 +69,11 @@ export default function HomePage() {
         const eventDate = clean(form.get("eventDate"));
         const returnDate = clean(form.get("returnDate"));
         if (returnDate && returnDate < eventDate) throw new Error("The return date must be on or after the required-from date.");
+        const requestText = items.join(" ").toLowerCase();
+        const priceReferences = catalog.filter(item => item.active !== false && item.price > 0 && requestText.includes(item.name.toLowerCase())).map(item => ({ name: item.name, price: Number(item.price) }));
         const record = await addDoc(collection(db, "rentalRequests"), {
           customerId: user.uid, customerName, email, phone, items,
+          ...(priceReferences.length ? { priceReferences } : {}),
           eventDate, returnDate,
           deliveryLocation: clean(form.get("deliveryLocation")),
           deliveryRequired: form.get("deliveryRequired") === "yes",
@@ -91,7 +95,7 @@ export default function HomePage() {
     
     setKind(rental ? "rental" : "event");
     if (rental) setRentalItems(service.name); else setEventBrief("I’m interested in: " + service.name + ". ");
-    setError(""); setMessage(""); setSaved(null);
+    setError(""); setMessage("");
     document.getElementById("request")?.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -129,8 +133,7 @@ export default function HomePage() {
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
       <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Tell us the essentials. The team will confirm availability and the final quote before anything is booked.</p><div className="lf-contact-card"><span>Keep everything together.</span><strong>Submit and track your request in the app.</strong></div></div>
       <div className="lf-form-panel">
-        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setEventBrief("");}}>Equipment hire</button></div>
-        {saved ? <div className="lf-success" role="status"><span className="lf-success-icon">✓</span><p className="lf-eyebrow">REQUEST RECEIVED</p><h3>Thank you. We have it.</h3><p>{message} The team still needs to review the details and confirm the next step. This is not yet a confirmed booking.</p><div className="lf-reference">REFERENCE <strong>{saved.id.slice(0,8).toUpperCase()}</strong></div><Link href="/account" className="lf-primary">Track your request <span>↗</span></Link><button className="lf-reset" type="button" onClick={()=>{setSaved(null);setMessage("");}}>Send another enquiry</button></div> :
+        <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setError("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setError("");setEventBrief("");}}>Equipment hire</button></div>
         <form className="lf-form" onSubmit={submit}>
           <div className="lf-form-heading"><span>{kind === "event" ? "01 / EVENT BRIEF" : "02 / EQUIPMENT REQUEST"}</span><small>Fields marked * are required</small></div>
           <div className="lf-form-grid"><label>Your name *<input name="customerName" autoComplete="name" required placeholder="Full name"/></label><label>Phone / WhatsApp *<input name="phone" type="tel" autoComplete="tel" required placeholder="+267 …"/></label><label className="lf-full">Email <span>(optional)</span><input name="email" type="email" autoComplete="email" placeholder="you@example.com"/></label>
@@ -149,6 +152,15 @@ export default function HomePage() {
             <label className="lf-full">Servicing / cleaning during hire<select name="servicingRequirement" defaultValue="discuss"><option value="discuss">Discuss with Lefifi</option><option value="yes">Yes, please include it in the request</option><option value="no">Not required</option></select></label>
             <label className="lf-full">Additional details <textarea name="notes" rows={3} placeholder="Quantities, access, setup requirements or timing"/></label>
           </>}
+          </div>
+          <div className="lf-submit-price-note" aria-live="polite">
+            <strong>Pricing with your request</strong>
+            <span>{(() => {
+              const source = (kind === "event" ? eventBrief : rentalItems).toLowerCase();
+              const matches = catalog.filter(item => item.active !== false && item.price > 0 && source.includes(item.name.toLowerCase()));
+              return matches.length ? matches.map(item => item.name + ": P" + Number(item.price).toLocaleString("en-BW")).join(" · ") : "The team will prepare a tailored quote from the details you submit.";
+            })()}</span>
+            <small>Catalogue prices are indicative base prices, not a confirmed quote.</small>
           </div>
           <button className="lf-submit" type="submit" disabled={busy || !hasFirebaseWebConfig || !online}>{busy ? "Sending your request…" : online ? "Send request" : "Reconnect to send"} <span>↗</span></button>
           <p className="lf-form-note">The team will review your request and confirm the quote. Sending this form does not book or reserve equipment.</p>
