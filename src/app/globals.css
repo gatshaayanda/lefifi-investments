@@ -3037,3 +3037,12 @@ a{ text-underline-offset:3px }
  .lefifi .lf-shortcut-action{right:7px;font-size:8px}
 }
 @media(prefers-reduced-motion:reduce){.lefifi .lf-shortcut-grid>*{transition:none}}
+
+/* Visible staff entry point; authentication remains enforced by /admin. */
+.lefifi .lf-nav-actions{display:flex;align-items:center;gap:8px}
+.lefifi .lf-nav-admin{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:9px 11px;border:1px solid rgba(9,19,30,.38);color:#172b3b;font-size:10px;font-weight:800;letter-spacing:.02em}
+.lefifi .lf-nav-admin:hover,.lefifi .lf-nav-admin:focus-visible{background:#eaf3f6;border-color:#176b8d;outline:2px solid #176b8d;outline-offset:2px}
+.lefifi .lf-footer-links{display:flex;align-items:center;gap:18px}
+.lefifi .lf-footer-links>a:last-child{font-weight:800;color:#d8e6eb}
+.lefifi .lf-footer-links>a:hover{text-decoration:underline}
+@media(max-width:560px){.lefifi .lf-nav-actions{gap:5px}.lefifi .lf-nav-admin{min-height:36px;padding:7px 8px;font-size:9px}.lefifi .lf-nav-account{font-size:9px;padding:7px 8px}.lefifi .lf-footer-links{gap:12px;flex-wrap:wrap}}
