@@ -100,7 +100,7 @@ export default function HomePage() {
     <header className="lf-header"><div className="lf-container lf-nav">
       <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></Link>
       <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#request">Enquire</a></nav>
-      <div className="lf-nav-actions"><Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link><Link className="lf-nav-admin" href="/admin">Staff / Admin <span>↗</span></Link></div>
+      <div className="lf-nav-actions"><Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link></div>
     </div></header>
 
     <section className="lf-hero">
@@ -158,7 +158,7 @@ export default function HomePage() {
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span><div className="lf-footer-links"><Link href="/admin">Staff / Admin ↗</Link></div></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span></div></footer>
     <nav className="lf-mobile-nav" aria-label="Quick navigation"><a href="#"><Home size={19}/><span>Home</span></a><a href="#services"><Tag size={19}/><span>Services</span></a><a href="#request"><MessageCircle size={19}/><span>Enquire</span></a><Link href="/account"><ClipboardList size={19}/><span>My requests</span></Link></nav><ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{window.location.href="/admin";}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
