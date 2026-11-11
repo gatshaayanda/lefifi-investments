@@ -81,7 +81,7 @@ async function precacheShell() {
       await shell.put(request, response.clone());
       if (!(response.headers.get("content-type") || "").includes("text/html")) return;
       const html = await response.text();
-      for (const match of html.matchAll(/(?:src|href)=["'](\\/_next\\/static\\/[^"']+)["']/g)) discovered.add(match[1]);
+      for (const match of html.matchAll(/(?:src|href)=["'](\/_next\/static\/[^"']+)["']/g)) discovered.add(match[1]);
     } catch {
       // An optional route or image must not block installation of the remaining shell.
     }
