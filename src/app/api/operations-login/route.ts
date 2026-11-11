@@ -24,8 +24,8 @@ function adminApp() {
 }
 export async function POST(request:Request) {
   try {
-    const expected=process.env.LEFIFI_OPERATIONS_WORD;
-    if(!expected) return NextResponse.json({error:"Staff access is not configured. Add LEFIFI_OPERATIONS_WORD to the server environment."},{status:503});
+    const expected=process.env.ADMIN_PASSWORD;
+    if(!expected) return NextResponse.json({error:"Staff access is not configured. Add ADMIN_PASSWORD to the server environment."},{status:503});
     const authorization=request.headers.get("authorization")||"";
     const idToken=authorization.startsWith("Bearer ")?authorization.slice(7):"";
     if(!idToken) return NextResponse.json({error:"Your staff session could not be verified. Refresh and try again."},{status:401});
