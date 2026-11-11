@@ -2937,3 +2937,7 @@ a{ text-underline-offset:3px }
 .lf-admin .lf-error{color:#8d2d24}
 .lf-admin .lf-success-inline{color:#23633b}
 @media(max-width:600px){.lf-admin .lf-brand-mark{width:142px;height:58px}.lf-admin .lf-admin-top{gap:10px}.lf-admin .lf-ops-record{padding:13px}}
+
+/* Lefifi iOS install guidance uses the official multicolour company logo. */
+.plugInstallMark{width:82px;height:43px;border-radius:5px;background:#fff;border:1px solid #dce3e8;padding:2px;overflow:hidden}
+.plugInstallMark img{display:block;width:100%;height:100%;object-fit:contain}
