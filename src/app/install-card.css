@@ -4,7 +4,7 @@
 .i13-install-brand>span:last-child{display:grid;gap:3px;min-width:0}
 .i13-install-brand strong{font-size:.78rem;letter-spacing:.07em;font-weight:900}
 .i13-install-brand small{font-size:.66rem;color:#626773;letter-spacing:.08em}
-.i13-install-mark{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:11px;background:#155eef;color:#fff;font-weight:950;font-size:1.05rem}
+.i13-install-mark{display:grid;place-items:center;flex:0 0 76px;width:76px;height:42px;overflow:hidden;background:#fff;border:1px solid #e1e5e8;border-radius:5px;padding:2px}.i13-install-mark img{display:block;width:100%;height:100%;object-fit:contain}
 .i13-install-close{position:absolute;right:8px;top:7px;width:28px;height:28px;border:0;border-radius:50%;background:#f0f1f4;color:#333;font-size:1.25rem;line-height:1;cursor:pointer}
 .i13-install-action{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:11px 13px;border:0;border-radius:10px;background:#155eef;color:#fff;font:inherit;font-size:.86rem;font-weight:850;cursor:pointer}
 .i13-install-action:focus-visible,.i13-install-close:focus-visible{outline:3px solid #7da5ff;outline-offset:3px}
