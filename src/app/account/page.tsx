@@ -3,7 +3,7 @@
 import Link from "next/link";
 import {
   ArrowUpRight, CalendarDays, CheckCircle2, ClipboardList, Clock3, FileText,
-  MapPin, Package, Phone, ShieldCheck, Truck, Users,
+  MapPin, Package, ShieldCheck, Truck, Users,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
@@ -40,10 +40,10 @@ const STATUS: Record<string, { label: string; summary: string }> = {
   new: { label: "Received", summary: "Lefifi has received your request. The team will review the details and decide the next step." },
   reviewing: { label: "Under review", summary: "The team is reviewing your brief, dates and requirements. They may contact you if they need more detail." },
   quoted: { label: "Quote ready", summary: "A quote has been recorded for your request. Review the scope and amount below, then contact Lefifi to discuss it." },
-  confirmed: { label: "Confirmed", summary: "Lefifi has marked this request as confirmed. Contact the team if you need to clarify any arrangements." },
-  in_progress: { label: "In progress", summary: "The team has marked this work as underway. Contact Lefifi if you need to coordinate event or hire details." },
+  confirmed: { label: "Confirmed", summary: "Lefifi has marked this request as confirmed. Send a follow-up enquiry in the app if you need to clarify any arrangements." },
+  in_progress: { label: "In progress", summary: "The team has marked this work as underway. Send a follow-up enquiry in the app if you need to coordinate event or hire details." },
   completed: { label: "Completed", summary: "Lefifi has marked this request as completed." },
-  declined: { label: "Not proceeding", summary: "The team has marked this request as not proceeding. Contact Lefifi if you need clarification." },
+  declined: { label: "Not proceeding", summary: "The team has marked this request as not proceeding. Send a follow-up enquiry in the app if you need clarification." },
 };
 
 function stampDate(value?: Stamp) {
@@ -131,8 +131,8 @@ export default function AccountPage() {
       <div className="lf-container lf-account-container lf-account-main">
         {!hasFirebaseWebConfig ? <div className="lf-state lf-error">
           <h2>Request history is unavailable</h2>
-          <p>This deployment is not connected to the customer records service yet. You can still contact Lefifi directly.</p>
-          <a className="lf-primary" href="tel:+26773706331">Call Lefifi <ArrowUpRight size={15} /></a>
+          <p>This deployment is not connected to the customer records service yet. Use the Lefifi enquiry form to send your request through the app.</p>
+          <Link className="lf-primary" href="/#request">Open the enquiry form <ArrowUpRight size={15} /></Link>
         </div>
         : loading ? <div className="lf-state lf-account-loading" role="status"><span className="lf-loading-dot" />Connecting to your saved requests…</div>
         : !user ? <div className="lf-state">
@@ -156,13 +156,13 @@ export default function AccountPage() {
             <div className="lf-account-shortcuts">
               <a href="#account-details"><span className="lf-account-shortcut-icon">◉</span><span><strong>Your details</strong><small>Contact information on file</small></span><b>Open ↗</b></a>
               <a href="#request-history"><span className="lf-account-shortcut-icon">◷</span><span><strong>Request history</strong><small>Event briefs and equipment hire</small></span><b>Open ↗</b></a>
-              <a href="https://wa.me/26773706331?text=Hello%20Lefifi%2C%20I%20have%20a%20question%20about%20my%20request." target="_blank" rel="noreferrer"><span className="lf-account-shortcut-icon">✉</span><span><strong>Talk to Lefifi</strong><small>Continue with the team on WhatsApp</small></span><b>Open ↗</b></a>
+              <Link href="/#request"><span className="lf-account-shortcut-icon">✉</span><span><strong>Follow up in the app</strong><small>Send the team an enquiry through Lefifi</small></span><b>Open ↗</b></Link>
             </div>
           </section>
           <section className="lf-account-details-panel" id="account-details">
             <div><span className="lf-eyebrow">YOUR DETAILS</span><h2>Contact information</h2><p>These are the details saved with your customer account.</p></div>
             <dl><div><dt>Name</dt><dd>{customer?.name || "Not available"}</dd></div><div><dt>Phone / WhatsApp</dt><dd>{customer?.phone || "Not available"}</dd></div><div><dt>Email</dt><dd>{customer?.email || "Not provided"}</dd></div></dl>
-            <a href="https://wa.me/26773706331?text=Hello%20Lefifi%2C%20I%20would%20like%20to%20update%20my%20customer%20details." target="_blank" rel="noreferrer">Ask the team to update your details ↗</a>
+            <Link href="/#request">Send a request to update your details ↗</Link>
           </section>
           <div className="lf-account-toolbar" id="request-history">
             <div><strong>Your requests</strong><span>{all.length} {all.length === 1 ? "record" : "records"} · updates appear as the team records them</span></div>
@@ -199,9 +199,9 @@ export default function AccountPage() {
               {item.quoteAmount !== undefined && <div className="lf-customer-quote">
                 <span>QUOTE RECORDED BY LEFIFI</span><strong>{money(item.quoteAmount)}</strong>
                 {item.quoteDetails && <p>{item.quoteDetails}</p>}
-                <small>This is a quote only, not a payment receipt or proof of booking. Contact the team to discuss the scope.</small>
+                <small>This is a quote only, not a payment receipt or proof of booking. Use the enquiry form in the app to discuss the scope.</small>
               </div>}
-              <div className="lf-account-record-actions"><a href="tel:+26773706331"><Phone size={13} />Call Lefifi</a><Link href="/#request">Send another enquiry <ArrowUpRight size={13} /></Link></div>
+              <div className="lf-account-record-actions"><Link href="/#request">Send a follow-up enquiry <ArrowUpRight size={13} /></Link></div>
             </article>;
           })}</div> : <div className="lf-state">
             <h2>{all.length ? "No matching requests" : "Your first request starts here"}</h2>
@@ -213,6 +213,6 @@ export default function AccountPage() {
       </div>
     </section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><a href="tel:+26773706331">+267 73 706 331</a></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span></div></footer>
   </main>;
 }
