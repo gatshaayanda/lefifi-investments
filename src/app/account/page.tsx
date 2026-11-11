@@ -31,6 +31,7 @@ type RecordItem = {
   servicingRequirement?: string;
   notes?: string;
   quoteAmount?: number;
+  priceReferences?: { name: string; price: number }[];
   quoteDetails?: string;
   quoteUpdatedAt?: Stamp;
   kind: "event" | "rental";
@@ -71,8 +72,10 @@ export default function AccountPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filter, setFilter] = useState<"all" | "event" | "rental">("all");
+  const [submittedId, setSubmittedId] = useState("");
 
   useEffect(() => {
+    setSubmittedId(new URLSearchParams(window.location.search).get("submitted") || "");
     let stopEvents = () => {};
     let stopRentals = () => {};
     let stopCustomer = () => {};
@@ -145,6 +148,12 @@ export default function AccountPage() {
           <button className="lf-account-retry" type="button" onClick={() => window.location.reload()}>Try again</button>
         </div>
         : <>
+          {submittedId && <section className="lf-account-submitted" role="status">
+            <span className="lf-account-submitted-mark">✓</span>
+            <div><span className="lf-eyebrow">REQUEST SUBMITTED</span><h2>Your request is now in your account.</h2>
+              <p>{all.some(item => item.id === submittedId) ? "Your reference " + submittedId.slice(0,8).toUpperCase() + " is saved below. Follow its status and any quote here." : "Your request was sent. Your account history is syncing; it will appear here shortly."}</p>
+            </div>
+          </section>}
           <div className="lf-account-summary" aria-label="Account summary">
             <div><span className="lf-account-summary-icon"><ClipboardList size={17} /></span><span className="lf-account-summary-copy"><strong>{all.length}</strong><span>Requests saved</span></span></div>
             <div><span className="lf-account-summary-icon"><Clock3 size={17} /></span><span className="lf-account-summary-copy"><strong>{openCount}</strong><span>In progress</span></span></div>
@@ -194,6 +203,11 @@ export default function AccountPage() {
                 {item.deliveryRequired !== undefined && <div><Truck className="lf-account-fact-icon" size={15} /><span><small>Delivery / collection</small><strong>{item.deliveryRequired ? "Include in quote" : "Customer arranging collection"}</strong></span></div>}
                 {item.servicingRequirement && <div><ShieldCheck className="lf-account-fact-icon" size={15} /><span><small>Servicing / cleaning</small><strong>{item.servicingRequirement === "yes" ? "Requested" : item.servicingRequirement === "no" ? "Not required" : "To discuss"}</strong></span></div>}
               </div>
+              {item.priceReferences?.length ? <div className="lf-customer-price-references">
+                <span>CATALOGUE PRICE REFERENCE</span>
+                {item.priceReferences.map((reference,index)=><div key={reference.name+index}><strong>{reference.name}</strong><b>{money(reference.price)}</b></div>)}
+                <small>Indicative base prices saved with your request. Lefifi will confirm scope, availability and the final quote.</small>
+              </div> : null}
               {(item.brief || item.notes) && <details className="lf-account-details"><summary><FileText size={13} />View request details</summary><p>{item.brief || item.notes}</p>{item.brief && item.notes && <p>{item.notes}</p>}</details>}
               <div className="lf-account-next"><strong>Current update · {status.label}</strong><p>{status.summary}</p><small>Last recorded update · {updated}</small></div>
               {item.quoteAmount !== undefined && <div className="lf-customer-quote">
