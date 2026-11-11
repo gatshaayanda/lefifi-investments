@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { onAuthStateChanged, type User } from "firebase/auth";
-import { collection, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db, hasFirebaseWebConfig } from "@/lib/firebase/client";
 import "./account.css";
 
@@ -66,6 +66,7 @@ function money(value: number) {
 export default function AccountPage() {
   const [user, setUser] = useState<User | null>(null);
   const [events, setEvents] = useState<RecordItem[]>([]);
+  const [customer, setCustomer] = useState<{name?:string;email?:string;phone?:string}|null>(null);
   const [rentals, setRentals] = useState<RecordItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -74,26 +75,28 @@ export default function AccountPage() {
   useEffect(() => {
     let stopEvents = () => {};
     let stopRentals = () => {};
+    let stopCustomer = () => {};
     const stopAuth = onAuthStateChanged(auth, next => {
-      stopEvents(); stopRentals();
-      setUser(next); setEvents([]); setRentals([]); setError("");
+      stopEvents(); stopRentals(); stopCustomer();
+      setUser(next); setEvents([]); setRentals([]); setCustomer(null); setError("");
       if (!next) { setLoading(false); return; }
+      stopCustomer = onSnapshot(doc(db, "customers", next.uid), snapshot => setCustomer(snapshot.exists() ? snapshot.data() as {name?:string;email?:string;phone?:string} : null));
       setLoading(true);
       let eventsReady = false;
       let rentalsReady = false;
       const finishLoading = () => setLoading(!(eventsReady && rentalsReady));
       stopEvents = onSnapshot(
-        query(collection(db, "eventEnquiries"), where("customerId", "==", next.uid), orderBy("createdAt", "desc")),
+        query(collection(db, "eventEnquiries"), where("customerId", "==", next.uid)),
         snapshot => { setEvents(snapshot.docs.map(item => ({ id: item.id, ...item.data(), kind: "event" } as RecordItem))); eventsReady = true; finishLoading(); },
         () => { setError("We could not load your event enquiries. Check your connection and try again."); eventsReady = true; finishLoading(); }
       );
       stopRentals = onSnapshot(
-        query(collection(db, "rentalRequests"), where("customerId", "==", next.uid), orderBy("createdAt", "desc")),
+        query(collection(db, "rentalRequests"), where("customerId", "==", next.uid)),
         snapshot => { setRentals(snapshot.docs.map(item => ({ id: item.id, ...item.data(), kind: "rental" } as RecordItem))); rentalsReady = true; finishLoading(); },
         () => { setError("We could not load your equipment requests. Check your connection and try again."); rentalsReady = true; finishLoading(); }
       );
     });
-    return () => { stopAuth(); stopEvents(); stopRentals(); };
+    return () => { stopAuth(); stopEvents(); stopRentals(); stopCustomer(); };
   }, []);
 
   const all = useMemo(() => [...events, ...rentals].sort((a, b) =>
@@ -116,9 +119,9 @@ export default function AccountPage() {
         <div className="lf-container lf-account-container">
           <div className="lf-account-heading">
             <div>
-              <p className="lf-eyebrow"><ClipboardList size={13} /> CUSTOMER SPACE · REQUEST TRACKING</p>
-              <h1 className="lf-inner-title">Your requests.</h1>
-              <p className="lf-account-lead">Event briefs, equipment hire and the latest updates from the Lefifi team — together in one place.</p>
+              <p className="lf-eyebrow"><ClipboardList size={13} /> LEFIFI CUSTOMER SPACE · GABORONE</p>
+              <h1 className="lf-inner-title">{customer?.name ? "Dumela, " + customer.name.split(" ")[0] + "." : "Your account."}</h1>
+              <p className="lf-account-lead">Your event briefs, equipment hire requests and the latest updates from the Lefifi team — together in one place.</p>
             </div>
             <Link className="lf-primary" href="/#request">New enquiry <ArrowUpRight size={15} /></Link>
           </div>
@@ -142,14 +145,27 @@ export default function AccountPage() {
           <button className="lf-account-retry" type="button" onClick={() => window.location.reload()}>Try again</button>
         </div>
         : <>
-          <div className="lf-account-summary" aria-label="Request summary">
-            <div><span className="lf-account-summary-icon"><ClipboardList size={17} /></span><span className="lf-account-summary-copy"><strong>{all.length}</strong><span>Total requests</span></span></div>
-            <div><span className="lf-account-summary-icon"><Clock3 size={17} /></span><span className="lf-account-summary-copy"><strong>{openCount}</strong><span>Still active</span></span></div>
-            <div><span className="lf-account-summary-icon"><FileText size={17} /></span><span className="lf-account-summary-copy"><strong>{quoteCount}</strong><span>Quotes recorded</span></span></div>
+          <div className="lf-account-summary" aria-label="Account summary">
+            <div><span className="lf-account-summary-icon"><ClipboardList size={17} /></span><span className="lf-account-summary-copy"><strong>{all.length}</strong><span>Requests saved</span></span></div>
+            <div><span className="lf-account-summary-icon"><Clock3 size={17} /></span><span className="lf-account-summary-copy"><strong>{openCount}</strong><span>In progress</span></span></div>
+            <div><span className="lf-account-summary-icon"><FileText size={17} /></span><span className="lf-account-summary-copy"><strong>{quoteCount}</strong><span>Quotes ready</span></span></div>
           </div>
 
-          <div className="lf-account-toolbar">
-            <div><strong>Request history</strong><span>{all.length} {all.length === 1 ? "record" : "records"} · updates appear as the team records them</span></div>
+          <section className="lf-account-workspace" aria-label="Account shortcuts">
+            <div className="lf-account-section-heading"><div><span className="lf-eyebrow">ACCOUNT SHORTCUTS</span><h2>Everything in one place.</h2></div><span className="lf-account-session">Guest account · Saved on this device</span></div>
+            <div className="lf-account-shortcuts">
+              <a href="#account-details"><span className="lf-account-shortcut-icon">◉</span><span><strong>Your details</strong><small>Contact information on file</small></span><b>Open ↗</b></a>
+              <a href="#request-history"><span className="lf-account-shortcut-icon">◷</span><span><strong>Request history</strong><small>Event briefs and equipment hire</small></span><b>Open ↗</b></a>
+              <a href="https://wa.me/26773706331?text=Hello%20Lefifi%2C%20I%20have%20a%20question%20about%20my%20request." target="_blank" rel="noreferrer"><span className="lf-account-shortcut-icon">✉</span><span><strong>Talk to Lefifi</strong><small>Continue with the team on WhatsApp</small></span><b>Open ↗</b></a>
+            </div>
+          </section>
+          <section className="lf-account-details-panel" id="account-details">
+            <div><span className="lf-eyebrow">YOUR DETAILS</span><h2>Contact information</h2><p>These are the details saved with your customer account.</p></div>
+            <dl><div><dt>Name</dt><dd>{customer?.name || "Not available"}</dd></div><div><dt>Phone / WhatsApp</dt><dd>{customer?.phone || "Not available"}</dd></div><div><dt>Email</dt><dd>{customer?.email || "Not provided"}</dd></div></dl>
+            <a href="https://wa.me/26773706331?text=Hello%20Lefifi%2C%20I%20would%20like%20to%20update%20my%20customer%20details." target="_blank" rel="noreferrer">Ask the team to update your details ↗</a>
+          </section>
+          <div className="lf-account-toolbar" id="request-history">
+            <div><strong>Your requests</strong><span>{all.length} {all.length === 1 ? "record" : "records"} · updates appear as the team records them</span></div>
             <div className="lf-account-filters" role="group" aria-label="Filter request history">
               <button type="button" className={filter === "all" ? "active" : ""} aria-pressed={filter === "all"} onClick={() => setFilter("all")}>All</button>
               <button type="button" className={filter === "event" ? "active" : ""} aria-pressed={filter === "event"} onClick={() => setFilter("event")}>Events</button>
@@ -193,7 +209,7 @@ export default function AccountPage() {
             <Link className="lf-primary" href="/#request">Start your first enquiry <ArrowUpRight size={15} /></Link>
           </div>}
         </>}
-        <p className="lf-account-privacy"><ShieldCheck size={13} /> Your request history is private to your guest session. Use the same browser to return to these records.</p>
+        <p className="lf-account-privacy"><ShieldCheck size={13} /> Your account is private to this browser’s saved guest session. Use the same browser to return to these records.</p>
       </div>
     </section>
 
