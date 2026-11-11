@@ -3103,3 +3103,73 @@ a{ text-underline-offset:3px }
 @media(max-width:380px){.lf-workspace .lf-metrics strong{font-size:1.55rem}.lf-ops-nav>a,.lf-sensitive-toggle{font-size:.65rem;padding:7px 8px}}
 
 @media(max-width:760px){.lefifi .lf-footer{padding-bottom:100px}}
+
+
+/* Lefifi staff workspace — plain, high-contrast and compact. */
+.lf-workspace{background:#f3f6f8!important;color:#172b3b!important;font-family:Arial,Helvetica,sans-serif!important}
+.lf-workspace .lf-admin-top{background:#102638!important;border-bottom:3px solid #1686ad!important;padding:10px 16px!important}
+.lf-workspace .lf-admin-content{width:min(1120px,calc(100% - 28px))!important;margin:18px auto 38px!important}
+.lf-workspace .lf-admin-title{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:0 0 12px!important;border-bottom:1px solid #cbd5dc!important}
+.lf-workspace .lf-admin-title h1{font:700 clamp(1.65rem,4vw,2.25rem)/1.1 Arial,Helvetica,sans-serif!important;letter-spacing:-.035em!important;color:#102638!important;margin:0 0 5px!important}
+.lf-workspace .lf-admin-title h1 em{color:#075b7b!important}
+.lf-workspace .lf-admin-title>div>p:last-child{color:#354b5a!important;font-size:.86rem!important;line-height:1.45!important}
+.lf-workspace .lf-eyebrow{color:#075b7b!important;font-size:.72rem!important;font-weight:800!important}
+.lf-workspace .lf-metrics{gap:8px!important;margin:12px 0 16px!important}
+.lf-workspace .lf-metrics article{min-height:76px!important;padding:10px 12px!important;background:#fff!important;border:1px solid #c7d4dc!important;border-top:3px solid #1686ad!important;border-radius:7px!important;gap:4px!important}
+.lf-workspace .lf-metrics span,.lf-workspace .lf-metrics small{color:#405563!important;font-size:.75rem!important}
+.lf-workspace .lf-metrics strong{font:750 1.55rem/1 Arial,Helvetica,sans-serif!important;color:#102638!important}
+.lf-workspace .lf-ops-nav{gap:7px!important;padding:0 0 12px!important;margin:0 0 18px!important;border-bottom:1px solid #c7d4dc!important}
+.lf-workspace .lf-ops-nav>a,.lf-workspace .lf-sensitive-toggle{min-height:38px!important;padding:8px 11px!important;background:#fff!important;border:1px solid #9aabb7!important;border-radius:6px!important;color:#173448!important;font-size:.76rem!important;font-weight:750!important}
+.lf-workspace .lf-ops-nav>a:hover,.lf-workspace .lf-sensitive-toggle:hover{background:#e7f3f8!important;border-color:#1686ad!important}
+.lf-workspace .lf-ops-section{margin:0 0 22px!important}
+.lf-workspace .lf-ops-toolbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:0 0 9px!important;margin:0 0 10px!important;border-bottom:1px solid #c7d4dc!important}
+.lf-workspace .lf-ops-toolbar h2{font:750 1.12rem/1.25 Arial,Helvetica,sans-serif!important;color:#102638!important}
+.lf-workspace .lf-ops-toolbar p{margin:4px 0 0!important;color:#405563!important;font-size:.78rem!important;line-height:1.4!important}
+.lf-workspace .lf-ops-toolbar label,.lf-workspace .lf-ops-actions label{color:#243f51!important;font-size:.78rem!important;font-weight:750!important}
+.lf-workspace .lf-ops-toolbar select,.lf-workspace .lf-ops-actions select{min-height:38px!important;padding:7px 9px!important;background:#fff!important;color:#172b3b!important;border:1px solid #8fa2af!important;border-radius:6px!important;font-size:.82rem!important}
+.lf-workspace .lf-ops-list{gap:9px!important}
+.lf-workspace .lf-ops-record{padding:13px 14px!important;background:#fff!important;border:1px solid #c7d4dc!important;border-radius:8px!important;box-shadow:0 2px 7px rgba(16,38,56,.04)!important}
+.lf-workspace .lf-ops-record h3{font:750 1rem/1.3 Arial,Helvetica,sans-serif!important;color:#102638!important;margin:4px 0 0!important}
+.lf-workspace .lf-record-kind{color:#075b7b!important;font-size:.7rem!important;letter-spacing:.04em!important}
+.lf-workspace .lf-status{padding:5px 8px!important;background:#f1f5f7!important;color:#173448!important;border:1px solid #8fa2af!important;border-radius:5px!important;font-size:.7rem!important;font-weight:800!important}
+.lf-workspace .lf-status-new{background:#fff5d9!important;color:#704b00!important;border-color:#c99a32!important}
+.lf-workspace .lf-ops-facts{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px 14px!important;margin-top:10px!important;padding:10px 0!important;border-color:#d5dfe5!important}
+.lf-workspace .lf-ops-facts span{min-width:0!important;gap:3px!important}
+.lf-workspace .lf-ops-facts small{color:#526675!important;font-size:.7rem!important}
+.lf-workspace .lf-ops-facts strong,.lf-workspace .lf-ops-facts a{color:#172b3b!important;font-size:.82rem!important;font-weight:700!important;overflow-wrap:anywhere!important}
+.lf-workspace .lf-ops-brief{margin:9px 0!important;padding:9px 11px!important;background:#f2f6f8!important;border-left:3px solid #1686ad!important;color:#243f51!important;font-size:.84rem!important;line-height:1.45!important}
+.lf-workspace .lf-quote-editor{display:grid!important;grid-template-columns:minmax(120px,.5fr) minmax(140px,.7fr) minmax(220px,1.4fr) auto!important;gap:8px!important;margin-top:10px!important;padding:10px!important;background:#f4f7f9!important;border:1px solid #d5dfe5!important;border-radius:6px!important}
+.lf-workspace .lf-quote-editor>div{grid-column:auto!important}
+.lf-workspace .lf-quote-editor strong{color:#243f51!important;font-size:.8rem!important}
+.lf-workspace .lf-quote-editor input{min-height:40px!important;padding:8px 9px!important;background:#fff!important;color:#172b3b!important;border:1px solid #8fa2af!important;border-radius:5px!important;font-size:.82rem!important}
+.lf-workspace .lf-quote-editor button,.lf-workspace .lf-asset-form-actions button,.lf-workspace .lf-asset-empty button,.lf-workspace .lf-asset-actions button{min-height:40px!important;padding:8px 12px!important;background:#075b7b!important;color:#fff!important;border:1px solid #075b7b!important;border-radius:5px!important;font-size:.78rem!important;font-weight:800!important}
+.lf-workspace .lf-ops-actions{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;margin-top:9px!important;color:#405563!important;font-size:.75rem!important}
+.lf-workspace .lf-ops-actions label{width:auto!important}
+.lf-workspace .lf-inventory{padding:14px!important;background:#fff!important;border:1px solid #c7d4dc!important;border-radius:8px!important}
+.lf-workspace .lf-asset-count{color:#075b7b!important;font-size:.78rem!important;font-weight:800!important}
+.lf-workspace .lf-asset-form{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;padding:12px!important;background:#f4f7f9!important;border:1px solid #d5dfe5!important;border-radius:6px!important}
+.lf-workspace .lf-asset-form label{display:grid!important;gap:5px!important;color:#243f51!important;font-size:.78rem!important;font-weight:750!important}
+.lf-workspace .lf-asset-form input,.lf-workspace .lf-asset-form select,.lf-workspace .lf-asset-form textarea{width:100%!important;min-height:40px!important;padding:8px 9px!important;background:#fff!important;color:#172b3b!important;border:1px solid #8fa2af!important;border-radius:5px!important;font-size:.84rem!important}
+.lf-workspace .lf-asset-form .lf-asset-notes,.lf-workspace .lf-asset-form-actions{grid-column:1/-1!important}
+.lf-workspace .lf-asset-list{gap:7px!important}
+.lf-workspace .lf-asset-list article{padding:11px!important;background:#fff!important;border:1px solid #d1dce2!important;border-radius:6px!important}
+.lf-workspace .lf-asset-list article strong,.lf-workspace .lf-asset-list article b{color:#172b3b!important;font-size:.85rem!important}
+.lf-workspace .lf-asset-list article span,.lf-workspace .lf-asset-list article small,.lf-workspace .lf-asset-list article p{color:#405563!important;font-size:.76rem!important;line-height:1.4!important}
+.lf-workspace .lf-asset-empty,.lf-workspace .lf-state{padding:12px!important;background:#f4f7f9!important;border:1px solid #c7d4dc!important;border-radius:6px!important;color:#243f51!important;font-size:.84rem!important;line-height:1.5!important}
+.lf-workspace .lf-admin-disclaimer{margin-top:18px!important;padding-top:12px!important;border-top:1px solid #c7d4dc!important;color:#405563!important;font-size:.78rem!important;line-height:1.5!important}
+.lf-workspace :where(input,select,textarea,button){font-family:Arial,Helvetica,sans-serif!important}
+.lf-workspace :where(button,a,input,select,textarea):focus-visible{outline:3px solid #1686ad!important;outline-offset:2px!important}
+@media(max-width:680px){
+ .lf-workspace .lf-admin-title{align-items:flex-start!important;flex-direction:column!important}
+ .lf-workspace .lf-ops-toolbar{align-items:flex-start!important;flex-direction:column!important}
+ .lf-workspace .lf-ops-toolbar label{width:100%!important;justify-content:space-between!important}
+ .lf-workspace .lf-ops-toolbar select{max-width:65%!important}
+ .lf-workspace .lf-ops-record-head{align-items:flex-start!important;flex-direction:row!important}
+ .lf-workspace .lf-ops-facts{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .lf-workspace .lf-quote-editor{grid-template-columns:1fr 1fr!important}
+ .lf-workspace .lf-quote-editor>div,.lf-workspace .lf-quote-editor input:nth-of-type(2),.lf-workspace .lf-quote-editor button{grid-column:1/-1!important}
+ .lf-workspace .lf-ops-actions{align-items:flex-start!important;flex-direction:column!important}
+ .lf-workspace .lf-ops-actions label{width:100%!important;justify-content:space-between!important}
+ .lf-workspace .lf-asset-form{grid-template-columns:1fr!important}
+ .lf-workspace .lf-asset-form .lf-asset-notes,.lf-workspace .lf-asset-form-actions{grid-column:auto!important}
+}
