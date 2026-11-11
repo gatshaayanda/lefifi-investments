@@ -17,7 +17,7 @@ function clean(value: FormDataEntryValue | null) { return String(value ?? "").tr
 export default function HomePage() {
   const [kind, setKind] = useState<RequestKind>("event");
   const [catalog, setCatalog] = useState<PublicService[]>(STARTER_SERVICES.map(item=>({...item})));
-  const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"/lefifi.jpg", mediaType:"image" as const, active:item.active }));
+  const guideServices = catalog.map(item => ({ id:item.id, name:item.name, price:item.price||0, description:item.detail, media:"", mediaType:"image" as const, active:item.active }));
   const [online, setOnline] = useState(true);
   useEffect(() => { const stop=onSnapshot(collection(db,"services"),snap=>{ const live=snap.docs.map(d=>({id:d.id,...d.data()} as PublicService)).filter(item=>item.active!==false); setCatalog(snap.empty ? STARTER_SERVICES.map(item=>({...item})) : live); }); return ()=>stop(); }, []);
   useEffect(() => { setOnline(navigator.onLine); const on = () => setOnline(true); const off = () => setOnline(false); window.addEventListener("online",on); window.addEventListener("offline",off); return () => { window.removeEventListener("online",on); window.removeEventListener("offline",off); }; }, []);
