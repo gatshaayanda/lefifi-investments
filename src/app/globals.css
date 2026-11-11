@@ -3101,3 +3101,5 @@ a{ text-underline-offset:3px }
  .lf-workspace .lf-inventory{padding:14px}.lf-footer-bottom{align-items:center;gap:12px}
 }
 @media(max-width:380px){.lf-workspace .lf-metrics strong{font-size:1.55rem}.lf-ops-nav>a,.lf-sensitive-toggle{font-size:.65rem;padding:7px 8px}}
+
+@media(max-width:760px){.lefifi .lf-footer{padding-bottom:100px}}
