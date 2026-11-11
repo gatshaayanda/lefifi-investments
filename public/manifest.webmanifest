@@ -10,9 +10,15 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f8f7",
-  "theme_color": "#102638",
+  "background_color": "#09131e",
+  "theme_color": "#09131e",
   "icons": [
+    {
+      "src": "/lefifi-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/lefifi.jpg",
       "sizes": "1100x1084",
