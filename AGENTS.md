@@ -11,7 +11,7 @@
 
 ## Architecture and journeys
 - src/app/page.tsx: mobile-first public discovery, compact service shortcuts, a live Firestore service catalogue with six editable single-price starter entries, service selection that prefills the correct event/rental form field, and real Firestore event enquiry/equipment hire submissions. Offline submissions are not queued.
-- src/app/account/page.tsx: live, customer-UID-scoped event/rental history with All/Events/Hire filters, status explanations, last-update timestamps, request detail disclosure and staff-recorded quote visibility. Guest history remains tied to the same browser session.
+- src/app/account/page.tsx: customer workspace opened automatically after a successful enquiry. It shows the saved customer contact details, account shortcuts, customer-UID-scoped event/rental history with All/Events/Hire filters, status explanations, last-update timestamps, request detail disclosure and staff-recorded quote visibility. WhatsApp links provide direct contact; they are not a persisted private messaging inbox. Guest history remains tied to the same browser session. Customer records are sorted client-side so account queries do not require a customerId+createdAt composite index.
 - src/app/admin/page.tsx: private operations workspace with live event/rental request queues, staff-controlled status updates, equipment CRUD and a single-price service catalogue CRUD. When the services collection is empty, staff can explicitly load six editable base-price entries; deletion does not silently recreate them.
 - src/app/admin/admin-gate.tsx: one-word staff access gate.
 - src/app/api/operations-login/route.ts: verifies the access word server-side, verifies an anonymous Firebase ID token, and grants a time-limited admin role document. It does not issue custom tokens.
@@ -53,7 +53,7 @@
 - npm run verify:offline
 - npm run lint
 - npm run build
-- Test customer event enquiry and rental request, selected-service prefills, customer-only live account history and filters, status/quote reflection, staff correct/incorrect access word, 12-hour expiry, denied cross-customer reads, offline unsent form state, PWA native prompt and iOS/embedded-browser behavior.
+- Test customer event enquiry and rental request, automatic post-submit account navigation, customer details and customer-only live account history/filters, status/quote reflection, staff correct/incorrect access word, 12-hour expiry, denied cross-customer reads, offline unsent form state, PWA native prompt and iOS/embedded-browser behavior.
 - No local build, emulator, browser, physical-device or production deployment is claimed unless its output is actually inspected.
 
 ## Current checkpoint
