@@ -11,7 +11,7 @@ type InstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
-type InstallState = "hidden" | "native" | "embedded";
+type InstallState = "hidden" | "embedded";
 
 function environment() {
   if (typeof window === "undefined") return { standalone: true, ios: false, android: false, embedded: false };
@@ -24,14 +24,6 @@ function environment() {
   return { standalone, ios, android, embedded };
 }
 
-function isIosSafari() {
-  if (typeof window === "undefined") return false;
-  const nav = window.navigator;
-  const ios = /iPad|iPhone|iPod/i.test(nav.userAgent) ||
-    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1);
-  return ios && /Safari/i.test(nav.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/i.test(nav.userAgent);
-}
-
 export default function PwaRegister({ initialEmbedded = false, initialAndroid = false }: { initialEmbedded?: boolean; initialAndroid?: boolean }) {
   const [offline, setOffline] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
@@ -39,7 +31,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   const [installState, setInstallState] = useState<InstallState>(initialEmbedded ? "embedded" : "hidden");
   const [updateReady, setUpdateReady] = useState<ServiceWorker | null>(null);
   const [embeddedAndroid, setEmbeddedAndroid] = useState(initialEmbedded && initialAndroid);
-  const [installHelpOpen, setInstallHelpOpen] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
   const [installCardDismissed, setInstallCardDismissed] = useState(false);
   const embeddedActionRef = useRef<HTMLButtonElement | null>(null);
@@ -123,7 +114,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     const appInstalled = () => {
       installPromptRef.current = null;
       setCanInstall(false);
-      setInstallHelpOpen(false);
       setInstallState("hidden");
     };
     window.addEventListener("iteration13-open-install", requestInstall);
@@ -166,35 +156,23 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   }, [initialEmbedded, initialAndroid]);
 
   useEffect(() => {
-    if (installState !== "embedded" && installState !== "native") return;
-
-    const isEmbeddedGate = installState === "embedded";
+    if (installState !== "embedded") return;
     const previousOverflow = document.body.style.overflow;
-    if (isEmbeddedGate) document.body.style.overflow = "hidden";
-    if (installState === "embedded") embeddedActionRef.current?.focus();
-    else document.querySelector<HTMLButtonElement>(".plugInstallPrimary")?.focus();
-
+    document.body.style.overflow = "hidden";
+    embeddedActionRef.current?.focus();
     const keepDialogFocused = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        if (isEmbeddedGate) {
-          event.preventDefault();
-          event.stopPropagation();
-        } else {
-          dismissInstall();
-        }
-      }
-      if (event.key === "Tab" && isEmbeddedGate) {
+      if (event.key === "Escape" || event.key === "Tab") {
         event.preventDefault();
+        event.stopPropagation();
         embeddedActionRef.current?.focus();
       }
     };
-
     window.addEventListener("keydown", keepDialogFocused, true);
     return () => {
-      if (isEmbeddedGate) document.body.style.overflow = previousOverflow;
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", keepDialogFocused, true);
     };
-  }, [installState, installHelpOpen]);
+  }, [installState]);
 
   async function install() {
     const prompt = installPromptRef.current;
@@ -211,12 +189,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       setInstallHelpOpen(false);
       setInstallState("hidden");
     }
-  }
-
-  function dismissInstall() {
-    setInstallCardDismissed(true);
-    setInstallHelpOpen(false);
-    setInstallState("hidden");
   }
 
   function openBrowser() {
@@ -247,25 +219,15 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
 
   const installShellStyle: CSSProperties = { position: "fixed", left: 16, right: 16, bottom: 16, zIndex: 1000, maxWidth: 720, margin: "0 auto", padding: 16, borderRadius: 18, background: "#FFFFFF", color: "#111318", boxShadow: "0 12px 40px rgba(0,0,0,.18)", border: "1px solid rgba(17,19,24,.12)" };
   const embeddedInstallStyle: CSSProperties = { position: "fixed", inset: 0, zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, background: "rgba(0,0,0,.82)", backdropFilter: "blur(4px)", overscrollBehavior: "contain" };
-  const installCard = installState === "native" && installHelpOpen && isIosSafari() ? (
-    <div style={installShellStyle} role="presentation">
-      <section className="plugInstallModal" role="dialog" aria-modal="false" aria-labelledby="plug-install-title" aria-describedby="plug-install-message">
-        <div className="plugInstallTop"><span className="plugInstallMark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span><span className="plugInstallTag">LEFIFI INVESTMENTS</span><button type="button" className="plugInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
-        <div className="plugInstallKicker">IPHONE & IPAD</div>
-        <h2 id="plug-install-title">Add to Home Screen.</h2>
-        <p id="plug-install-message">In Safari, tap <b>Share</b>, choose <b>Add to Home Screen</b>, then tap <b>Add</b>. Open the new Home Screen icon to launch the installed app.</p>
-        <button type="button" className="plugInstallPrimary" onClick={dismissInstall}>Continue on the website</button>
-      </section>
-    </div>
-) : installState === "embedded" ? (
+  const installCard = installState === "embedded" ? (
     <div style={embeddedInstallStyle} role="alertdialog" aria-modal="true" aria-labelledby="plug-embedded-title" aria-describedby="plug-embedded-message">
       <div className="pwaInstallInfo" style={{...installShellStyle, position: "relative", left: "auto", right: "auto", bottom: "auto", width: "100%", maxWidth: 520, margin: 0}}>
         <div>
-          <strong id="plug-embedded-title"><span aria-hidden="true">🌐 </span>OPEN LEFIFI IN YOUR BROWSER</strong>
-          <span id="plug-embedded-message">{embeddedAndroid ? <>Open Lefifi in Chrome to continue. Chrome will offer its own installation action when the app is eligible.</> : <>Lefifi opened inside another app. Open this page in your browser to continue.</>}</span>
+          <strong id="plug-embedded-title">OPEN LEFIFI IN YOUR BROWSER</strong>
+          <span id="plug-embedded-message">{embeddedAndroid ? "Open Lefifi in Chrome to continue." : "Lefifi opened inside another app. Open this page in your browser to continue."}</span>
         </div>
         <div className="pwaInstallActions" style={{display:"flex",justifyContent:"flex-end"}}>
-          <button ref={embeddedActionRef} type="button" style={{background:"#0866FF",color:"#fff"}} onClick={openBrowser}>{embeddedAndroid ? "OPEN IN CHROME" : "OPEN IN BROWSER"}</button>
+          <button ref={embeddedActionRef} type="button" style={{background:"#075b7b",color:"#fff"}} onClick={openBrowser}>{embeddedAndroid ? "OPEN IN CHROME" : "OPEN IN BROWSER"}</button>
         </div>
       </div>
     </div>
