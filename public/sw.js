@@ -23,8 +23,8 @@ try {
       const title = payload.data?.title || "Lefifi update";
       const options = {
         body: payload.data?.body || "Open the app to check your latest information.",
-        icon: "/lefifi-mark.svg",
-        badge: "/iteration13-icon.svg",
+        icon: "/lefifi.jpg",
+        badge: "/lefifi.jpg",
         data: { link: payload.data?.link || "/account" },
       };
       self.registration.showNotification(title, options);
@@ -51,14 +51,14 @@ self.addEventListener("notificationclick", (event) => {
   }));
 });
 
-const CACHE_VERSION = "lefifi-shell-v1";
+const CACHE_VERSION = "lefifi-shell-v2";
 const MEDIA_CACHE = "lefifi-media-v1";
 const SHELL_CACHE = CACHE_VERSION;
 const STATIC_LIMIT = 100;
 const PUBLIC_PAGE_LIMIT = 12;
 const MEDIA_LIMIT = 40;
 const MEDIA_HOSTS = ["images.unsplash.com", "utfs.io", "ufs.sh"];
-const APP_SHELL = ["/", "/offline", "/patterns", "/iphone-install", "/iphone-install.svg", "/iteration13-icon.svg", "/lefifi-mark.svg", "/lefifi-mark.svg", "/lefifi-mark.svg", "/lefifi-mark.svg", "/lefifi-mark.svg", "/manifest.webmanifest"];
+const APP_SHELL = ["/", "/offline", "/patterns", "/iphone-install", "/iphone-install.svg", "/lefifi.jpg", "/manifest.webmanifest"];
 
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
