@@ -2941,3 +2941,69 @@ a{ text-underline-offset:3px }
 /* Lefifi iOS install guidance uses the official multicolour company logo. */
 .plugInstallMark{width:82px;height:43px;border-radius:5px;background:#fff;border:1px solid #dce3e8;padding:2px;overflow:hidden}
 .plugInstallMark img{display:block;width:100%;height:100%;object-fit:contain}
+
+
+/* Customer storefront: compact, thumb-friendly layout inspired by the Iteration 13 WashRide reference. */
+.lefifi .lf-topline .lf-container{min-height:27px;align-items:center}
+.lefifi .lf-header{position:sticky;top:0;z-index:30}
+.lefifi .lf-hero{min-height:0;padding:42px 0 18px}
+.lefifi .lf-hero h1{font-size:clamp(42px,6vw,68px);margin:15px 0 10px}
+.lefifi .lf-hero-copy{font-size:13px;line-height:1.5;max-width:420px}
+.lefifi .lf-hero-foot{margin-top:28px}
+.lefifi .lf-shortcut-grid>*{min-height:76px;padding-top:36px}
+.lefifi .lf-section{padding:38px 0}
+.lefifi .lf-section-heading{margin-bottom:17px}
+.lefifi .lf-section-heading>p{font-size:12px;line-height:1.45}
+.lefifi .lf-service-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.lefifi .lf-service{min-height:126px;padding:15px 16px;gap:6px}
+.lefifi .lf-service-title{font-size:14px}
+.lefifi .lf-service-detail{font-size:11px;line-height:1.35}
+.lefifi .lf-service-price{font-size:11px}
+.lefifi .lf-feature{display:none}
+.lefifi .lf-request-section{padding:34px 0 88px}
+.lefifi .lf-request-layout{grid-template-columns:.62fr 1.38fr;gap:24px}
+.lefifi .lf-request-intro h2{font-size:32px}
+.lefifi .lf-request-intro>p:not(.lf-eyebrow){font-size:12px;line-height:1.45}
+.lefifi .lf-contact-card{margin-top:16px;padding-top:12px}
+.lefifi .lf-contact-card a{font-size:16px}
+.lefifi .lf-form{padding:14px}
+.lefifi .lf-form-tabs{padding:0 14px}
+.lefifi .lf-form-heading{padding-bottom:9px;margin-bottom:10px}
+.lefifi .lf-form-grid{gap:9px}
+.lefifi .lf-form label{gap:4px}
+.lefifi .lf-form input,.lefifi .lf-form select{min-height:38px;padding:8px 9px}
+.lefifi .lf-form textarea{min-height:58px;padding:8px 9px}
+.lefifi .lf-form-note{font-size:10px;line-height:1.4}
+.lefifi .lf-mobile-nav{display:none}
+.lefifi .lf-footer-bottom{min-height:44px}
+@media(max-width:760px){
+ .lefifi .lf-hero{padding:36px 0 16px;min-height:0}
+ .lefifi .lf-hero h1{font-size:clamp(42px,11vw,58px)}
+ .lefifi .lf-hero-foot{margin-top:25px}
+ .lefifi .lf-shortcut-grid>*{min-height:82px;padding:35px 12px 10px}
+ .lefifi .lf-section{padding:30px 0}
+ .lefifi .lf-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lefifi .lf-service{min-height:132px;padding:14px 12px}
+ .lefifi .lf-service-icon{left:13px;top:12px}
+ .lefifi .lf-service-arrow{right:12px;top:12px}
+ .lefifi .lf-request-layout{grid-template-columns:1fr;gap:14px}
+ .lefifi .lf-request-intro h2{font-size:30px;margin:5px 0}
+ .lefifi .lf-request-intro>p:not(.lf-eyebrow){max-width:unset;margin:4px 0}
+ .lefifi .lf-contact-card{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+ .lefifi .lf-form{padding:12px}
+ .lefifi .lf-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lefifi .lf-form-grid .lf-full{grid-column:1/-1}
+ .lefifi .lf-mobile-nav{position:fixed;z-index:60;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:rgba(5,15,31,.97);border-top:1px solid rgba(67,169,208,.38);box-shadow:0 -8px 24px rgba(5,15,31,.16);backdrop-filter:blur(14px)}
+ .lefifi .lf-mobile-nav a{display:flex;min-height:45px;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#eaf3f8;font-size:9px;font-weight:700}
+ .lefifi .lf-mobile-nav a:first-child{color:#43a9d0}
+ .lefifi .lf-mobile-nav svg{color:#43a9d0}
+ .lefifi .lf-footer{padding-bottom:62px}
+}
+@media(max-width:420px){
+ .lefifi .lf-container{width:calc(100% - 24px)}
+ .lefifi .lf-brand-mark{width:132px;height:54px}
+ .lefifi .lf-nav-account{font-size:10px;padding:8px 9px}
+ .lefifi .lf-service-detail{font-size:10px}
+ .lefifi .lf-form-grid{gap:8px}
+ .lefifi .lf-form label{font-size:11px}
+}
