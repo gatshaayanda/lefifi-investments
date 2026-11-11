@@ -123,3 +123,15 @@
 .lf-account-page .lf-account-details-panel dd{margin:0;text-align:right;font-size:.72rem;font-weight:750;color:#263d4d;overflow-wrap:anywhere}
 .lf-account-page .lf-account-details-panel>a{grid-column:2;color:#176b8d;font-size:.7rem;font-weight:800}
 @media(max-width:700px){.lf-account-page .lf-account-workspace,.lf-account-page .lf-account-details-panel{padding:13px}.lf-account-page .lf-account-section-heading{align-items:flex-start;flex-direction:column}.lf-account-page .lf-account-shortcuts{grid-template-columns:1fr}.lf-account-page .lf-account-shortcuts>a{grid-template-columns:34px minmax(0,1fr) auto;min-height:62px}.lf-account-page .lf-account-shortcuts b{grid-column:3;grid-row:1}.lf-account-page .lf-account-details-panel{grid-template-columns:1fr}.lf-account-page .lf-account-details-panel>a{grid-column:1}}
+
+.lf-submit-price-note{display:grid;gap:4px;margin:15px 0 11px;padding:11px 13px;border:1px solid #cbd8df;border-radius:7px;background:#f3f7f9;color:#263e4d}
+.lf-submit-price-note strong{font-size:.72rem;font-weight:850}.lf-submit-price-note span{font-size:.76rem;line-height:1.45}.lf-submit-price-note small{font-size:.65rem;color:#5c6f7b}
+.lf-account-submitted{display:flex;align-items:flex-start;gap:13px;margin:0 0 16px;padding:15px 17px;border:1px solid #b7d6c7;border-radius:9px;background:#f0f8f3;color:#1c4535}
+.lf-account-submitted-mark{display:grid;place-items:center;flex:0 0 28px;height:28px;border-radius:50%;background:#d5eddf;color:#17633e;font-weight:900}
+.lf-account-submitted .lf-eyebrow{margin:0 0 4px;color:#28714e;font-size:.62rem;font-weight:850;letter-spacing:.1em}
+.lf-account-submitted h2{margin:0 0 4px;font-size:1rem;color:#173f30}.lf-account-submitted p{margin:0;color:#365b4a;font-size:.76rem;line-height:1.45}
+.lf-customer-price-references{display:grid;gap:7px;margin:12px 0;padding:12px 14px;border:1px solid #cbd8df;border-radius:8px;background:#f6f9fa}
+.lf-customer-price-references>span{font-size:.61rem;letter-spacing:.09em;font-weight:850;color:#526a78}
+.lf-customer-price-references>div{display:flex;justify-content:space-between;gap:12px;font-size:.75rem;color:#263e4d}.lf-customer-price-references b{white-space:nowrap}
+.lf-customer-price-references small{font-size:.65rem;line-height:1.45;color:#5c6f7b}
+@media(max-width:700px){.lf-account-submitted{padding:12px}.lf-submit-price-note{margin-top:12px}}
