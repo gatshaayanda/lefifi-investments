@@ -58,44 +58,31 @@ const STATIC_LIMIT = 100;
 const PUBLIC_PAGE_LIMIT = 12;
 const MEDIA_LIMIT = 40;
 const MEDIA_HOSTS = ["images.unsplash.com", "utfs.io", "ufs.sh"];
-const APP_SHELL = ["/", "/offline", "/patterns", "/iphone-install", "/iphone-install.svg", "/lefifi-mark.svg", "/lefifi.jpg", "/manifest.webmanifest"];
+// Only the essential offline shell participates in service-worker installation.
+// Secondary routes and Next.js chunks are cached naturally as customers visit them.
+const APP_SHELL = ["/", "/offline", "/lefifi-mark.svg", "/lefifi.jpg", "/manifest.webmanifest"];
 
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
     await precacheShell();
-    // Install the new routing/cache policy immediately; the page is not force-reloaded.
+    // Do not make browser install eligibility wait for secondary pages or JS chunks.
     await self.skipWaiting();
   })());
 });
 
 async function precacheShell() {
   const shell = await caches.open(SHELL_CACHE);
-  const discovered = new Set();
-  // Fetch the app shell concurrently: serial navigation requests delayed
-  // service-worker installation and browser install eligibility.
   await Promise.all(APP_SHELL.map(async path => {
     try {
       const request = new Request(path, { cache: "reload" });
       const response = await fetch(request);
-      if (!response.ok) return;
-      await shell.put(request, response.clone());
-      if (!(response.headers.get("content-type") || "").includes("text/html")) return;
-      const html = await response.text();
-      for (const match of html.matchAll(/(?:src|href)=["'](\/_next\/static\/[^"']+)["']/g)) discovered.add(match[1]);
+      if (response.ok) await shell.put(request, response.clone());
     } catch {
-      // An optional route or image must not block installation of the remaining shell.
+      // A failed asset must not block the remaining essential shell.
     }
-  }));
-  await Promise.all([...discovered].map(async path => {
-    try {
-      const request = new Request(path, { cache: "reload" });
-      const response = await fetch(request);
-      if (response.ok) await shell.put(request, response);
-    } catch {}
   }));
   await trimCache(SHELL_CACHE, STATIC_LIMIT);
 }
-
 self.addEventListener("message", event => {
   if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
   if (event.data?.type === "CACHE_MEDIA" && Array.isArray(event.data.urls)) {
