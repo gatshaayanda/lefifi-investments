@@ -58,7 +58,7 @@ const STATIC_LIMIT = 100;
 const PUBLIC_PAGE_LIMIT = 12;
 const MEDIA_LIMIT = 40;
 const MEDIA_HOSTS = ["images.unsplash.com", "utfs.io", "ufs.sh"];
-const APP_SHELL = ["/", "/offline", "/patterns", "/iphone-install", "/iphone-install.svg", "/lefifi.jpg", "/manifest.webmanifest"];
+const APP_SHELL = ["/", "/offline", "/patterns", "/iphone-install", "/iphone-install.svg", "/lefifi-mark.svg", "/lefifi.jpg", "/manifest.webmanifest"];
 
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
