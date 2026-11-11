@@ -38,8 +38,8 @@ type RecordItem = {
 
 const STATUS: Record<string, { label: string; summary: string }> = {
   new: { label: "Received", summary: "Lefifi has received your request. The team will review the details and decide the next step." },
-  reviewing: { label: "Under review", summary: "The team is reviewing your brief, dates and requirements. They may contact you if they need more detail." },
-  quoted: { label: "Quote ready", summary: "A quote has been recorded for your request. Review the scope and amount below, then contact Lefifi to discuss it." },
+  reviewing: { label: "Under review", summary: "The team is reviewing your brief, dates and requirements. Any update will appear in this request history." },
+  quoted: { label: "Quote ready", summary: "A quote has been recorded for your request. Review the scope and amount below, then send a follow-up enquiry in the app if you need changes." },
   confirmed: { label: "Confirmed", summary: "Lefifi has marked this request as confirmed. Send a follow-up enquiry in the app if you need to clarify any arrangements." },
   in_progress: { label: "In progress", summary: "The team has marked this work as underway. Send a follow-up enquiry in the app if you need to coordinate event or hire details." },
   completed: { label: "Completed", summary: "Lefifi has marked this request as completed." },
