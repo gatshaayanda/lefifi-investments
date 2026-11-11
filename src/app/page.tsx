@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, AudioLines, CalendarDays, ClipboardList, Monitor, Package, PanelsTopLeft, Sofa } from "lucide-react";
+import { ArrowUpRight, AudioLines, CalendarDays, ClipboardList, Home, MessageCircle, Monitor, Package, PanelsTopLeft, Sofa, Tag } from "lucide-react";
 import { useEffect, useState } from "react";
 import { addDoc, collection, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { signInAnonymously } from "firebase/auth";
@@ -124,14 +124,14 @@ export default function HomePage() {
     </div></section>
 
     <section className="lf-section" id="services"><div className="lf-container">
-      <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Tell us what you are planning. We’ll review the details and come back with the right next step. Listed amounts are editable base prices; final scope is confirmed with the team.</p></div>
-      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`Base price · P${Number(item.price).toLocaleString("en-BW")}`:"Price to be confirmed"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
+      <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Explore the services and starting prices. Choose what you need and send a short brief.</p></div>
+      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`From P${Number(item.price).toLocaleString("en-BW")}`:"Ask for price"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
     </div></section>
 
     <section className="lf-feature" id="about"><div className="lf-feature-image" /><div className="lf-feature-copy"><p className="lf-eyebrow">FROM FIRST IDEA TO FINAL DETAIL</p><h2>Good events are<br/><em>well put together.</em></h2><p>Lefifi Investments supports event requirements across planning, furniture and styling, technical production and equipment hire. Share the occasion, the location and what you have in mind — the team can help shape the scope with you.</p><a href="#request" className="lf-text-link">Talk to the team <span>↗</span></a></div></section>
 
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
-      <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Send an event brief or an equipment hire request. The team will review it and confirm availability, scope and pricing with you. Submitting a request does not confirm a booking.</p><div className="lf-contact-card"><span>Prefer to speak directly?</span><a href="tel:+26773706331">+267 73 706 331</a><small>Gaborone, Botswana · P.O. Box 201958, Bontleng</small></div></div>
+      <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Tell us the essentials. The team will confirm availability and the final quote before anything is booked.</p><div className="lf-contact-card"><span>Rather call?</span><a href="tel:+26773706331">+267 73 706 331</a></div></div>
       <div className="lf-form-panel">
         <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setEventBrief("");}}>Equipment hire</button></div>
         {saved ? <div className="lf-success" role="status"><span className="lf-success-icon">✓</span><p className="lf-eyebrow">REQUEST RECEIVED</p><h3>Thank you. We have it.</h3><p>{message} The team still needs to review the details and confirm the next step. This is not yet a confirmed booking.</p><div className="lf-reference">REFERENCE <strong>{saved.id.slice(0,8).toUpperCase()}</strong></div><Link href="/account" className="lf-primary">Track your request <span>↗</span></Link><button className="lf-reset" type="button" onClick={()=>{setSaved(null);setMessage("");}}>Send another enquiry</button></div> :
@@ -155,14 +155,14 @@ export default function HomePage() {
           </>}
           </div>
           <button className="lf-submit" type="submit" disabled={busy || !hasFirebaseWebConfig || !online}>{busy ? "Sending your request…" : online ? "Send request" : "Reconnect to send"} <span>↗</span></button>
-          <p className="lf-form-note">Your details are used to respond to this enquiry. Availability, final pricing and booking confirmation are handled by the Lefifi team.</p>
+          <p className="lf-form-note">The team will review your request and confirm the quote. Sending this form does not book or reserve equipment.</p>
           {!online && <p className="lf-error" role="status">Offline · This form will not send or queue a request until you reconnect.</p>}{message && <p className="lf-inline-message" role="status">{message}</p>}{error && <p className="lf-error" role="alert">{error}</p>}
           {!hasFirebaseWebConfig && <p className="lf-error" role="status">Online request saving is not configured on this deployment. Please call +267 73 706 331.</p>}
         </form>}
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-main"><a className="lf-brand" href="#"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></a><p>Events, equipment and production.<br/>Gaborone, Botswana.</p><a href="tel:+26773706331">+267 73 706 331</a></div><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments</span><Link href="/account">Customer requests</Link></div></footer>
-    <ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
+    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></footer>
+    <nav className="lf-mobile-nav" aria-label="Quick navigation"><a href="#"><Home size={19}/><span>Home</span></a><a href="#services"><Tag size={19}/><span>Services</span></a><a href="#request"><MessageCircle size={19}/><span>Enquire</span></a><Link href="/account"><ClipboardList size={19}/><span>My requests</span></Link></nav><ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
