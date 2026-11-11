@@ -117,8 +117,8 @@ export default function HomePage() {
     </section>
 
     <section className="lf-shortcuts" aria-label="Quick destinations"><div className="lf-container lf-shortcut-grid">
-      <button type="button" onClick={()=>chooseOffering({name:"Event planning & management"})}><span className="lf-shortcut-icon" aria-hidden="true"><CalendarDays size={19} strokeWidth={1.6}/></span><strong>Plan an event</strong><small>Brief the team</small><b aria-hidden="true"><ArrowUpRight size={16}/></b></button>
-      <button type="button" onClick={()=>chooseOffering({name:"Sound & lighting"})}><span className="lf-shortcut-icon" aria-hidden="true"><AudioLines size={19} strokeWidth={1.6}/></span><strong>Production</strong><small>Sound, light & stage</small><b aria-hidden="true">↗</b></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Event planning & management"})}><span className="lf-shortcut-icon" aria-hidden="true"><CalendarDays size={19} strokeWidth={1.6}/></span><strong>Plan an event</strong><small>Brief the team</small><span className="lf-shortcut-action" aria-hidden="true">OPEN <ArrowUpRight size={15}/></span></button>
+      <button type="button" onClick={()=>chooseOffering({name:"Sound & lighting"})}><span className="lf-shortcut-icon" aria-hidden="true"><AudioLines size={19} strokeWidth={1.6}/></span><strong>Production</strong><small>Sound, light & stage</small><span className="lf-shortcut-action" aria-hidden="true">OPEN <ArrowUpRight size={15}/></span></button>
       <button type="button" onClick={()=>chooseOffering({name:"Mobile toilet hire"})}><span className="lf-shortcut-icon" aria-hidden="true"><Package size={19} strokeWidth={1.6}/></span><strong>Hire equipment</strong><small>Share dates & location</small><b aria-hidden="true">↗</b></button>
       <Link href="/account"><span className="lf-shortcut-icon" aria-hidden="true"><ClipboardList size={19} strokeWidth={1.6}/></span><strong>My requests</strong><small>Check your updates</small><b aria-hidden="true">↗</b></Link>
     </div></section>
