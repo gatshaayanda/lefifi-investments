@@ -9,3 +9,17 @@
 .i13-install-action{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:11px 13px;border:0;border-radius:10px;background:#155eef;color:#fff;font:inherit;font-size:.86rem;font-weight:850;cursor:pointer}
 .i13-install-action:focus-visible,.i13-install-close:focus-visible{outline:3px solid #7da5ff;outline-offset:3px}
 @media(min-width:700px){.i13-install-card{left:auto;right:18px;bottom:18px;width:350px;margin:0}}
+
+/* Africhiko install card pattern, rebranded for Lefifi. */
+.offlineBanner{position:fixed;left:12px;right:12px;bottom:12px;z-index:100;background:#102638;color:#fff;padding:11px 16px;border-radius:10px;text-align:center;font-size:.82rem;font-weight:750;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.af-install-card{position:fixed;right:18px;bottom:18px;z-index:1000;width:min(330px,calc(100vw - 28px));display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:14px;background:#fff;color:#172b3b;border:1px solid #c7d4dc;border-radius:10px;box-shadow:0 12px 34px rgba(16,38,56,.16);font-family:Arial,Helvetica,sans-serif}
+.af-install-brand{display:flex;align-items:center;gap:10px;min-width:0}
+.af-install-mark{display:grid;place-items:center;flex:0 0 54px;width:54px;height:42px;overflow:hidden;border:1px solid #d5dfe5;border-radius:5px;background:#fff;padding:2px}
+.af-install-mark img{display:block;width:100%;height:100%;object-fit:contain}
+.af-install-brand strong,.af-install-brand small{display:block}
+.af-install-brand strong{font-size:.78rem;letter-spacing:.06em;font-weight:900}
+.af-install-brand small{margin-top:4px;color:#405563;font-size:.62rem;font-weight:750;letter-spacing:.04em}
+.af-install-close{align-self:start;display:grid;place-items:center;width:28px;height:28px;padding:0;border:1px solid #c7d4dc;border-radius:50%;background:#f4f7f9;color:#243f51;font-size:1.2rem;line-height:1;cursor:pointer}
+.af-install-action{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:10px 13px;border:1px solid #075b7b;border-radius:6px;background:#075b7b;color:#fff;font-size:.84rem;font-weight:850;cursor:pointer}
+.af-install-action:focus-visible,.af-install-close:focus-visible{outline:3px solid #1686ad;outline-offset:3px}
+@media(max-width:560px){.offlineBanner{font-size:.76rem;line-height:1.4}.af-install-card{left:14px;right:14px;bottom:64px;width:auto;max-width:390px;margin:0 auto;padding:12px}}
