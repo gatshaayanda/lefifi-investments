@@ -22,7 +22,7 @@
 ## Authentication and authorization
 - Customers use Firebase Anonymous Auth when they submit an enquiry. Their guest session is persisted by Firebase in the same browser; account history is private to that UID.
 - Staff use a separate Firebase app/Auth instance with Anonymous Auth. The staff-facing UI is one access-word field only.
-- Server variables required for staff access: LEFIFI_OPERATIONS_WORD and FIREBASE_ADMIN_KEY (service-account JSON from the Lefifi Firebase project). The API verifies the ID token, checks the secret using a constant-time hash comparison, and writes an admin role with a 12-hour expiry. No Firebase custom token is created.
+- Server variables required for staff access: ADMIN_PASSWORD and FIREBASE_ADMIN_KEY (service-account JSON from the Lefifi Firebase project). The API verifies the ID token, checks the secret using a constant-time hash comparison, and writes an admin role with a 12-hour expiry. No Firebase custom token is created.
 - The service account project_id must equal NEXT_PUBLIC_FIREBASE_PROJECT_ID. Never reuse credentials from another project.
 - Admin documents are server-written only. Firestore rules require an unexpired role for staff reads/writes. Never create admin documents from client code or loosen rules to bypass login.
 - Firebase Anonymous Auth must be enabled. Do not add Email/Password login, custom-token auth or deterministic staff identities.
@@ -43,7 +43,7 @@
 
 ## Environment
 - Public Firebase web config: NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID, NEXT_PUBLIC_FIREBASE_APP_ID; optional NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID.
-- Staff server config: LEFIFI_OPERATIONS_WORD, FIREBASE_ADMIN_KEY.
+- Staff server config: ADMIN_PASSWORD, FIREBASE_ADMIN_KEY.
 - Optional metadata base: NEXT_PUBLIC_BASE_URL.
 - UploadThing requires its project token before upload controls are exposed. Do not substitute Firebase Storage.
 
