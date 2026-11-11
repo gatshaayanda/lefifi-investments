@@ -3173,3 +3173,7 @@ a{ text-underline-offset:3px }
  .lf-workspace .lf-asset-form{grid-template-columns:1fr!important}
  .lf-workspace .lf-asset-form .lf-asset-notes,.lf-workspace .lf-asset-form-actions{grid-column:auto!important}
 }
+
+@media(min-width:681px){
+ .lf-workspace .lf-metrics{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
