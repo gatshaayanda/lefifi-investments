@@ -33,7 +33,7 @@ export default function HomePage() {
     if (busy) return;
     if (!navigator.onLine) { setError("You are offline. This request has not been sent. Reconnect and submit it again."); return; }
     if (!hasFirebaseWebConfig) {
-      setError("Online requests are not configured on this deployment yet. Please contact Lefifi directly on +267 73 706 331.");
+      setError("Online requests are not configured on this deployment yet. Please submit your request through the app.");
       return;
     }
     const formElement = event.currentTarget;
@@ -96,7 +96,7 @@ export default function HomePage() {
   }
 
   return <main className="lefifi">
-    <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></div>
+    <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><span>EVENTS · RENTALS · PRODUCTION</span></div></div>
     <header className="lf-header"><div className="lf-container lf-nav">
       <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></Link>
       <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#request">Enquire</a></nav>
@@ -127,7 +127,7 @@ export default function HomePage() {
     </div></section>
 
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
-      <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Tell us the essentials. The team will confirm availability and the final quote before anything is booked.</p><div className="lf-contact-card"><span>Rather call?</span><a href="tel:+26773706331">+267 73 706 331</a></div></div>
+      <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Tell us the essentials. The team will confirm availability and the final quote before anything is booked.</p><div className="lf-contact-card"><span>Keep everything together.</span><strong>Submit and track your request in the app.</strong></div></div>
       <div className="lf-form-panel">
         <div className="lf-form-tabs" role="tablist" aria-label="Choose enquiry type"><button type="button" role="tab" aria-selected={kind === "event"} className={kind === "event" ? "active" : ""} onClick={()=>{setKind("event");setSaved(null);setError("");setRentalItems("");}}>Event enquiry</button><button type="button" role="tab" aria-selected={kind === "rental"} className={kind === "rental" ? "active" : ""} onClick={()=>{setKind("rental");setSaved(null);setError("");setEventBrief("");}}>Equipment hire</button></div>
         {saved ? <div className="lf-success" role="status"><span className="lf-success-icon">✓</span><p className="lf-eyebrow">REQUEST RECEIVED</p><h3>Thank you. We have it.</h3><p>{message} The team still needs to review the details and confirm the next step. This is not yet a confirmed booking.</p><div className="lf-reference">REFERENCE <strong>{saved.id.slice(0,8).toUpperCase()}</strong></div><Link href="/account" className="lf-primary">Track your request <span>↗</span></Link><button className="lf-reset" type="button" onClick={()=>{setSaved(null);setMessage("");}}>Send another enquiry</button></div> :
@@ -153,12 +153,12 @@ export default function HomePage() {
           <button className="lf-submit" type="submit" disabled={busy || !hasFirebaseWebConfig || !online}>{busy ? "Sending your request…" : online ? "Send request" : "Reconnect to send"} <span>↗</span></button>
           <p className="lf-form-note">The team will review your request and confirm the quote. Sending this form does not book or reserve equipment.</p>
           {!online && <p className="lf-error" role="status">Offline · This form will not send or queue a request until you reconnect.</p>}{message && <p className="lf-inline-message" role="status">{message}</p>}{error && <p className="lf-error" role="alert">{error}</p>}
-          {!hasFirebaseWebConfig && <p className="lf-error" role="status">Online request saving is not configured on this deployment. Please call +267 73 706 331.</p>}
+          {!hasFirebaseWebConfig && <p className="lf-error" role="status">Online request saving is not configured on this deployment. Please use the enquiry form and submit again when online.</p>}
         </form>}
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span><div className="lf-footer-links"><a href="tel:+26773706331">Call +267 73 706 331</a><Link href="/admin">Staff / Admin ↗</Link></div></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span><div className="lf-footer-links"><Link href="/admin">Staff / Admin ↗</Link></div></div></footer>
     <nav className="lf-mobile-nav" aria-label="Quick navigation"><a href="#"><Home size={19}/><span>Home</span></a><a href="#services"><Tag size={19}/><span>Services</span></a><a href="#request"><MessageCircle size={19}/><span>Enquire</span></a><Link href="/account"><ClipboardList size={19}/><span>My requests</span></Link></nav><ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{window.location.href="/admin";}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
