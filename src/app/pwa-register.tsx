@@ -228,7 +228,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     }
     try {
       await prompt.prompt();
-      const choice = await prompt.userChoice;
+      await prompt.userChoice;
     } catch {
       // The event is one-shot and browser-controlled. Do not replace it with
       // generic Chrome-menu instructions when the native prompt fails.
