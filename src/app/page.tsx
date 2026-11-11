@@ -158,7 +158,7 @@ export default function HomePage() {
       </div>
     </div></section>
 
-    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span></div></footer>
+    <footer className="lf-footer"><div className="lf-container lf-footer-bottom"><span>© {new Date().getFullYear()} Lefifi Investments · Gaborone</span><Link className="lf-staff-access" href="/admin">Staff access <ArrowUpRight size={13}/></Link></div></footer>
     <nav className="lf-mobile-nav" aria-label="Quick navigation"><a href="#"><Home size={19}/><span>Home</span></a><a href="#services"><Tag size={19}/><span>Services</span></a><a href="#request"><MessageCircle size={19}/><span>Enquire</span></a><Link href="/account"><ClipboardList size={19}/><span>My requests</span></Link></nav><ServiceGuide view="shop" services={guideServices} requestCount={0} onChooseService={chooseOffering} onOpenAccount={()=>{window.location.href="/account";}} onOpenAdmin={()=>{window.location.href="/admin";}} onOpenStorefront={()=>window.scrollTo({top:0,behavior:"smooth"})}/>
   </main>;
 }
