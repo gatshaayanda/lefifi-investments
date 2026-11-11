@@ -5,7 +5,7 @@
 - Branch: main
 - Foundation: Iteration 13 baseline 8cab59b; selected explicitly by the product owner.
 - Business: Lefifi Investments, Gaborone, Botswana. Event planning/management, furniture and styling, indoor/outdoor LED screens, sound, lighting, stage design/production, and mobile toilet/equipment hire.
-- Public contact: +267 73 706 331; P.O. Box 201958, Bontleng.
+- Customer dealings and enquiries are handled through the app. Do not publish business phone/call/WhatsApp contact routes. Customer phone capture on an enquiry is retained for request fulfilment.
 - Firebase project: learn-fx-trading-bw-academy.
 - Uploads: UploadThing only. Firebase Storage is not configured or deployed.
 
@@ -13,15 +13,15 @@
 - src/app/page.tsx: mobile-first public discovery, compact service shortcuts, a live Firestore service catalogue with six editable single-price starter entries, service selection that prefills the correct event/rental form field, and real Firestore event enquiry/equipment hire submissions. Offline submissions are not queued.
 - src/app/account/page.tsx: customer workspace opened automatically after a successful enquiry. It shows the saved customer contact details, account shortcuts, customer-UID-scoped event/rental history with All/Events/Hire filters, status explanations, last-update timestamps, request detail disclosure and staff-recorded quote visibility. WhatsApp links provide direct contact; they are not a persisted private messaging inbox. Guest history remains tied to the same browser session. Customer records are sorted client-side so account queries do not require a customerId+createdAt composite index.
 - src/app/admin/page.tsx: private operations workspace with live event/rental request queues, staff-controlled status updates, equipment CRUD and a single-price service catalogue CRUD. When the services collection is empty, staff can explicitly load six editable base-price entries; deletion does not silently recreate them.
-- src/app/admin/admin-gate.tsx: one-word staff access gate.
-- src/app/api/operations-login/route.ts: verifies the access word server-side, verifies an anonymous Firebase ID token, and grants a time-limited admin role document. It does not issue custom tokens.
+- src/app/admin/admin-gate.tsx: one-password staff access gate.
+- src/app/api/operations-login/route.ts: verifies the password server-side, verifies an anonymous Firebase ID token, and grants a time-limited admin role document. It does not issue custom tokens.
 - src/lib/firebase/client.ts: separate Firebase Auth/Firestore app instances for customer and staff sessions, so staff sign-in does not overwrite a customer's guest session.
 - Firestore collections: customers, eventEnquiries, rentalRequests, admins, equipment, jobs, quotes, payments, businessSettings.
 - Event/rental status values: new, reviewing, quoted, confirmed, in_progress, completed, declined. A submitted request is not a confirmed booking.
 
 ## Authentication and authorization
 - Customers use Firebase Anonymous Auth when they submit an enquiry. Their guest session is persisted by Firebase in the same browser; account history is private to that UID.
-- Staff use a separate Firebase app/Auth instance with Anonymous Auth. The staff-facing UI is one access-word field only.
+- Staff use a separate Firebase app/Auth instance with Anonymous Auth. The staff-facing UI is one password field only.
 - Server variables required for staff access: ADMIN_PASSWORD and FIREBASE_ADMIN_KEY (service-account JSON from the Lefifi Firebase project). The API verifies the ID token, checks the secret using a constant-time hash comparison, and writes an admin role with a 12-hour expiry. No Firebase custom token is created.
 - The service account project_id must equal NEXT_PUBLIC_FIREBASE_PROJECT_ID. Never reuse credentials from another project.
 - Admin documents are server-written only. Firestore rules require an unexpired role for staff reads/writes. Never create admin documents from client code or loosen rules to bypass login.
