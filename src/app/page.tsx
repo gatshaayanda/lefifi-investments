@@ -101,7 +101,7 @@ export default function HomePage() {
     <div className="lf-topline"><div className="lf-container"><span>GABORONE · BOTSWANA</span><a href="tel:+26773706331">Call +267 73 706 331</a></div></div>
     <header className="lf-header"><div className="lf-container lf-nav">
       <Link className="lf-brand" href="/" aria-label="Lefifi Investments home"><span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span></Link>
-      <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#about">About</a><a href="#request">Enquire</a></nav>
+      <nav aria-label="Main navigation"><a href="#services">Services</a><a href="#request">Enquire</a></nav>
       <Link className="lf-nav-account" href="/account">My requests <span>↗</span></Link>
     </div></header>
 
@@ -125,10 +125,8 @@ export default function HomePage() {
 
     <section className="lf-section" id="services"><div className="lf-container">
       <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Explore the services and starting prices. Choose what you need and send a short brief.</p></div>
-      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`From P${Number(item.price).toLocaleString("en-BW")}`:"Ask for price"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
+      <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`P${Number(item.price).toLocaleString("en-BW")}`:"Ask for price"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
     </div></section>
-
-    <section className="lf-feature" id="about"><div className="lf-feature-image" /><div className="lf-feature-copy"><p className="lf-eyebrow">FROM FIRST IDEA TO FINAL DETAIL</p><h2>Good events are<br/><em>well put together.</em></h2><p>Lefifi Investments supports event requirements across planning, furniture and styling, technical production and equipment hire. Share the occasion, the location and what you have in mind — the team can help shape the scope with you.</p><a href="#request" className="lf-text-link">Talk to the team <span>↗</span></a></div></section>
 
     <section className="lf-request-section" id="request"><div className="lf-container lf-request-layout">
       <div className="lf-request-intro"><p className="lf-eyebrow">LET’S GET THE DETAILS</p><h2>Tell us what<br/><em>you have in mind.</em></h2><p>Tell us the essentials. The team will confirm availability and the final quote before anything is booked.</p><div className="lf-contact-card"><span>Rather call?</span><a href="tel:+26773706331">+267 73 706 331</a></div></div>
