@@ -31,7 +31,7 @@ export async function POST(request:Request) {
     if(!idToken) return NextResponse.json({error:"Your staff session could not be verified. Refresh and try again."},{status:401});
     const body=await request.json().catch(()=>null) as {word?:unknown}|null;
     const word=typeof body?.word==="string"?body.word.trim():"";
-    if(!matchesWord(word,expected)) return NextResponse.json({error:"Access denied. Check the access word."},{status:401});
+    if(!matchesWord(word,expected)) return NextResponse.json({error:"Access denied. Check the password."},{status:401});
     const app=adminApp();
     const decoded=await getAuth(app).verifyIdToken(idToken);
     if(decoded.firebase?.sign_in_provider!=="anonymous") return NextResponse.json({error:"Staff access requires a separate guest staff session."},{status:403});
