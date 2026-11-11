@@ -133,7 +133,7 @@ export default function ServiceGuide({ view, services, requestCount, onChooseSer
     if (match) { chooseService(match); return; }
     if (/website|web page|site/.test(normalized)) { const service = activeServices.find(item => /website/i.test(item.name)); if (service) { chooseService(service); return; } }
     if (/app|mobile/.test(normalized)) { const service = activeServices.find(item => /^app$/i.test(item.name)); if (service) { chooseService(service); return; } }
-    say("I can help with Lefifi’s event and equipment services. Choose a service below or open your request history. For anything outside these options, contact the team directly.");
+    say("I can help with Lefifi’s event and equipment services. Choose a service below, open your request history or use the enquiry form on this page for anything else.");
   }
 
   const customerActions = [
