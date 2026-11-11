@@ -51,7 +51,7 @@ self.addEventListener("notificationclick", (event) => {
   }));
 });
 
-const CACHE_VERSION = "lefifi-shell-v2";
+const CACHE_VERSION = "lefifi-shell-v3";
 const MEDIA_CACHE = "lefifi-media-v1";
 const SHELL_CACHE = CACHE_VERSION;
 const STATIC_LIMIT = 100;
@@ -71,17 +71,21 @@ self.addEventListener("install", event => {
 async function precacheShell() {
   const shell = await caches.open(SHELL_CACHE);
   const discovered = new Set();
-  for (const path of APP_SHELL) {
+  // Fetch the app shell concurrently: serial navigation requests delayed
+  // service-worker installation and browser install eligibility.
+  await Promise.all(APP_SHELL.map(async path => {
     try {
       const request = new Request(path, { cache: "reload" });
       const response = await fetch(request);
-      if (!response.ok) continue;
+      if (!response.ok) return;
       await shell.put(request, response.clone());
-      if (!(response.headers.get("content-type") || "").includes("text/html")) continue;
+      if (!(response.headers.get("content-type") || "").includes("text/html")) return;
       const html = await response.text();
-      for (const match of html.matchAll(/(?:src|href)=["'](\/_next\/static\/[^"']+)["']/g)) discovered.add(match[1]);
-    } catch {}
-  }
+      for (const match of html.matchAll(/(?:src|href)=["'](\\/_next\\/static\\/[^"']+)["']/g)) discovered.add(match[1]);
+    } catch {
+      // An optional route or image must not block installation of the remaining shell.
+    }
+  }));
   await Promise.all([...discovered].map(async path => {
     try {
       const request = new Request(path, { cache: "reload" });
