@@ -9,5 +9,3 @@
 .i13-install-action{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;padding:11px 13px;border:0;border-radius:10px;background:#155eef;color:#fff;font:inherit;font-size:.86rem;font-weight:850;cursor:pointer}
 .i13-install-action:focus-visible,.i13-install-close:focus-visible{outline:3px solid #7da5ff;outline-offset:3px}
 @media(min-width:700px){.i13-install-card{left:auto;right:18px;bottom:18px;width:350px;margin:0}}
-
-@media(max-width:699px){.i13-install-card{bottom:calc(70px + env(safe-area-inset-bottom))}}
