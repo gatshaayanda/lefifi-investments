@@ -13,9 +13,6 @@ type InstallPromptEvent = Event & {
 };
 type InstallState = "hidden" | "native" | "embedded";
 
-const INSTALL_DISMISSED_KEY = "lefifi:install:dismissed-at";
-const INSTALL_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
-
 function environment() {
   if (typeof window === "undefined") return { standalone: true, ios: false, android: false, embedded: false };
   const ua = navigator.userAgent || "";
@@ -33,30 +30,6 @@ function isIosSafari() {
   const ios = /iPad|iPhone|iPod/i.test(nav.userAgent) ||
     (nav.platform === "MacIntel" && nav.maxTouchPoints > 1);
   return ios && /Safari/i.test(nav.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/i.test(nav.userAgent);
-}
-
-function dismissedRecently() {
-  try {
-    const value = window.localStorage.getItem(INSTALL_DISMISSED_KEY);
-    if (!value) return false;
-    const at = Date.parse(value);
-    if (!Number.isFinite(at)) return false;
-    return Date.now() - at < INSTALL_DISMISS_MS;
-  } catch {
-    return false;
-  }
-}
-
-function rememberDismissal() {
-  try {
-    window.localStorage.setItem(INSTALL_DISMISSED_KEY, new Date().toISOString());
-  } catch {
-    // Installation remains optional when storage is unavailable.
-  }
-}
-
-function clearDismissal() {
-  try { window.localStorage.removeItem(INSTALL_DISMISSED_KEY); } catch {}
 }
 
 export default function PwaRegister({ initialEmbedded = false, initialAndroid = false }: { initialEmbedded?: boolean; initialAndroid?: boolean }) {
@@ -118,7 +91,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       event.preventDefault();
       const prompt = event as InstallPromptEvent;
       installPromptRef.current = prompt;
-      setInstallCardDismissed(dismissedRecently());
+      setInstallCardDismissed(false);
       setCanInstall(true);
       // Retain the one-shot native event for the user's explicit Install click.
       // Do not interrupt page load with a second, custom install screen.
@@ -171,7 +144,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       setCanShowManualInstall(false);
       setInstallHelpOpen(false);
       setInstallState("hidden");
-      clearDismissal();
     };
     window.addEventListener("iteration13-open-install", requestInstall);
     window.addEventListener("appinstalled", appInstalled);
@@ -257,7 +229,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     try {
       await prompt.prompt();
       const choice = await prompt.userChoice;
-      if (choice.outcome === "dismissed") rememberDismissal();
     } catch {
       // The event is one-shot and browser-controlled. Do not replace it with
       // generic Chrome-menu instructions when the native prompt fails.
@@ -270,7 +241,6 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   }
 
   function dismissInstall() {
-    rememberDismissal();
     setInstallCardDismissed(true);
     setInstallHelpOpen(false);
     setInstallState("hidden");
@@ -336,7 +306,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
         <div className="i13-install-brand">
           <span className="i13-install-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
         </div>
-        <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => { rememberDismissal(); setInstallCardDismissed(true); }}>×</button>
+        <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => setInstallCardDismissed(true)}>×</button>
         <button className="i13-install-action" type="button" onClick={() => {
           if (installPromptRef.current) {
             void install();
