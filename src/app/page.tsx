@@ -78,10 +78,8 @@ export default function HomePage() {
         });
         recordId = record.id;
       }
-      setSaved({ id: recordId, kind });
-      setMessage(kind === "event" ? "Your event enquiry has been received." : "Your equipment request has been received.");
-      formElement.reset();
-       setEventBrief(""); setRentalItems("");
+      // The request is saved against this browser guest account. Open the customer workspace.
+      window.location.assign("/account?submitted=" + encodeURIComponent(recordId));
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "We could not save this request. Please try again.");
       setMessage("");
