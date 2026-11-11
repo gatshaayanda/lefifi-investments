@@ -61,3 +61,43 @@
 .lf-account-page .lf-footer .lf-container{max-width:1040px}
 @media(max-width:700px){.lf-account-page .lf-account-banner{padding:27px 0 22px}.lf-account-page .lf-account-heading{align-items:flex-start;flex-direction:column;gap:14px}.lf-account-page .lf-account-heading>.lf-primary{min-height:40px}.lf-account-page .lf-account-summary{gap:6px}.lf-account-page .lf-account-summary>div{gap:8px;padding:10px}.lf-account-page .lf-account-summary-icon{width:29px;height:29px;flex-basis:29px}.lf-account-page .lf-account-summary strong{font-size:1.35rem}.lf-account-page .lf-account-summary span{font-size:.57rem}.lf-account-page .lf-account-toolbar{align-items:flex-start;flex-direction:column}.lf-account-page .lf-account-filters{width:100%}.lf-account-page .lf-account-filters button{flex:1}.lf-account-page .lf-account-record{padding:12px}.lf-account-page .lf-account-record-head{align-items:flex-start}.lf-account-page .lf-account-record h2{font-size:1.15rem}.lf-account-page .lf-account-status{padding:5px 7px;font-size:.56rem}.lf-account-page .lf-account-facts{gap:9px 10px}.lf-account-page .lf-account-record-actions{flex-wrap:wrap}}
 @media(max-width:390px){.lf-account-page .lf-account-summary>div{align-items:flex-start;flex-direction:column;gap:5px}.lf-account-page .lf-account-summary-icon{display:none}.lf-account-page .lf-account-facts{grid-template-columns:1fr}}
+
+
+/* Customer account — Lefifi's original multicolour identity and accessible reading contrast. */
+.lf-account-page{background:#f5f8f9;color:#172b3b}
+.lf-account-page .lf-header{background:rgba(247,249,250,.98);border-bottom-color:#cbd5dc}
+.lf-account-page .lf-account-banner{background:#102638;border-bottom:4px solid #43a9d0}
+.lf-account-page .lf-account-banner .lf-eyebrow{color:#75c9e8}
+.lf-account-page .lf-account-lead{color:#e0e8ed;font-size:.9rem}
+.lf-account-page .lf-account-summary>div,.lf-account-page .lf-account-record{border-color:#cbd5dc}
+.lf-account-page .lf-account-summary-icon{background:#e8f5fa;color:#176b8d}
+.lf-account-page .lf-account-summary span{color:#536575;font-size:.7rem}
+.lf-account-page .lf-account-toolbar>div:first-child span{color:#536575;font-size:.75rem}
+.lf-account-page .lf-account-filters{background:#e7eef2}
+.lf-account-page .lf-account-filters button{color:#344b5c;font-size:.72rem}
+.lf-account-page .lf-account-filters button.active{background:#102638;color:#fff}
+.lf-account-page .lf-account-kind,.lf-account-page .lf-account-record-actions a{color:#176b8d}
+.lf-account-page .lf-account-status{border-color:#a9cbd8;color:#145b78;background:#eaf6fa;font-size:.68rem}
+.lf-account-page .lf-account-meta{color:#536575;font-size:.68rem}
+.lf-account-page .lf-account-meta strong{color:#263d4d}
+.lf-account-page .lf-account-fact-icon{color:#2585a9}
+.lf-account-page .lf-account-facts small{font-size:.7rem;color:#536575}
+.lf-account-page .lf-account-facts strong{font-size:.82rem;color:#263d4d}
+.lf-account-page .lf-account-details{color:#263d4d}
+.lf-account-page .lf-account-details summary{font-size:.78rem}
+.lf-account-page .lf-account-details p{font-size:.82rem;color:#435665}
+.lf-account-page .lf-account-next{background:#eaf4f7;border-left-color:#43a9d0}
+.lf-account-page .lf-account-next strong{font-size:.76rem;color:#263d4d}
+.lf-account-page .lf-account-next p{color:#435665;font-size:.8rem}
+.lf-account-page .lf-account-next small{color:#536575;font-size:.68rem}
+.lf-account-page .lf-customer-quote{border-left-color:#43a9d0}
+.lf-account-page .lf-customer-quote>span{color:#75c9e8}
+.lf-account-page .lf-customer-quote p{font-size:.82rem}
+.lf-account-page .lf-customer-quote small{color:#d5e2e9;font-size:.7rem}
+.lf-account-page .lf-account-privacy{color:#536575;font-size:.72rem}
+.lf-account-page .lf-account-retry{border-color:#43a9d0;background:#102638;color:#fff;font-size:.78rem}
+@media(max-width:700px){
+ .lf-account-page .lf-account-summary span{font-size:.64rem}
+ .lf-account-page .lf-account-meta{font-size:.64rem}
+ .lf-account-page .lf-account-facts strong{font-size:.8rem}
+}
