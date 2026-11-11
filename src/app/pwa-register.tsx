@@ -305,7 +305,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   const installCard = installState === "native" && installHelpOpen && isIosSafari() ? (
     <div style={installShellStyle} role="presentation">
       <section className="plugInstallModal" role="dialog" aria-modal="false" aria-labelledby="plug-install-title" aria-describedby="plug-install-message">
-        <div className="plugInstallTop"><span className="plugInstallMark">13</span><span className="plugInstallTag">ITERATION 13 · SERVICE STUDIO</span><button type="button" className="plugInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
+        <div className="plugInstallTop"><span className="plugInstallMark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span><span className="plugInstallTag">LEFIFI INVESTMENTS</span><button type="button" className="plugInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
         <div className="plugInstallKicker">IPHONE & IPAD</div>
         <h2 id="plug-install-title">Add to Home Screen.</h2>
         <p id="plug-install-message">In Safari, tap <b>Share</b>, choose <b>Add to Home Screen</b>, then tap <b>Add</b>. Open the new Home Screen icon to launch the installed app.</p>
@@ -316,7 +316,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     <div style={embeddedInstallStyle} role="alertdialog" aria-modal="true" aria-labelledby="plug-embedded-title" aria-describedby="plug-embedded-message">
       <div className="pwaInstallInfo" style={{...installShellStyle, position: "relative", left: "auto", right: "auto", bottom: "auto", width: "100%", maxWidth: 520, margin: 0}}>
         <div>
-          <strong id="plug-embedded-title"><span aria-hidden="true">🌐 </span>OPEN ITERATION 13 IN YOUR BROWSER</strong>
+          <strong id="plug-embedded-title"><span aria-hidden="true">🌐 </span>OPEN LEFIFI IN YOUR BROWSER</strong>
           <span id="plug-embedded-message">{embeddedAndroid ? <>Open Lefifi in Chrome to continue. Chrome will offer its own installation action when the app is eligible.</> : <>Lefifi opened inside another app. Open this page in your browser to continue.</>}</span>
         </div>
         <div className="pwaInstallActions" style={{display:"flex",justifyContent:"flex-end"}}>
@@ -332,8 +332,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     {!environment().standalone && installState !== "embedded" && (canInstall || canShowManualInstall) && !installCardDismissed && !(installState === "native" && installHelpOpen) && (
       <aside className="i13-install-card" aria-label="Install Lefifi">
         <div className="i13-install-brand">
-          <span className="i13-install-mark" aria-hidden="true">13</span>
-          <span><strong>ITERATION 13</strong><small>SERVICE STUDIO</small></span>
+          <span className="i13-install-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
         </div>
         <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => setInstallCardDismissed(true)}>×</button>
         <button className="i13-install-action" type="button" onClick={() => {
