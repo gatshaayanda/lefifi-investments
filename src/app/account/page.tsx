@@ -106,8 +106,7 @@ export default function AccountPage() {
   return <main className="lefifi lf-inner lf-account-page">
     <header className="lf-header"><div className="lf-container lf-nav">
       <Link className="lf-brand" href="/" aria-label="Lefifi Investments home">
-        <span className="lf-brand-mark"><img src="/lefifi-mark.svg" alt="" /></span>
-        <span><strong>LEFIFI</strong><small>INVESTMENTS</small></span>
+        <span className="lf-brand-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
       </Link>
       <Link className="lf-nav-account" href="/">Back to Lefifi <ArrowUpRight size={13} /></Link>
     </div></header>
