@@ -51,7 +51,7 @@ self.addEventListener("notificationclick", (event) => {
   }));
 });
 
-const CACHE_VERSION = "lefifi-shell-v3";
+const CACHE_VERSION = "lefifi-shell-v4";
 const MEDIA_CACHE = "lefifi-media-v1";
 const SHELL_CACHE = CACHE_VERSION;
 const STATIC_LIMIT = 100;
@@ -60,7 +60,7 @@ const MEDIA_LIMIT = 40;
 const MEDIA_HOSTS = ["images.unsplash.com", "utfs.io", "ufs.sh"];
 // Only the essential offline shell participates in service-worker installation.
 // Secondary routes and Next.js chunks are cached naturally as customers visit them.
-const APP_SHELL = ["/", "/offline", "/lefifi-mark.svg", "/lefifi.jpg", "/manifest.webmanifest"];
+const APP_SHELL = ["/", "/offline", "/lefifi-mark.svg", "/lefifi.jpg", "/manifest.webmanifest", "/iphone-install", "/iphone-install.svg"];
 
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
