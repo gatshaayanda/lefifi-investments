@@ -75,3 +75,14 @@
 - Feedback must be contextual and persistent enough to be noticed. Prefer inline field errors, form-level error summaries, persistent success/confirmation states, updated records, progress indicators and notification panels. Do not use disappearing toasts as the only confirmation, error or important status channel. A toast may only be considered for non-critical, supplementary status where missing it has no consequence and an accessible persistent alternative exists.
 - Before acceptance, inspect each major customer and staff journey at mobile and desktop widths. Ask: can a first-time user identify what is tappable, what happens next, whether an action succeeded, and how to recover from an error without guessing?
 - Research basis: Nielsen Norman Group guidance on click uncertainty and signifiers; Google Material Design accessibility guidance on clear hierarchy, redundant cues, contrast and touch targets; GitHub Primer accessibility guidance discouraging toasts and recommending persistent/contextual feedback; Scottish Government Design System guidance on the risk of disappearing toasts.
+
+
+## Landing page visual contract
+- The public home uses the Iteration 13 / WashRide mobile-home composition adapted to Lefifi: compact brand header, full-bleed relevant production image, concise high-contrast headline, one dominant enquiry action, a consistent two-column quick-destination grid, visible service prices, and persistent mobile navigation for Home, Services, Enquire and My requests.
+- The mobile layout is primary; desktop remains responsive. Staff access stays discreet at the bottom footer and must never appear in public navigation.
+- Preserve complete service descriptions and visible base prices; compactness must not clip text or hide pricing.
+- Visual source: `gatshaayanda/iteration13/docs/assets/washride-home-reference.jpeg` and `docs/VISUAL-DIRECTION-STANDARD.md`. Use the reference's composition and hierarchy, not its WashRide identity or literal car-wash styling.
+
+## PWA installation contract
+- Preserve Iteration 13's complete install lifecycle: early `beforeInteractive` native prompt capture, single-controller handoff after hydration, retained one-shot native prompt, user-click-only prompt invocation, dismissible branded card, iOS Safari Share → Add to Home Screen guidance, embedded-browser handoff, appinstalled cleanup, and offline caching of `/iphone-install` plus its illustration.
+- Keep Lefifi branding and isolated `lefifi-shell-vN` cache names. Do not replace this with a late-only React listener or remove the iOS guide.
