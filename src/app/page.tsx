@@ -166,7 +166,7 @@ export default function HomePage() {
           <p className="lf-form-note">The team will review your request and confirm the quote. Sending this form does not book or reserve equipment.</p>
           {!online && <p className="lf-error" role="status">Offline · This form will not send or queue a request until you reconnect.</p>}{message && <p className="lf-inline-message" role="status">{message}</p>}{error && <p className="lf-error" role="alert">{error}</p>}
           {!hasFirebaseWebConfig && <p className="lf-error" role="status">Online request saving is not configured on this deployment. Please use the enquiry form and submit again when online.</p>}
-        </form>}
+        </form>
       </div>
     </div></section>
 
