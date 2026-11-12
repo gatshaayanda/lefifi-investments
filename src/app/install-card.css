@@ -1,4 +1,4 @@
-/* Compact, dismissible install card aligned with the approved Africhiko pattern. */
+/* Iteration 13 installation contract, rebranded for Lefifi Investments. */
 .i13-install-card{position:fixed;left:16px;right:16px;bottom:16px;z-index:999;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;max-width:390px;margin:0 auto;padding:14px;background:#fff;color:#111318;border:1px solid rgba(17,19,24,.14);border-radius:16px;box-shadow:0 12px 34px rgba(0,0,0,.18)}
 .i13-install-brand{display:flex;align-items:center;gap:10px;min-width:0;padding-right:26px}
 .i13-install-brand>span:last-child{display:grid;gap:3px;min-width:0}
