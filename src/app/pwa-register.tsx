@@ -11,7 +11,10 @@ type InstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 };
-type InstallState = "hidden" | "embedded";
+type InstallState = "hidden" | "native" | "embedded";
+
+const INSTALL_DISMISSED_KEY = "lefifi:install:dismissed-at";
+const INSTALL_DISMISS_MS = 7 * 24 * 60 * 60 * 1000;
 
 function environment() {
   if (typeof window === "undefined") return { standalone: true, ios: false, android: false, embedded: false };
@@ -24,6 +27,38 @@ function environment() {
   return { standalone, ios, android, embedded };
 }
 
+function isIosSafari() {
+  if (typeof window === "undefined") return false;
+  const nav = window.navigator;
+  const ios = /iPad|iPhone|iPod/i.test(nav.userAgent) ||
+    (nav.platform === "MacIntel" && nav.maxTouchPoints > 1);
+  return ios && /Safari/i.test(nav.userAgent) && !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo/i.test(nav.userAgent);
+}
+
+function dismissedRecently() {
+  try {
+    const value = window.localStorage.getItem(INSTALL_DISMISSED_KEY);
+    if (!value) return false;
+    const at = Date.parse(value);
+    if (!Number.isFinite(at)) return false;
+    return Date.now() - at < INSTALL_DISMISS_MS;
+  } catch {
+    return false;
+  }
+}
+
+function rememberDismissal() {
+  try {
+    window.localStorage.setItem(INSTALL_DISMISSED_KEY, new Date().toISOString());
+  } catch {
+    // Installation remains optional when storage is unavailable.
+  }
+}
+
+function clearDismissal() {
+  try { window.localStorage.removeItem(INSTALL_DISMISSED_KEY); } catch {}
+}
+
 export default function PwaRegister({ initialEmbedded = false, initialAndroid = false }: { initialEmbedded?: boolean; initialAndroid?: boolean }) {
   const [offline, setOffline] = useState(false);
   const [reconnecting, setReconnecting] = useState(false);
@@ -31,7 +66,9 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   const [installState, setInstallState] = useState<InstallState>(initialEmbedded ? "embedded" : "hidden");
   const [updateReady, setUpdateReady] = useState<ServiceWorker | null>(null);
   const [embeddedAndroid, setEmbeddedAndroid] = useState(initialEmbedded && initialAndroid);
+  const [installHelpOpen, setInstallHelpOpen] = useState(false);
   const [canInstall, setCanInstall] = useState(false);
+  const [canShowManualInstall, setCanShowManualInstall] = useState(false);
   const [installCardDismissed, setInstallCardDismissed] = useState(false);
   const embeddedActionRef = useRef<HTMLButtonElement | null>(null);
   const reloadForUpdate = useRef(false);
@@ -41,6 +78,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     const env = environment();
     const embedded = initialEmbedded || env.embedded;
     setEmbeddedAndroid((initialEmbedded && initialAndroid) || (env.embedded && env.android));
+    setCanShowManualInstall(isIosSafari());
 
     const retryPendingOrderNotifications = async () => {
       const user = auth.currentUser;
@@ -88,7 +126,15 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
 
     window.addEventListener("online", online);
     window.addEventListener("offline", off);
-    // Africhiko install pattern: listen directly, retain the native event, and show the card only when Chrome supplies it.
+    const promptWindow = window as Window & { __lefifiInstallPrompt?: Event; __lefifiPwaListenerReady?: boolean };
+    // The browser can emit beforeinstallprompt before React hydrates. Adopt the
+    // event captured by the tiny beforeInteractive script before listening normally.
+    promptWindow.__lefifiPwaListenerReady = true;
+    const earlyPrompt = promptWindow.__lefifiInstallPrompt;
+    if (earlyPrompt) {
+      delete promptWindow.__lefifiInstallPrompt;
+      onBeforeInstallPrompt(earlyPrompt);
+    }
     window.addEventListener("beforeinstallprompt", onBeforeInstallPrompt);
 
     if (env.standalone && !embedded) {
@@ -110,13 +156,22 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
         void install();
         return;
       }
+      // Only iOS Safari needs manual guidance. On desktop/Android, do not replace
+      // the browser-owned prompt with a custom explainer or fake install flow.
+      if (current.ios && isIosSafari()) {
+        setInstallHelpOpen(true);
+        setInstallState("native");
+      }
     };
     const appInstalled = () => {
       installPromptRef.current = null;
       setCanInstall(false);
+      setCanShowManualInstall(false);
+      setInstallHelpOpen(false);
       setInstallState("hidden");
+      clearDismissal();
     };
-    window.addEventListener("iteration13-open-install", requestInstall);
+    window.addEventListener("lefifi-open-install", requestInstall);
     window.addEventListener("appinstalled", appInstalled);
 
     let registration: ServiceWorkerRegistration | null = null;
@@ -145,7 +200,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     navigator.serviceWorker?.addEventListener("controllerchange", controllerChange);
 
     return () => {
-      window.removeEventListener("iteration13-open-install", requestInstall);
+      window.removeEventListener("lefifi-open-install", requestInstall);
       window.removeEventListener("appinstalled", appInstalled);
       window.removeEventListener("online", online);
       window.removeEventListener("offline", off);
@@ -156,30 +211,51 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   }, [initialEmbedded, initialAndroid]);
 
   useEffect(() => {
-    if (installState !== "embedded") return;
+    if (installState !== "embedded" && installState !== "native") return;
+
+    const isEmbeddedGate = installState === "embedded";
     const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    embeddedActionRef.current?.focus();
+    if (isEmbeddedGate) document.body.style.overflow = "hidden";
+    if (installState === "embedded") embeddedActionRef.current?.focus();
+    else document.querySelector<HTMLButtonElement>(".lefifiInstallPrimary")?.focus();
+
     const keepDialogFocused = (event: KeyboardEvent) => {
-      if (event.key === "Escape" || event.key === "Tab") {
+      if (event.key === "Escape") {
+        if (isEmbeddedGate) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else {
+          dismissInstall();
+        }
+      }
+      if (event.key === "Tab" && isEmbeddedGate) {
         event.preventDefault();
-        event.stopPropagation();
         embeddedActionRef.current?.focus();
       }
     };
+
     window.addEventListener("keydown", keepDialogFocused, true);
     return () => {
-      document.body.style.overflow = previousOverflow;
+      if (isEmbeddedGate) document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", keepDialogFocused, true);
     };
-  }, [installState]);
+  }, [installState, installHelpOpen]);
 
   async function install() {
     const prompt = installPromptRef.current;
-    if (!prompt) return;
+    if (!prompt) {
+      // Never manufacture a replacement prompt. Manual steps are only valid for
+      // iOS Safari, where beforeinstallprompt is not available.
+      if (isIosSafari()) {
+        setInstallHelpOpen(true);
+        setInstallState("native");
+      }
+      return;
+    }
     try {
       await prompt.prompt();
-      await prompt.userChoice;
+      const choice = await prompt.userChoice;
+      if (choice.outcome === "dismissed") rememberDismissal();
     } catch {
       // The event is one-shot and browser-controlled. Do not replace it with
       // generic Chrome-menu instructions when the native prompt fails.
@@ -189,6 +265,13 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
       setInstallHelpOpen(false);
       setInstallState("hidden");
     }
+  }
+
+  function dismissInstall() {
+    rememberDismissal();
+    setInstallCardDismissed(true);
+    setInstallHelpOpen(false);
+    setInstallState("hidden");
   }
 
   function openBrowser() {
@@ -219,31 +302,50 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
 
   const installShellStyle: CSSProperties = { position: "fixed", left: 16, right: 16, bottom: 16, zIndex: 1000, maxWidth: 720, margin: "0 auto", padding: 16, borderRadius: 18, background: "#FFFFFF", color: "#111318", boxShadow: "0 12px 40px rgba(0,0,0,.18)", border: "1px solid rgba(17,19,24,.12)" };
   const embeddedInstallStyle: CSSProperties = { position: "fixed", inset: 0, zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, background: "rgba(0,0,0,.82)", backdropFilter: "blur(4px)", overscrollBehavior: "contain" };
-  const installCard = installState === "embedded" ? (
+  const installCard = installState === "native" && installHelpOpen && isIosSafari() ? (
+    <div style={installShellStyle} role="presentation">
+      <section className="lefifiInstallModal" role="dialog" aria-modal="false" aria-labelledby="plug-install-title" aria-describedby="plug-install-message">
+        <div className="lefifiInstallTop"><span className="lefifiInstallMark"><img src="/lefifi.jpg" alt="Lefifi Investments"</span><span className="lefifiInstallTag">LEFIFI INVESTMENTS · EVENTS & PRODUCTION</span><button type="button" className="lefifiInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
+        <div className="lefifiInstallKicker">IPHONE & IPAD</div>
+        <h2 id="plug-install-title">Add to Home Screen.</h2>
+        <p id="plug-install-message">In Safari, tap <b>Share</b>, choose <b>Add to Home Screen</b>, then tap <b>Add</b>. Open the new Home Screen icon to launch the installed app.</p>
+        <button type="button" className="lefifiInstallPrimary" onClick={dismissInstall}>Continue on the website</button>
+      </section>
+    </div>
+) : installState === "embedded" ? (
     <div style={embeddedInstallStyle} role="alertdialog" aria-modal="true" aria-labelledby="plug-embedded-title" aria-describedby="plug-embedded-message">
       <div className="pwaInstallInfo" style={{...installShellStyle, position: "relative", left: "auto", right: "auto", bottom: "auto", width: "100%", maxWidth: 520, margin: 0}}>
         <div>
-          <strong id="plug-embedded-title">OPEN LEFIFI IN YOUR BROWSER</strong>
-          <span id="plug-embedded-message">{embeddedAndroid ? "Open Lefifi in Chrome to continue." : "Lefifi opened inside another app. Open this page in your browser to continue."}</span>
+          <strong id="plug-embedded-title"><span aria-hidden="true">🌐 </span>OPEN LEFIFI INVESTMENTS IN YOUR BROWSER</strong>
+          <span id="plug-embedded-message">{embeddedAndroid ? <>Open Lefifi in Chrome to continue. Chrome will offer its own installation action when the app is eligible.</> : <>Lefifi opened inside another app. Open this page in your browser to continue.</>}</span>
         </div>
         <div className="pwaInstallActions" style={{display:"flex",justifyContent:"flex-end"}}>
-          <button ref={embeddedActionRef} type="button" style={{background:"#075b7b",color:"#fff"}} onClick={openBrowser}>{embeddedAndroid ? "OPEN IN CHROME" : "OPEN IN BROWSER"}</button>
+          <button ref={embeddedActionRef} type="button" style={{background:"#0866FF",color:"#fff"}} onClick={openBrowser}>{embeddedAndroid ? "OPEN IN CHROME" : "OPEN IN BROWSER"}</button>
         </div>
       </div>
     </div>
   ) : null;
 
   return <>
-    {offline && <div className="offlineBanner" role="status" aria-live="polite"><span aria-hidden="true">⚡</span> Offline · The service demo saves orders and admin edits locally on this device. Firebase-backed routes need a connection.</div>}
-    {!offline && reconnecting && <div className="offlineBanner reconnectingBanner" role="status" aria-live="polite"><span aria-hidden="true">↻</span> Reconnected · Lefifi can reach the network again. Your saved request records remain in your account.</div>}
-    {canInstall && !installCardDismissed && installState !== "embedded" && (
-      <aside className="af-install-card" aria-label="Install Lefifi Investments">
-        <div className="af-install-brand">
-          <span className="af-install-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
-          <span><strong>LEFIFI INVESTMENTS</strong><small>EVENTS · RENTALS · PRODUCTION</small></span>
+    {offline && <div className="offlineBanner" role="status" aria-live="polite"><span aria-hidden="true">⚡</span> Offline · Previously viewed public pages may remain available offline. New requests need a connection.</div>}
+    {!offline && reconnecting && <div className="offlineBanner reconnectingBanner" role="status" aria-live="polite"><span aria-hidden="true">↻</span> Reconnected · Lefifi can reach the network again. You can submit requests again.</div>}
+    {!environment().standalone && installState !== "embedded" && (canInstall || canShowManualInstall) && !installCardDismissed && !(installState === "native" && installHelpOpen) && (
+      <aside className="i13-install-card" aria-label="Install Lefifi Investments">
+        <div className="i13-install-brand">
+          <span className="i13-install-mark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span>
+          <span><strong>LEFIFI INVESTMENTS</strong><small>SERVICE STUDIO</small></span>
         </div>
-        <button className="af-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => setInstallCardDismissed(true)}>×</button>
-        <button className="af-install-action" type="button" onClick={() => void install()}>Install Lefifi <span aria-hidden="true">↗</span></button>
+        <button className="i13-install-close" type="button" aria-label="Dismiss install prompt" onClick={() => setInstallCardDismissed(true)}>×</button>
+        <button className="i13-install-action" type="button" onClick={() => {
+          if (installPromptRef.current) {
+            void install();
+            return;
+          }
+          if (isIosSafari()) {
+            setInstallHelpOpen(true);
+            setInstallState("native");
+          }
+        }}>{canInstall ? "Install Lefifi" : "Add to Home Screen"} <span aria-hidden="true">↗</span></button>
       </aside>
     )}
     {installCard}
