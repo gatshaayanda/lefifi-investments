@@ -3177,3 +3177,80 @@ a{ text-underline-offset:3px }
 @media(min-width:681px){
  .lf-workspace .lf-metrics{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }
+
+
+/* Lefifi mobile app home — WashRide reference composition, with Lefifi identity. */
+@media(max-width:700px){
+  .lf-topline{display:none}
+  .lf-header{position:absolute;top:0;left:0;right:0;background:rgba(4,13,27,.28);border:0;backdrop-filter:none}
+  .lf-nav{height:66px;width:calc(100% - 32px)}
+  .lf-brand-mark{width:116px;height:44px;border:0;background:#fff;border-radius:5px;padding:3px;overflow:hidden}
+  .lf-brand-mark img{width:100%;height:100%;object-fit:contain;display:block}
+  .lf-nav nav{display:none}
+  .lf-nav-actions{margin-left:auto}
+  .lf-nav-account{width:42px;height:42px;display:grid;place-items:center;padding:0;border:1px solid rgba(255,255,255,.55);border-radius:50%;font-size:0}
+  .lf-nav-account span{font-size:1.25rem;padding:0}
+  .lf-hero{min-height:0;display:block;padding:0;background:#061329}
+  .lf-hero-image{inset:0 0 auto;height:610px;opacity:1;background-image:linear-gradient(180deg,rgba(3,12,27,.12) 0%,rgba(3,12,27,.08) 40%,#061329 96%),linear-gradient(90deg,rgba(3,12,27,.48),rgba(3,12,27,.04)),url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1100&q=85");background-position:center;background-size:cover}
+  .lf-hero-content{padding:154px 0 24px;position:relative}
+  .lf-hero .lf-eyebrow{font-size:.68rem;color:#8bdcff;letter-spacing:.13em;margin-bottom:14px}
+  .lf-hero h1{font:800 clamp(2.65rem,11vw,4.2rem)/.98 Inter,Arial,sans-serif;letter-spacing:-.065em;text-transform:none;margin:0;max-width:520px;color:#fff}
+  .lf-hero h1 em{color:#38bdf8;text-shadow:none;font-style:normal}
+  .lf-hero-copy{font-size:.91rem;line-height:1.5;color:#f0f5fa;margin:14px 0 0;max-width:500px}
+  .lf-actions{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .lf-primary,.lf-secondary{min-height:54px;padding:0 15px;border-radius:13px;font-size:.86rem;gap:8px}
+  .lf-primary{grid-column:1/-1;background:linear-gradient(115deg,#087dff,#08b7ed);color:#fff;box-shadow:0 7px 22px rgba(0,137,255,.28);font-size:1rem}
+  .lf-secondary{justify-content:center;border:1px solid #47719d;background:rgba(8,30,59,.78);color:#fff}
+  .lf-hero-foot{display:none}
+  .lf-shortcuts{position:relative;background:#061329;padding:5px 0 20px}
+  .lf-shortcut-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .lf-shortcut-grid>a,.lf-shortcut-grid>button{min-width:0;min-height:112px;padding:14px 13px;background:linear-gradient(145deg,#102b50,#0a1d39);border:1px solid #174a7e;border-radius:15px;color:#fff;box-shadow:inset 0 1px rgba(255,255,255,.06),0 6px 15px rgba(0,0,0,.15);display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto auto;gap:5px 8px;text-align:left}
+  .lf-shortcut-icon{grid-column:1/-1;width:30px;height:30px;display:grid;place-items:center;color:#66caff}
+  .lf-shortcut-grid strong{font-size:.9rem;line-height:1.2;color:#fff}
+  .lf-shortcut-grid small{grid-column:1/-1;color:#d4e4f5;font-size:.76rem;line-height:1.35}
+  .lf-shortcut-action{grid-column:2;grid-row:2;display:flex;align-items:center;gap:3px;color:#71d1ff;font-size:.57rem;font-weight:900;letter-spacing:.08em}
+  .lf-trust-mobile{display:flex}
+  .lf-section{padding:36px 0 42px}
+  .lf-section-heading{display:block;margin-bottom:18px}
+  .lf-section-heading h2{font-size:2.1rem;line-height:1.05}
+  .lf-section-heading>p{font-size:.83rem;margin-top:9px}
+  .lf-service-grid{grid-template-columns:1fr 1fr;gap:1px}
+  .lf-service{min-height:155px;padding:14px}
+  .lf-service-title{font:700 1rem/1.25 Inter,Arial,sans-serif;margin-top:10px}
+  .lf-service-detail{font-size:.78rem;line-height:1.4;margin-top:6px;color:#4d5962}
+  .lf-service-price{font-size:.88rem;font-weight:850;margin-top:9px;color:#075b7b}
+  .lf-service-arrow{right:12px;top:12px}
+  .lf-request-section{padding:38px 0 90px}
+  .lf-request-layout{grid-template-columns:1fr;gap:18px}
+  .lf-request-intro{position:static}
+  .lf-request-intro h2{font-size:2.35rem;line-height:1.02}
+  .lf-request-intro>p:not(.lf-eyebrow){font-size:.84rem;line-height:1.5}
+  .lf-contact-card{margin-top:14px;padding-top:12px}
+  .lf-form-panel{padding:16px;border-radius:12px}
+  .lf-form-tabs{margin-bottom:15px}
+  .lf-form-grid{gap:10px}
+  .lf-form label{font-size:.82rem}
+  .lf-footer{padding-bottom:100px}
+  .lf-footer-bottom{font-size:.7rem}
+  .lf-mobile-nav{position:fixed;z-index:80;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(3,12,27,.97);border-top:1px solid #1d426c;backdrop-filter:blur(16px)}
+  .lf-mobile-nav a{display:grid;justify-items:center;align-content:center;gap:4px;min-height:48px;color:#c4d7ed;font-size:.69rem;font-weight:700}
+  .lf-mobile-nav a:first-child{color:#36baff}
+  .lf-mobile-nav svg{width:20px;height:20px}
+}
+@media(min-width:701px){
+  .lf-brand-mark{width:142px;height:48px;padding:3px;background:#fff;border:0;border-radius:5px;overflow:hidden}
+  .lf-brand-mark img{width:100%;height:100%;object-fit:contain;display:block}
+  .lf-shortcuts{background:#071629;padding:16px 0}
+  .lf-shortcut-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .lf-shortcut-grid>a,.lf-shortcut-grid>button{min-height:106px;padding:14px;background:#10243b;border:1px solid #254867;border-radius:10px;color:#fff;display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left}
+  .lf-shortcut-icon{color:#58c5ff}
+  .lf-shortcut-grid strong{font-size:.88rem}
+  .lf-shortcut-grid small{color:#c6d8e8;font-size:.75rem}
+  .lf-shortcut-action{display:flex;align-items:center;gap:4px;color:#66caff;font-size:.6rem;font-weight:900;margin-top:auto}
+}
+.lf-service-price{display:block}
+.lf-submit-price-note{display:grid;gap:5px;margin-top:14px;padding:12px;background:#e9f3f8;border:1px solid #c5dce8;border-radius:7px;color:#172b3b}
+.lf-submit-price-note strong{font-size:.82rem}.lf-submit-price-note span{font-size:.85rem;line-height:1.45}.lf-submit-price-note small{font-size:.72rem;color:#405563}
+.lf-shortcuts{position:relative}
+.lf-trust-mobile{display:none}
+@media(prefers-reduced-motion:reduce){.lf-shortcut-grid>a,.lf-shortcut-grid>button{transition:none}}
