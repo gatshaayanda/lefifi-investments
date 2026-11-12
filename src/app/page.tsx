@@ -125,6 +125,8 @@ export default function HomePage() {
       <Link href="/account"><span className="lf-shortcut-icon" aria-hidden="true"><ClipboardList size={19} strokeWidth={1.6}/></span><strong>My requests</strong><small>Check your updates</small><span className="lf-shortcut-action" aria-hidden="true">OPEN <ArrowUpRight size={15}/></span></Link>
     </div></section>
 
+    <section className="lf-trust-strip" aria-label="Lefifi service promise"><div className="lf-container"><span>PLANNED WITH PURPOSE · DELIVERED WITH CARE</span><i aria-hidden="true"/><span>GABORONE · BOTSWANA</span></div></section>
+
     <section className="lf-section" id="services"><div className="lf-container">
       <div className="lf-section-heading"><div><p className="lf-eyebrow">WHAT WE BRING TOGETHER</p><h2>One brief. <em>Many moving parts.</em></h2></div><p>Explore the services and starting prices. Choose what you need and send a short brief.</p></div>
       <div className="lf-service-grid">{catalog.map((item,index)=><button className="lf-service" type="button" key={item.id} onClick={()=>chooseOffering({name:item.name})}><span className="lf-service-icon" aria-hidden="true">{(() => { const Icon=serviceIcons[index % serviceIcons.length]; return <Icon size={20} strokeWidth={1.55}/>; })()}</span><span className="lf-service-title">{item.name}</span><span className="lf-service-detail">{item.detail}</span><span className="lf-service-price">{item.price>0?`P${Number(item.price).toLocaleString("en-BW")}`:"Ask for price"}</span><span className="lf-service-arrow" aria-hidden="true"><ArrowUpRight size={17}/></span></button>)}</div>
