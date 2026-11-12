@@ -23,3 +23,5 @@
 .af-install-action{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:42px;padding:10px 13px;border:1px solid #075b7b;border-radius:6px;background:#075b7b;color:#fff;font-size:.84rem;font-weight:850;cursor:pointer}
 .af-install-action:focus-visible,.af-install-close:focus-visible{outline:3px solid #1686ad;outline-offset:3px}
 @media(max-width:560px){.offlineBanner{font-size:.76rem;line-height:1.4}.af-install-card{left:14px;right:14px;bottom:64px;width:auto;max-width:390px;margin:0 auto;padding:12px}}
+
+.plugInstallMark img{display:block;width:100%;height:100%;object-fit:contain;background:#fff;border-radius:4px}
