@@ -3289,3 +3289,20 @@ a{ text-underline-offset:3px }
 
 
 .plugInstallMark img{display:block;width:100%;height:100%;object-fit:contain;background:#fff;border-radius:4px}
+
+
+/* Keep the desktop storefront as concise and action-led as the mobile app. */
+@media(min-width:701px){
+  .lf-hero{min-height:500px}
+  .lf-hero-content{padding:56px 0 42px}
+  .lf-hero h1{font-size:clamp(3.4rem,5.4vw,5.3rem);line-height:.94}
+  .lf-hero-copy{margin-top:16px;font-size:.92rem;line-height:1.55}
+  .lf-actions{margin-top:20px}
+  .lf-hero-foot{margin-top:36px}
+  .lf-section{padding:54px 0}
+  .lf-section-heading{margin-bottom:20px}
+  .lf-service{min-height:165px;padding:18px}
+  .lf-service-title{margin-top:15px}
+  .lf-request-section{padding:58px 0}
+  .lf-request-layout{gap:34px}
+}
