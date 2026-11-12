@@ -217,7 +217,7 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
     const previousOverflow = document.body.style.overflow;
     if (isEmbeddedGate) document.body.style.overflow = "hidden";
     if (installState === "embedded") embeddedActionRef.current?.focus();
-    else document.querySelector<HTMLButtonElement>(".lefifiInstallPrimary")?.focus();
+    else document.querySelector<HTMLButtonElement>(".plugInstallPrimary")?.focus();
 
     const keepDialogFocused = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -304,12 +304,12 @@ export default function PwaRegister({ initialEmbedded = false, initialAndroid = 
   const embeddedInstallStyle: CSSProperties = { position: "fixed", inset: 0, zIndex: 2147483647, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, background: "rgba(0,0,0,.82)", backdropFilter: "blur(4px)", overscrollBehavior: "contain" };
   const installCard = installState === "native" && installHelpOpen && isIosSafari() ? (
     <div style={installShellStyle} role="presentation">
-      <section className="lefifiInstallModal" role="dialog" aria-modal="false" aria-labelledby="plug-install-title" aria-describedby="plug-install-message">
-        <div className="lefifiInstallTop"><span className="lefifiInstallMark"><img src="/lefifi.jpg" alt="Lefifi Investments"</span><span className="lefifiInstallTag">LEFIFI INVESTMENTS · EVENTS & PRODUCTION</span><button type="button" className="lefifiInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
-        <div className="lefifiInstallKicker">IPHONE & IPAD</div>
+      <section className="plugInstallModal" role="dialog" aria-modal="false" aria-labelledby="plug-install-title" aria-describedby="plug-install-message">
+        <div className="plugInstallTop"><span className="plugInstallMark"><img src="/lefifi.jpg" alt="Lefifi Investments" /></span><span className="plugInstallTag">LEFIFI INVESTMENTS · EVENTS & PRODUCTION</span><button type="button" className="plugInstallClose" aria-label="Close install guidance" onClick={dismissInstall}>×</button></div>
+        <div className="plugInstallKicker">IPHONE & IPAD</div>
         <h2 id="plug-install-title">Add to Home Screen.</h2>
         <p id="plug-install-message">In Safari, tap <b>Share</b>, choose <b>Add to Home Screen</b>, then tap <b>Add</b>. Open the new Home Screen icon to launch the installed app.</p>
-        <button type="button" className="lefifiInstallPrimary" onClick={dismissInstall}>Continue on the website</button>
+        <button type="button" className="plugInstallPrimary" onClick={dismissInstall}>Continue on the website</button>
       </section>
     </div>
 ) : installState === "embedded" ? (
