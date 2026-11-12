@@ -3,6 +3,7 @@ import {headers} from "next/headers";
 import {Analytics} from "@vercel/analytics/next";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 import PwaRegister from "@/app/pwa-register";
+import Script from "next/script";
 import "./globals.css"; import "./pwa.css"; import "./install-card.css";
 const siteUrl=process.env.NEXT_PUBLIC_BASE_URL||"https://lefifi.co.bw";
 const EMBEDDED_BROWSER_PATTERN=/WhatsApp|Instagram|FBAN|FBAV|Messenger|Line[/]|Twitter|TikTok|Snapchat/i;
@@ -18,5 +19,14 @@ export default async function RootLayout({children}:{children:React.ReactNode}){
    || (/Android/i.test(userAgent)&&/\bwv\b/i.test(userAgent))
    || /^(com\.whatsapp|com\.instagram\.android|com\.facebook\.katana|com\.facebook\.lite|com\.facebook\.orca)$/i.test(requestedWith);
  const android=/Android/i.test(userAgent);
- return <html lang="en"><body style={embedded?{overflow:"hidden"}:undefined}><PwaRegister initialEmbedded={embedded} initialAndroid={android}/>{children}<Analytics/><SpeedInsights/></body></html>
+ return <html lang="en"><body style={embedded?{overflow:"hidden"}:undefined}><Script id="lefifi-early-install-capture" strategy="beforeInteractive">{`
+(function () {
+  window.addEventListener("beforeinstallprompt", function (event) {
+    var standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+    if (standalone || window.__iteration13PwaListenerReady === true) return;
+    event.preventDefault();
+    window.__iteration13InstallPrompt = event;
+  });
+})();
+`}</Script><PwaRegister initialEmbedded={embedded} initialAndroid={android}/>{children}<Analytics/><SpeedInsights/></body></html>
 }
